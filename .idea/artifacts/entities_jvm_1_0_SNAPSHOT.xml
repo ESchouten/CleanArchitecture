@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="entities-jvm-1.0-SNAPSHOT">
+    <output-path>$PROJECT_DIR$/entities/build/libs</output-path>
+    <root id="archive" name="entities-jvm-1.0-SNAPSHOT.jar">
+      <element id="module-output" name="CleanArchitecture.entities.jvmMain" />
+    </root>
+  </artifact>
+</component>
