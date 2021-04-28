@@ -1,9 +1,8 @@
 package usecases
 
-abstract class UseCase<Request, Result> {
-    abstract fun execute(request: Request): Result
-}
+import models.UserModel
 
-abstract class Validator<Request> {
-    abstract fun validate(request: Request)
+interface UseCase<Request, Result> {
+    val executor: (request: Request, authentication: UserModel?) -> Result
+    fun execute(request: Request, authentication: UserModel?) = executor(request, authentication)
 }
