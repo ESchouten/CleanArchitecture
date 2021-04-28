@@ -3,11 +3,7 @@ plugins {
 }
 
 kotlin {
-    jvm().compilations.all {
-        kotlinOptions {
-            useIR = true
-        }
-    }
+    jvm()
 
     sourceSets {
         commonMain{
