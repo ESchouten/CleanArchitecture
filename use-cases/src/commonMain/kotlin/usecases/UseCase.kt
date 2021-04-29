@@ -1,5 +1,6 @@
 package usecases
 
+import models.Model
 import models.UserModel
 
 interface UseCase<Request, Result> {

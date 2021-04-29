@@ -21,6 +21,7 @@ data class CreateUser(
         if (authentication == null || !authentication.authorities.contains(Authorities.USER)) throw AuthorizationException()
         if (!email(request.email)) throw EmailInvalidException()
         if (!password(request.password)) throw PasswordInvalidException()
+        /** TODO: BCrypt **/
         if (UserExists(repository).execute(request.email, authentication)) throw EmailAlreadyExistsException()
         UserModel.of(repository.save(User(request.email, request.authorities, request.password)))
     }

@@ -6,3 +6,4 @@ class EmailInvalidException(message: String = "Email invalid") : InvalidProperty
 class PasswordInvalidException(message: String = "Password invalid") : InvalidPropertyException(message)
 
 open class AuthorizationException(message: String = "No authority for this action") : Exception(message)
+class LoginException(message: String = "Invalid authentication") : AuthorizationException(message)
