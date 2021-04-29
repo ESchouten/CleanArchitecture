@@ -6,7 +6,7 @@ kotlin {
     jvm()
 
     sourceSets {
-        commonMain{
+        val commonMain by getting {
             dependencies {
                 api("com.benasher44:uuid:0.2.3")
             }

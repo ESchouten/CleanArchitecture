@@ -21,9 +21,7 @@ data class CreateUserModel(
     val authorities: List<Authorities>,
     val password: String,
 ) {
-    fun toUser() {
-        fun toUser() = User(email, authorities, password)
-    }
+    fun toUser() = User(email, authorities, password)
 }
 
 @Model

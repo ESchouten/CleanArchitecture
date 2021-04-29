@@ -3,15 +3,17 @@ pluginManagement {
         gradlePluginPortal()
     }
 
-    val kotlinVersion = "1.5.0-RC"
+    val kotlinVersion = "1.5.0"
 
     plugins {
         kotlin("multiplatform") version kotlinVersion
+        kotlin("jvm") version kotlinVersion
     }
 }
 
 include(
     ":entities",
-    ":use-cases"
+    ":use-cases",
+    ":adapters"
 )
 

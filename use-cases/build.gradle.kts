@@ -6,7 +6,7 @@ kotlin {
     jvm()
 
     sourceSets {
-        commonMain{
+        val commonMain by getting {
             dependencies {
                 api(project(":entities"))
             }
