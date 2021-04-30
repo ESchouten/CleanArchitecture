@@ -1,6 +1,7 @@
 package usecases.user
 
 import LoginException
+import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuidFrom
 import models.LoginUserModel
 import models.UserModel
@@ -8,11 +9,10 @@ import repositories.UserRepository
 import usecases.UseCase
 
 data class AuthenticateUser(
-    private val repository: UserRepository
-) : UseCase<String, UserModel> {
+    private val repository: UserRepository,
+) : UseCase<Uuid, UserModel> {
 
-    override val executor = { request: String, _: UserModel? ->
-        /** TODO: JWT **/
-        repository.findById(uuidFrom(request))?.let { UserModel.of(it) } ?: throw LoginException()
+    override val executor = { request: Uuid, _: UserModel? ->
+        repository.findById(request)?.let { UserModel.of(it) } ?: throw LoginException()
     }
 }
