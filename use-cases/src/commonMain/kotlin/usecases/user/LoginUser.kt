@@ -10,11 +10,11 @@ import usecases.UseCase
 data class LoginUser(
     private val repository: UserRepository,
     private val encoder: (Uuid) -> String,
-) : UseCase<LoginUserModel, String> {
+) : UseCase<LoginUserModel, String>(LoginUserModel::class, String::class) {
 
     override val executor = { request: LoginUserModel, _: UserModel? ->
         val user = repository.findByEmail(request.email)
-        /** TODO: BCrypt + JWT **/
+        /** TODO: BCrypt **/
         if (user == null || request.password != user.password) throw LoginException()
         encoder(user.id)
     }

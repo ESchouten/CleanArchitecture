@@ -1,9 +1,13 @@
 package usecases
 
-import models.Model
 import models.UserModel
+import kotlin.reflect.KClass
 
-interface UseCase<Request, Result> {
-    val executor: (request: Request, authentication: UserModel?) -> Result
-    fun execute(request: Request, authentication: UserModel?) = executor(request, authentication)
+abstract class UseCase<Request: Any, Result: Any>(
+    val requestType: KClass<Request>,
+    val resultType: KClass<Result>
+) {
+
+    abstract val executor: (request: Request, authentication: UserModel?) -> Result
+    fun execute(request: Request, authentication: UserModel?): Result = executor(request, authentication)
 }

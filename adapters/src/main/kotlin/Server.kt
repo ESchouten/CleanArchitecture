@@ -1,5 +1,6 @@
 import com.apurebase.kgraphql.Context
 import com.apurebase.kgraphql.GraphQL
+import com.apurebase.kgraphql.schema.dsl.SchemaBuilder
 import com.benasher44.uuid.uuidFrom
 import entities.Authorities
 import entities.User
@@ -9,15 +10,20 @@ import io.ktor.auth.jwt.*
 import io.ktor.features.*
 import io.ktor.server.cio.*
 import models.LoginUserModel
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import org.koin.dsl.module
 import org.koin.ktor.ext.Koin
 import org.koin.ktor.ext.inject
 import repositories.UserRepository
 import repositories.UserRepositoryImpl
+import usecases.UseCase
 import usecases.user.AuthenticateUser
 import usecases.user.CreateUser
 import usecases.user.LoginUser
 import usecases.user.UserExists
+import kotlin.reflect.KClass
+import kotlin.reflect.full.createType
 
 fun main(args: Array<String>) = EngineMain.main(args)
 
@@ -60,6 +66,10 @@ fun Application.module(testing: Boolean = false) {
         }
     }
 
+
+    val usecases = listOf<UseCase<*, *>>(LoginUser(getDependency(), authenticator::encode))
+    val types = listOf<KClass<*>>(LoginUserModel::class)
+
     install(GraphQL) {
         playground = true
         wrap {
@@ -76,19 +86,34 @@ fun Application.module(testing: Boolean = false) {
                     ctx.get<UserPrincipal>()?.email ?: "Unknown"
                 }
             }
-            mutation("login") {
+            query("login") {
                 resolver { request: LoginUserModel ->
                     val loginUser: LoginUser by inject()
                     loginUser.execute(request, null)
                 }
             }
-            type<LoginUserModel>()
+            usecases.forEach {
+                connection(it)
+            }
+
+            types.forEach {
+                type(it) {}
+            }
         }
     }
+}
 
-//    routing {
-//        get("/") {
-//            call.respondText("Hello, world!")
-//        }
-//    }
+fun <T, U, V: UseCase<T, U>> SchemaBuilder.connection(usecase: V) {
+    val resultType = usecase.resultType.createType()
+    query(usecase::class.simpleName!!) {
+        resolver { request: T, ctx: Context ->
+            usecase.execute(request, ctx.get<UserPrincipal>()?.toUserModel())
+        }.apply { target.setReturnType(resultType) }
+    }
+}
+
+inline fun <reified T> getDependency(): T {
+    return object : KoinComponent {
+        val value: T by inject()
+    }.value
 }

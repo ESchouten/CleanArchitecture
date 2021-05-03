@@ -6,7 +6,6 @@ import EmailInvalidException
 import PasswordInvalidException
 import email
 import entities.Authorities
-import entities.User
 import models.CreateUserModel
 import models.UserModel
 import password
@@ -15,7 +14,7 @@ import usecases.UseCase
 
 data class CreateUser(
     private val repository: UserRepository
-) : UseCase<CreateUserModel, UserModel> {
+) : UseCase<CreateUserModel, UserModel>(CreateUserModel::class, UserModel::class) {
 
     override val executor = { request: CreateUserModel, authentication: UserModel? ->
         if (authentication == null || !authentication.authorities.contains(Authorities.USER)) throw AuthorizationException()
