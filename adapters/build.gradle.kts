@@ -15,7 +15,14 @@ dependencies {
     implementation("io.ktor:ktor-auth-jwt:1.5.4")
     implementation("ch.qos.logback:logback-classic:1.2.3")
     implementation("io.insert-koin:koin-ktor:3.0.1")
-    implementation("com.apurebase:kgraphql-ktor:0.17.7")
+    implementation("com.github.ESchouten.kgraphql:kgraphql-ktor:10e1e35daa")
+//    implementation("com.apurebase:kgraphql-ktor:0.17.7")
 
     implementation(kotlin("reflect"))
+
+    testImplementation(kotlin("test"))
+}
+
+repositories {
+    maven("https://jitpack.io")
 }

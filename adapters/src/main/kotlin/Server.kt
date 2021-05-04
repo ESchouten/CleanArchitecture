@@ -1,6 +1,7 @@
 import com.apurebase.kgraphql.Context
 import com.apurebase.kgraphql.GraphQL
 import com.apurebase.kgraphql.schema.dsl.SchemaBuilder
+import com.apurebase.kgraphql.schema.model.InputValueDef
 import com.benasher44.uuid.uuidFrom
 import entities.Authorities
 import entities.User
@@ -23,6 +24,7 @@ import usecases.user.CreateUser
 import usecases.user.LoginUser
 import usecases.user.UserExists
 import kotlin.reflect.KClass
+import kotlin.reflect.KType
 import kotlin.reflect.full.createType
 
 fun main(args: Array<String>) = EngineMain.main(args)
@@ -103,12 +105,16 @@ fun Application.module(testing: Boolean = false) {
     }
 }
 
-fun <T, U, V: UseCase<T, U>> SchemaBuilder.connection(usecase: V) {
-    val resultType = usecase.resultType.createType()
+fun <T : Any, U : Any, V: UseCase<T, U>> SchemaBuilder.connection(usecase: V) {
+    val requestType: KClass<T> = usecase.requestType
+    val resultType: KType = usecase.resultType.createType()
     query(usecase::class.simpleName!!) {
         resolver { request: T, ctx: Context ->
             usecase.execute(request, ctx.get<UserPrincipal>()?.toUserModel())
-        }.apply { target.setReturnType(resultType) }
+        }.apply {
+            target.setReturnType(resultType)
+            addInputValues(listOf(InputValueDef(requestType, "request")))
+        }
     }
 }
 
