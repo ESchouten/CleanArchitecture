@@ -14,10 +14,10 @@ class LoginUser(
     private val encoder: (Uuid) -> String,
 ) : UsecaseA1<LoginUserModel, String>(LoginUserModel::class, String::class) {
 
-    override val executor = { request: LoginUserModel, _: UserModel? ->
-        val user = repository.findByEmail(request.email)
+    override val executor = { _: UserModel?, a0: LoginUserModel ->
+        val user = repository.findByEmail(a0.email)
         /** TODO: BCrypt **/
-        if (user == null || request.password != user.password) throw LoginException()
+        if (user == null || a0.password != user.password) throw LoginException()
         encoder(user.id)
     }
 }

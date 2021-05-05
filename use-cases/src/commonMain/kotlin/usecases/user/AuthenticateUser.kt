@@ -12,7 +12,7 @@ class AuthenticateUser(
     private val repository: UserRepository,
 ) : UsecaseA1<Uuid, UserModel>(Uuid::class, UserModel::class) {
 
-    override val executor = { request: Uuid, _: UserModel? ->
-        repository.findById(request)?.let { UserModel.of(it) } ?: throw LoginException()
+    override val executor = { _: UserModel?, a0: Uuid ->
+        repository.findById(a0)?.let { UserModel.of(it) } ?: throw LoginException()
     }
 }

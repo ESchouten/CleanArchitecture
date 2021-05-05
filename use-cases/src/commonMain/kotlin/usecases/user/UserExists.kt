@@ -9,7 +9,8 @@ import usecases.UsecaseA1
 class UserExists(
     private val repository: UserRepository
 ) : UsecaseA1<String, Boolean>(String::class, Boolean::class) {
-    override val executor = { request: String, _: UserModel? ->
-        repository.findByEmail(request) != null
+
+    override val executor = { _: UserModel?, a0: String, ->
+        repository.findByEmail(a0) != null
     }
 }

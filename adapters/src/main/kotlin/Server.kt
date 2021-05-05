@@ -58,7 +58,7 @@ fun Application.module(testing: Boolean = false) {
             validate { credential ->
                 if (credential.payload.audience.contains(authenticator.audience)) {
                     val authenticateUser: AuthenticateUser by inject()
-                    UserPrincipal(authenticateUser.execute(uuidFrom(credential.payload.subject), null))
+                    UserPrincipal(authenticateUser.execute(null, uuidFrom(credential.payload.subject)))
                 } else {
                     null
                 }
@@ -111,8 +111,8 @@ fun <T : Any, V : UsecaseA0<T>> SchemaBuilder.usecase(usecase: V) {
 
 fun <T : Any, U : Any, V : UsecaseA1<U, T>> SchemaBuilder.usecase(usecase: V) {
     query(usecase::class.simpleName!!) {
-        resolver { a0: U, ctx: Context ->
-            usecase.execute(a0, ctx.get<UserPrincipal>()?.toUserModel())
+        resolver {ctx: Context,  a0: U ->
+            usecase.execute(ctx.get<UserPrincipal>()?.toUserModel(), a0)
         }.apply {
             target.setReturnType(usecase.result.createType())
             addInputValues(listOf(InputValueDef(usecase.a0, "a0")))
