@@ -61,13 +61,13 @@ fun SchemaBuilder.usecase(usecase: UsecaseType<*>) {
     }
 }
 
-fun <T : Any, V : UsecaseA0<T>> AbstractOperationDSL.usecase(usecase: V): ResolverDSL {
+fun <T, V : UsecaseA0<T>> AbstractOperationDSL.usecase(usecase: V): ResolverDSL {
     return resolver { ctx: Context ->
         usecase.execute(ctx.get<UserPrincipal>())
     }
 }
 
-fun <T : Any, U : Any, V : UsecaseA1<U, T>> AbstractOperationDSL.usecase(usecase: V): ResolverDSL {
+fun <T, U, V : UsecaseA1<U, T>> AbstractOperationDSL.usecase(usecase: V): ResolverDSL {
     return resolver { ctx: Context, a0: U ->
         usecase.execute(ctx.get<UserPrincipal>(), a0)
     }

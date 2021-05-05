@@ -1,5 +1,4 @@
 import com.apurebase.kgraphql.GraphQL
-import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuidFrom
 import entities.Authorities
 import io.ktor.application.*
@@ -38,8 +37,8 @@ fun Application.module(testing: Boolean = false) {
             verifier(authenticator.verifier)
             validate { credential ->
                 if (credential.payload.audience.contains(authenticator.audience)) {
-                    val authenticateUser: AuthenticateUser by inject()
-                    authenticateUser.execute(null, uuidFrom(credential.payload.subject)) as UserPrincipal
+                    val authenticateUser: AuthenticateUser = get()
+                    UserPrincipal(authenticateUser.execute(null, uuidFrom(credential.payload.subject)))
                 } else {
                     null
                 }

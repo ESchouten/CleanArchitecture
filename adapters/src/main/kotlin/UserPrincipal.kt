@@ -7,4 +7,7 @@ class UserPrincipal private constructor(
     id: Uuid,
     email: String,
     authorities: List<Authorities>,
-) : UserModel(id, email, authorities), Principal
+) : UserModel(id, email, authorities), Principal {
+
+    constructor(user: UserModel) : this(user.id, user.email, user.authorities)
+}
