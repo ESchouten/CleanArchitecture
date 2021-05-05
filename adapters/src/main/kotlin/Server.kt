@@ -102,7 +102,7 @@ fun SchemaBuilder.usecase(usecase: UsecaseType<*>) {
             is UsecaseA1<*, *> -> usecase(usecase)
             else -> throw Exception("Invalid usecase")
         }.apply {
-            target.setReturnType(usecase.result.createType())
+            setReturnType(usecase.result.createType())
             addInputValues(usecase.args.mapIndexed { index, kClass -> InputValueDef(kClass, "a${index}") })
         }
     }
