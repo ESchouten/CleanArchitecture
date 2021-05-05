@@ -6,23 +6,24 @@ import EmailInvalidException
 import PasswordInvalidException
 import email
 import entities.Authorities
-import entities.User
 import models.CreateUserModel
 import models.UserModel
 import password
 import repositories.UserRepository
-import usecases.UseCase
+import usecases.Usecase
+import usecases.UsecaseA1
 
-data class CreateUser(
+@Usecase
+class CreateUser(
     private val repository: UserRepository
-) : UseCase<CreateUserModel, UserModel> {
+) : UsecaseA1<CreateUserModel, UserModel>(CreateUserModel::class, UserModel::class) {
 
-    override val executor = { request: CreateUserModel, authentication: UserModel? ->
+    override val executor = { authentication: UserModel?, a0: CreateUserModel ->
         if (authentication == null || !authentication.authorities.contains(Authorities.USER)) throw AuthorizationException()
-        if (!email(request.email)) throw EmailInvalidException()
-        if (!password(request.password)) throw PasswordInvalidException()
-        if (UserExists(repository).execute(request.email, authentication)) throw EmailAlreadyExistsException()
+        if (!email(a0.email)) throw EmailInvalidException()
+        if (!password(a0.password)) throw PasswordInvalidException()
+        if (UserExists(repository).execute(authentication, a0.email)) throw EmailAlreadyExistsException()
         /** TODO: BCrypt **/
-        UserModel.of(repository.save(request.toUser()))
+        UserModel.of(repository.save(a0.toUser()))
     }
 }
