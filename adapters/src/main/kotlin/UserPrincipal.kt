@@ -9,5 +9,6 @@ class UserPrincipal private constructor(
     val authorities: List<Authorities>,
 ) : Principal {
     fun toUserModel() = UserModel(id, email, authorities)
+
     constructor(user: UserModel) : this(user.id, user.email, user.authorities)
 }

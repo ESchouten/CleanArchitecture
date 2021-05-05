@@ -12,5 +12,6 @@ class UserRepositoryImpl : UserRepository {
         users.add(entity)
         return entity
     }
+
     override fun findByEmail(email: String) = users.find { it.email == email }
 }

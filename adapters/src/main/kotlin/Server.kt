@@ -18,10 +18,11 @@ import org.koin.ktor.ext.Koin
 import org.koin.ktor.ext.inject
 import repositories.UserRepository
 import repositories.UserRepositoryImpl
-import usecases.*
+import usecases.UsecaseA0
+import usecases.UsecaseA1
+import usecases.UsecaseType
 import usecases.user.*
 import kotlin.reflect.KClass
-import kotlin.reflect.KType
 import kotlin.reflect.full.createType
 
 fun main(args: Array<String>) = EngineMain.main(args)
@@ -111,7 +112,7 @@ fun <T : Any, V : UsecaseA0<T>> SchemaBuilder.usecase(usecase: V) {
 
 fun <T : Any, U : Any, V : UsecaseA1<U, T>> SchemaBuilder.usecase(usecase: V) {
     query(usecase::class.simpleName!!) {
-        resolver {ctx: Context,  a0: U ->
+        resolver { ctx: Context, a0: U ->
             usecase.execute(ctx.get<UserPrincipal>()?.toUserModel(), a0)
         }.apply {
             target.setReturnType(usecase.result.createType())
