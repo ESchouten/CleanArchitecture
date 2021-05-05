@@ -3,7 +3,6 @@ import com.apurebase.kgraphql.GraphQL
 import com.apurebase.kgraphql.schema.dsl.ResolverDSL
 import com.apurebase.kgraphql.schema.dsl.SchemaBuilder
 import com.apurebase.kgraphql.schema.dsl.operations.AbstractOperationDSL
-import com.apurebase.kgraphql.schema.dsl.operations.QueryDSL
 import com.apurebase.kgraphql.schema.model.InputValueDef
 import com.benasher44.uuid.uuidFrom
 import entities.Authorities
@@ -75,48 +74,7 @@ fun Application.module(testing: Boolean = false) {
     val types = listOf<KClass<*>>(LoginUserModel::class)
 
     install(GraphQL) {
-        playground = true
-        wrap {
-            authenticate(optional = true, build = it)
-        }
-        context { call ->
-            call.authentication.principal<UserPrincipal>()?.let {
-                +it
-            }
-        }
-        schema {
-            usecases.forEach {
-                usecase(it)
-            }
-            types.forEach {
-                type(it) {}
-            }
-        }
-    }
-}
-
-fun SchemaBuilder.usecase(usecase: UsecaseType<*>) {
-    query(usecase::class.simpleName!!) {
-        when (usecase) {
-            is UsecaseA0<*> -> usecase(usecase)
-            is UsecaseA1<*, *> -> usecase(usecase)
-            else -> throw Exception("Invalid usecase")
-        }.apply {
-            setReturnType(usecase.result.createType())
-            addInputValues(usecase.args.mapIndexed { index, kClass -> InputValueDef(kClass, "a${index}") })
-        }
-    }
-}
-
-fun <T : Any, V : UsecaseA0<T>> AbstractOperationDSL.usecase(usecase: V): ResolverDSL {
-    return resolver { ctx: Context ->
-        usecase.execute(ctx.get<UserPrincipal>()?.toUserModel())
-    }
-}
-
-fun <T : Any, U : Any, V : UsecaseA1<U, T>> AbstractOperationDSL.usecase(usecase: V): ResolverDSL {
-    return resolver { ctx: Context, a0: U ->
-        usecase.execute(ctx.get<UserPrincipal>()?.toUserModel(), a0)
+        configure(usecases, types)
     }
 }
 
