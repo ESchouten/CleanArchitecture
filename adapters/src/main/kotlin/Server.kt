@@ -88,12 +88,6 @@ fun Application.module(testing: Boolean = false) {
                     ctx.get<UserPrincipal>()?.email ?: "Unknown"
                 }
             }
-            query("login") {
-                resolver { request: LoginUserModel ->
-                    val loginUser: LoginUser by inject()
-                    loginUser.execute(request, null)
-                }
-            }
             usecases.forEach {
                 connection(it)
             }
