@@ -5,12 +5,14 @@ import com.benasher44.uuid.Uuid
 import models.LoginUserModel
 import models.UserModel
 import repositories.UserRepository
-import usecases.UseCase
+import usecases.Usecase
+import usecases.UsecaseA1
 
-data class LoginUser(
+@Usecase
+class LoginUser(
     private val repository: UserRepository,
     private val encoder: (Uuid) -> String,
-) : UseCase<LoginUserModel, String>(LoginUserModel::class, String::class) {
+) : UsecaseA1<LoginUserModel, String>(LoginUserModel::class, String::class) {
 
     override val executor = { request: LoginUserModel, _: UserModel? ->
         val user = repository.findByEmail(request.email)

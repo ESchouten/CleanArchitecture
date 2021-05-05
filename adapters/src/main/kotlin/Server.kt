@@ -18,11 +18,8 @@ import org.koin.ktor.ext.Koin
 import org.koin.ktor.ext.inject
 import repositories.UserRepository
 import repositories.UserRepositoryImpl
-import usecases.UseCase
-import usecases.user.AuthenticateUser
-import usecases.user.CreateUser
-import usecases.user.LoginUser
-import usecases.user.UserExists
+import usecases.*
+import usecases.user.*
 import kotlin.reflect.KClass
 import kotlin.reflect.KType
 import kotlin.reflect.full.createType
@@ -41,6 +38,7 @@ fun Application.module(testing: Boolean = false) {
 
     val userModule = module {
         single { AuthenticateUser(get()) }
+        single { AuthenticatedUser() }
         single { CreateUser(get()) }
         single { LoginUser(get(), authenticator::encode) }
         single { UserExists(get()) }
@@ -69,7 +67,7 @@ fun Application.module(testing: Boolean = false) {
     }
 
 
-    val usecases = listOf<UseCase<*, *>>(LoginUser(getDependency(), authenticator::encode))
+    val usecases = listOf<UsecaseType>(LoginUser(getDependency(), authenticator::encode))
     val types = listOf<KClass<*>>(LoginUserModel::class)
 
     install(GraphQL) {
@@ -83,15 +81,9 @@ fun Application.module(testing: Boolean = false) {
             }
         }
         schema {
-            query("hello") {
-                resolver { ctx: Context ->
-                    ctx.get<UserPrincipal>()?.email ?: "Unknown"
-                }
-            }
             usecases.forEach {
-                connection(it)
+                usecase(it)
             }
-
             types.forEach {
                 type(it) {}
             }
@@ -99,15 +91,31 @@ fun Application.module(testing: Boolean = false) {
     }
 }
 
-fun <T : Any, U : Any, V: UseCase<T, U>> SchemaBuilder.connection(usecase: V) {
-    val requestType: KClass<T> = usecase.requestType
-    val resultType: KType = usecase.resultType.createType()
+fun SchemaBuilder.usecase(usecase: UsecaseType) {
+    when (usecase) {
+        is UsecaseA0<*> -> usecase(usecase)
+        is UsecaseA1<*, *> -> usecase(usecase)
+        else -> throw Exception("Invalid usecase")
+    }
+}
+
+fun <T : Any, V : UsecaseA0<T>> SchemaBuilder.usecase(usecase: V) {
     query(usecase::class.simpleName!!) {
-        resolver { request: T, ctx: Context ->
-            usecase.execute(request, ctx.get<UserPrincipal>()?.toUserModel())
+        resolver { ctx: Context ->
+            usecase.execute(ctx.get<UserPrincipal>()?.toUserModel())
         }.apply {
-            target.setReturnType(resultType)
-            addInputValues(listOf(InputValueDef(requestType, "request")))
+            target.setReturnType(usecase.result.createType())
+        }
+    }
+}
+
+fun <T : Any, U : Any, V : UsecaseA1<U, T>> SchemaBuilder.usecase(usecase: V) {
+    query(usecase::class.simpleName!!) {
+        resolver { a0: U, ctx: Context ->
+            usecase.execute(a0, ctx.get<UserPrincipal>()?.toUserModel())
+        }.apply {
+            target.setReturnType(usecase.result.createType())
+            addInputValues(listOf(InputValueDef(usecase.a0, "a0")))
         }
     }
 }

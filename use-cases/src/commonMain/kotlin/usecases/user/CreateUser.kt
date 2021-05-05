@@ -10,11 +10,13 @@ import models.CreateUserModel
 import models.UserModel
 import password
 import repositories.UserRepository
-import usecases.UseCase
+import usecases.Usecase
+import usecases.UsecaseA1
 
-data class CreateUser(
+@Usecase
+class CreateUser(
     private val repository: UserRepository
-) : UseCase<CreateUserModel, UserModel>(CreateUserModel::class, UserModel::class) {
+) : UsecaseA1<CreateUserModel, UserModel>(CreateUserModel::class, UserModel::class) {
 
     override val executor = { request: CreateUserModel, authentication: UserModel? ->
         if (authentication == null || !authentication.authorities.contains(Authorities.USER)) throw AuthorizationException()
