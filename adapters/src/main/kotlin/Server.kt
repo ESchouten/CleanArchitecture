@@ -1,31 +1,22 @@
-import com.apurebase.kgraphql.Context
 import com.apurebase.kgraphql.GraphQL
-import com.apurebase.kgraphql.schema.dsl.ResolverDSL
-import com.apurebase.kgraphql.schema.dsl.SchemaBuilder
-import com.apurebase.kgraphql.schema.dsl.operations.AbstractOperationDSL
-import com.apurebase.kgraphql.schema.model.InputValueDef
+import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuidFrom
 import entities.Authorities
-import entities.User
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.auth.jwt.*
 import io.ktor.features.*
 import io.ktor.server.cio.*
 import models.LoginUserModel
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
-import org.koin.dsl.module
+import models.UserModel
 import org.koin.ktor.ext.Koin
+import org.koin.ktor.ext.get
 import org.koin.ktor.ext.inject
-import repositories.UserRepository
-import repositories.UserRepositoryImpl
-import usecases.UsecaseA0
-import usecases.UsecaseA1
 import usecases.UsecaseType
-import usecases.user.*
+import usecases.user.AuthenticateUser
+import usecases.user.AuthenticatedUser
+import usecases.user.LoginUser
 import kotlin.reflect.KClass
-import kotlin.reflect.full.createType
 
 fun main(args: Array<String>) = EngineMain.main(args)
 
@@ -33,27 +24,14 @@ fun Application.module(testing: Boolean = false) {
     install(DefaultHeaders)
     install(CallLogging)
 
-    val authenticator = Authenticator(
-        issuer = environment.config.property("ktor.jwt.domain").getString(),
-        audience = environment.config.property("ktor.jwt.audience").getString(),
-        myRealm = environment.config.property("ktor.jwt.realm").getString(),
-    )
-
-    val userModule = module {
-        single { AuthenticateUser(get()) }
-        single { AuthenticatedUser() }
-        single { CreateUser(get()) }
-        single { LoginUser(get(), authenticator::encode) }
-        single { UserExists(get()) }
-        single<UserRepository> { UserRepositoryImpl() }
-    }
+    val config = config()
+    val authenticator = Authenticator(config)
 
     install(Koin) {
-        modules(userModule)
+        modules(
+            userModule(authenticator)
+        )
     }
-
-    val userRepository: UserRepository by inject()
-    userRepository.save(User("erik@erikschouten.com", listOf(Authorities.USER), "pass"))
 
     install(Authentication) {
         jwt {
@@ -61,7 +39,7 @@ fun Application.module(testing: Boolean = false) {
             validate { credential ->
                 if (credential.payload.audience.contains(authenticator.audience)) {
                     val authenticateUser: AuthenticateUser by inject()
-                    UserPrincipal(authenticateUser.execute(null, uuidFrom(credential.payload.subject)))
+                    authenticateUser.execute(null, uuidFrom(credential.payload.subject)) as UserPrincipal
                 } else {
                     null
                 }
@@ -69,17 +47,18 @@ fun Application.module(testing: Boolean = false) {
         }
     }
 
-
-    val usecases = listOf<UsecaseType<*>>(LoginUser(getDependency(), authenticator::encode))
-    val types = listOf<KClass<*>>(LoginUserModel::class)
+    val usecases = listOf<UsecaseType<*>>(
+        LoginUser(get(), authenticator::encode),
+        AuthenticatedUser(),
+    )
+    val types = listOf<KClass<*>>(
+        LoginUserModel::class,
+        UserModel::class,
+        Authorities::class,
+    )
 
     install(GraphQL) {
-        configure(usecases, types)
+        configure(usecases, types, config.development)
     }
-}
-
-inline fun <reified T> getDependency(): T {
-    return object : KoinComponent {
-        val value: T by inject()
-    }.value
+    if (config.development) setup(get())
 }

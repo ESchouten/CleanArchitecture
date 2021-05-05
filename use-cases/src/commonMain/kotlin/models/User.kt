@@ -5,7 +5,7 @@ import entities.Authorities
 import entities.User
 
 @Model
-data class UserModel(
+open class UserModel(
     val id: Uuid,
     val email: String,
     val authorities: List<Authorities>,

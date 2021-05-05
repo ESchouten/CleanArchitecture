@@ -4,15 +4,19 @@ import com.apurebase.kgraphql.schema.dsl.ResolverDSL
 import com.apurebase.kgraphql.schema.dsl.SchemaBuilder
 import com.apurebase.kgraphql.schema.dsl.operations.AbstractOperationDSL
 import com.apurebase.kgraphql.schema.model.InputValueDef
+import com.benasher44.uuid.Uuid
+import com.benasher44.uuid.uuidFrom
 import io.ktor.auth.*
 import usecases.UsecaseA0
 import usecases.UsecaseA1
 import usecases.UsecaseType
 import kotlin.reflect.KClass
+import kotlin.reflect.cast
 import kotlin.reflect.full.createType
+import kotlin.reflect.full.isSubclassOf
 
-fun GraphQL.Configuration.configure(usecases: List<UsecaseType<*>>, types: List<KClass<*>>, playground: Boolean = false) {
-    this.playground = playground
+fun GraphQL.Configuration.configure(usecases: List<UsecaseType<*>>, types: List<KClass<*>>, development: Boolean = false) {
+    this.playground = development
 
     wrap {
         authenticate(optional = true, build = it)
@@ -25,13 +29,23 @@ fun GraphQL.Configuration.configure(usecases: List<UsecaseType<*>>, types: List<
     }
 
     schema {
+        stringScalar<Uuid>{
+            deserialize = { id: String -> uuidFrom(id) }
+            serialize = Uuid::toString
+        }
         usecases.forEach {
             usecase(it)
         }
         types.forEach {
-            type(it) {}
+            if (it.isSubclassOf(Enum::class)) {
+                enum(it as KClass<Enum<*>>)
+            } else type(it) {}
         }
     }
+}
+
+fun <T : Enum<T>> SchemaBuilder.enum(type: KClass<T>) {
+    enum(kClass = type, enumValues = type.java.enumConstants as Array<T>, block = null)
 }
 
 fun SchemaBuilder.usecase(usecase: UsecaseType<*>) {
@@ -49,12 +63,12 @@ fun SchemaBuilder.usecase(usecase: UsecaseType<*>) {
 
 fun <T : Any, V : UsecaseA0<T>> AbstractOperationDSL.usecase(usecase: V): ResolverDSL {
     return resolver { ctx: Context ->
-        usecase.execute(ctx.get<UserPrincipal>()?.toUserModel())
+        usecase.execute(ctx.get<UserPrincipal>())
     }
 }
 
 fun <T : Any, U : Any, V : UsecaseA1<U, T>> AbstractOperationDSL.usecase(usecase: V): ResolverDSL {
     return resolver { ctx: Context, a0: U ->
-        usecase.execute(ctx.get<UserPrincipal>()?.toUserModel(), a0)
+        usecase.execute(ctx.get<UserPrincipal>(), a0)
     }
 }
