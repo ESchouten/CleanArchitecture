@@ -7,6 +7,7 @@ import com.apurebase.kgraphql.schema.model.InputValueDef
 import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuidFrom
 import io.ktor.auth.*
+import models.LoginUserModel
 import usecases.UsecaseA0
 import usecases.UsecaseA1
 import usecases.UsecaseType
@@ -15,7 +16,7 @@ import kotlin.reflect.cast
 import kotlin.reflect.full.createType
 import kotlin.reflect.full.isSubclassOf
 
-fun GraphQL.Configuration.configure(usecases: List<UsecaseType<*>>, types: List<KClass<*>>, development: Boolean = false) {
+fun GraphQL.Configuration.configure(usecases: Array<UsecaseType<*>>, types: Array<KClass<*>>, development: Boolean = false) {
     this.playground = development
 
     wrap {
@@ -33,19 +34,31 @@ fun GraphQL.Configuration.configure(usecases: List<UsecaseType<*>>, types: List<
             deserialize = { id: String -> uuidFrom(id) }
             serialize = Uuid::toString
         }
-        usecases.forEach {
-            usecase(it)
-        }
-        types.forEach {
-            if (it.isSubclassOf(Enum::class)) {
-                enum(it as KClass<Enum<*>>)
-            } else type(it) {}
-        }
+
+        usecases(usecases)
     }
 }
 
 fun <T : Enum<T>> SchemaBuilder.enum(type: KClass<T>) {
     enum(kClass = type, enumValues = type.java.enumConstants as Array<T>, block = null)
+}
+
+fun SchemaBuilder.usecases(usecases: Array<UsecaseType<*>>) {
+    val types = mutableSetOf<KClass<*>>()
+    usecases.forEach {
+        usecase(it)
+        types.addAll(types(it))
+    }
+    val scalars = model.toSchemaDefinition().scalars.map { it.kClass }
+    types.filter {  }.forEach {
+        if (it.isSubclassOf(Enum::class)) {
+            enum(it as KClass<Enum<*>>)
+        } else type(it) {}
+    }
+}
+
+fun types(usecase: UsecaseType<*>): List<KClass<*>> {
+    return usecase.args + listOf(usecase.result)
 }
 
 fun SchemaBuilder.usecase(usecase: UsecaseType<*>) {
