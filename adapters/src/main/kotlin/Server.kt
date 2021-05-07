@@ -49,14 +49,9 @@ fun Application.module(testing: Boolean = false) {
         LoginUser(get(), authenticator::encode),
         AuthenticatedUser(),
     )
-    val types = arrayOf<KClass<*>>(
-        LoginUserModel::class,
-        UserModel::class,
-        Authorities::class,
-    )
 
     install(GraphQL) {
-        configure(usecases, types, config.development)
+        configure(usecases, config.development)
     }
     if (config.development) setup(get())
 }
