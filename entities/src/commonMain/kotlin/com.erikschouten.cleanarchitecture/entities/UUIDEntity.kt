@@ -1,4 +1,4 @@
-package entities
+package com.erikschouten.cleanarchitecture.entities
 
 import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuid4

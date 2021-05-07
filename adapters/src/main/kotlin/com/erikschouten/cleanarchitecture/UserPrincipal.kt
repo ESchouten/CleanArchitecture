@@ -1,7 +1,9 @@
+package com.erikschouten.cleanarchitecture
+
 import com.benasher44.uuid.Uuid
-import entities.Authorities
+import com.erikschouten.cleanarchitecture.entities.Authorities
 import io.ktor.auth.*
-import models.UserModel
+import com.erikschouten.cleanarchitecture.models.UserModel
 
 class UserPrincipal private constructor(
     val id: Uuid,

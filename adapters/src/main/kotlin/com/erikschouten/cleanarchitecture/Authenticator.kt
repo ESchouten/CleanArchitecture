@@ -1,3 +1,5 @@
+package com.erikschouten.cleanarchitecture
+
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import com.benasher44.uuid.Uuid

@@ -1,8 +1,8 @@
-package models
+package com.erikschouten.cleanarchitecture.models
 
 import com.benasher44.uuid.Uuid
-import entities.Authorities
-import entities.User
+import com.erikschouten.cleanarchitecture.entities.Authorities
+import com.erikschouten.cleanarchitecture.entities.User
 
 data class UserModel(
     val id: Uuid,

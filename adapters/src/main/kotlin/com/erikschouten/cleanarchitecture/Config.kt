@@ -1,13 +1,12 @@
-import entities.Authorities
-import entities.User
+package com.erikschouten.cleanarchitecture
+
+import com.erikschouten.cleanarchitecture.entities.Authorities
+import com.erikschouten.cleanarchitecture.entities.User
 import io.ktor.application.*
-import io.ktor.config.*
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 import org.koin.dsl.module
-import repositories.UserRepository
-import repositories.UserRepositoryImpl
-import usecases.user.*
+import com.erikschouten.cleanarchitecture.repositories.UserRepository
+import com.erikschouten.cleanarchitecture.usecases.user.*
+import com.erikschouten.cleanarchitecture.repositories.UserRepositoryImpl
 
 fun Application.config() = environment.config.run {
     Config(

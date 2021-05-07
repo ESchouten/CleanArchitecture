@@ -1,3 +1,5 @@
+package com.erikschouten.cleanarchitecture
+
 import com.apurebase.kgraphql.Context
 import com.apurebase.kgraphql.GraphQL
 import com.apurebase.kgraphql.schema.dsl.ResolverDSL
@@ -9,19 +11,16 @@ import com.apurebase.kgraphql.schema.model.TypeDef
 import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuidFrom
 import io.ktor.auth.*
-import models.LoginUserModel
-import usecases.UsecaseA0
-import usecases.UsecaseA1
-import usecases.UsecaseType
+import com.erikschouten.cleanarchitecture.usecases.UsecaseA0
+import com.erikschouten.cleanarchitecture.usecases.UsecaseA1
+import com.erikschouten.cleanarchitecture.usecases.UsecaseType
 import kotlin.reflect.KClass
-import kotlin.reflect.cast
 import kotlin.reflect.full.createType
 import kotlin.reflect.full.isSubclassOf
 import kotlin.reflect.full.memberProperties
 import kotlin.reflect.full.starProjectedType
 import kotlin.reflect.jvm.isAccessible
 import kotlin.reflect.jvm.jvmErasure
-import kotlin.reflect.typeOf
 
 fun GraphQL.Configuration.configure(usecases: Array<UsecaseType<*>>, development: Boolean = false) {
     this.playground = development
@@ -101,7 +100,7 @@ fun SchemaBuilder.usecase(usecase: UsecaseType<*>) {
         when (usecase) {
             is UsecaseA0<*> -> usecase(usecase)
             is UsecaseA1<*, *> -> usecase(usecase)
-            else -> throw Exception("Invalid usecase")
+            else -> throw Exception("Invalid com.erikschouten.cleanarchitecture.usecase")
         }.apply {
             setReturnType(usecase.result.createType())
             addInputValues(usecase.args.mapIndexed { index, kClass -> InputValueDef(kClass, "a${index}") })

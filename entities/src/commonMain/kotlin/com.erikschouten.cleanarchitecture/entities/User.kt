@@ -1,4 +1,4 @@
-package entities
+package com.erikschouten.cleanarchitecture.entities
 
 data class User(
     val email: String,

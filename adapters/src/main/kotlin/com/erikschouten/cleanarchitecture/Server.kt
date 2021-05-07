@@ -1,20 +1,18 @@
+package com.erikschouten.cleanarchitecture
+
 import com.apurebase.kgraphql.GraphQL
 import com.benasher44.uuid.uuidFrom
-import entities.Authorities
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.auth.jwt.*
 import io.ktor.features.*
 import io.ktor.server.cio.*
-import models.LoginUserModel
-import models.UserModel
 import org.koin.ktor.ext.Koin
 import org.koin.ktor.ext.get
-import usecases.UsecaseType
-import usecases.user.AuthenticateUser
-import usecases.user.AuthenticatedUser
-import usecases.user.LoginUser
-import kotlin.reflect.KClass
+import com.erikschouten.cleanarchitecture.usecases.UsecaseType
+import com.erikschouten.cleanarchitecture.usecases.user.AuthenticateUser
+import com.erikschouten.cleanarchitecture.usecases.user.AuthenticatedUser
+import com.erikschouten.cleanarchitecture.usecases.user.LoginUser
 
 fun main(args: Array<String>) = EngineMain.main(args)
 

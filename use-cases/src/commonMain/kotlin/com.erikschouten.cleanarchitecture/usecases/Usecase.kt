@@ -1,6 +1,6 @@
-package usecases
+package com.erikschouten.cleanarchitecture.usecases
 
-import models.UserModel
+import com.erikschouten.cleanarchitecture.models.UserModel
 import kotlin.reflect.KClass
 
 annotation class Usecase

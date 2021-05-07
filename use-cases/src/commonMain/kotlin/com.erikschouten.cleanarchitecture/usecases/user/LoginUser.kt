@@ -1,12 +1,12 @@
-package usecases.user
+package com.erikschouten.cleanarchitecture.usecases.user
 
-import LoginException
+import com.erikschouten.cleanarchitecture.LoginException
 import com.benasher44.uuid.Uuid
-import models.LoginUserModel
-import models.UserModel
-import repositories.UserRepository
-import usecases.Usecase
-import usecases.UsecaseA1
+import com.erikschouten.cleanarchitecture.models.LoginUserModel
+import com.erikschouten.cleanarchitecture.models.UserModel
+import com.erikschouten.cleanarchitecture.repositories.UserRepository
+import com.erikschouten.cleanarchitecture.usecases.Usecase
+import com.erikschouten.cleanarchitecture.usecases.UsecaseA1
 
 @Usecase
 class LoginUser(
