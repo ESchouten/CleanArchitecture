@@ -9,7 +9,7 @@ application {
 
 dependencies {
     val ktorVersion = "1.5.4"
-    
+
     implementation(project(":use-cases"))
     implementation("io.ktor:ktor-server-core:$ktorVersion")
     implementation("io.ktor:ktor-server-cio:$ktorVersion")
