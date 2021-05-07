@@ -51,5 +51,6 @@ fun Application.module(testing: Boolean = false) {
     install(GraphQL) {
         configure(usecases, config.development)
     }
+
     if (config.development) setup(get())
 }
