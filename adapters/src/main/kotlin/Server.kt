@@ -10,7 +10,6 @@ import models.LoginUserModel
 import models.UserModel
 import org.koin.ktor.ext.Koin
 import org.koin.ktor.ext.get
-import org.koin.ktor.ext.inject
 import usecases.UsecaseType
 import usecases.user.AuthenticateUser
 import usecases.user.AuthenticatedUser
@@ -46,18 +45,13 @@ fun Application.module(testing: Boolean = false) {
         }
     }
 
-    val usecases = listOf<UsecaseType<*>>(
+    val usecases = arrayOf<UsecaseType<*>>(
         LoginUser(get(), authenticator::encode),
         AuthenticatedUser(),
     )
-    val types = listOf<KClass<*>>(
-        LoginUserModel::class,
-        UserModel::class,
-        Authorities::class,
-    )
 
     install(GraphQL) {
-        configure(usecases, types, config.development)
+        configure(usecases, config.development)
     }
     if (config.development) setup(get())
 }
