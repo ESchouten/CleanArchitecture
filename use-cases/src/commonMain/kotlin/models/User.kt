@@ -4,8 +4,7 @@ import com.benasher44.uuid.Uuid
 import entities.Authorities
 import entities.User
 
-@Model
-open class UserModel(
+data class UserModel(
     val id: Uuid,
     val email: String,
     val authorities: List<Authorities>,
@@ -15,7 +14,6 @@ open class UserModel(
     }
 }
 
-@Model
 data class CreateUserModel(
     val email: String,
     val authorities: List<Authorities>,
@@ -24,7 +22,6 @@ data class CreateUserModel(
     fun toUser() = User(email, authorities, password)
 }
 
-@Model
 data class LoginUserModel(
     val email: String,
     val password: String,

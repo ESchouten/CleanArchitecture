@@ -66,7 +66,7 @@ fun SchemaBuilder.usecases(usecases: Array<UsecaseType<*>>) {
 }
 
 fun types(types: Set<KClass<*>>, scalars: List<KClass<*>>): Set<KClass<*>> {
-    val found = types.filterNot { it in scalars }.toMutableList()
+    val found = types.filterNotTo(mutableSetOf()) { it in scalars }
     found.addAll(
         found.flatMap {
             val props = properties(it)
@@ -111,13 +111,13 @@ fun SchemaBuilder.usecase(usecase: UsecaseType<*>) {
 
 fun <T, V : UsecaseA0<T>> AbstractOperationDSL.usecase(usecase: V): ResolverDSL {
     return resolver { ctx: Context ->
-        usecase.execute(ctx.get<UserPrincipal>())
+        usecase.execute(ctx.get<UserPrincipal>()?.toUserModel())
     }
 }
 
 fun <T, U, V : UsecaseA1<U, T>> AbstractOperationDSL.usecase(usecase: V): ResolverDSL {
     return resolver { ctx: Context, a0: U ->
-        usecase.execute(ctx.get<UserPrincipal>(), a0)
+        usecase.execute(ctx.get<UserPrincipal>()?.toUserModel(), a0)
     }
 }
 
