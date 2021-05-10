@@ -21,7 +21,7 @@ abstract class UsecaseA0<R : Any>(
 
     final override val args get() = emptyList<KClass<*>>()
     abstract val executor: (authentication: UserModel?) -> R
-    fun execute(authentication: UserModel?) = executor(authentication)
+    operator fun invoke(authentication: UserModel?) = executor(authentication)
 }
 
 abstract class UsecaseA1<A0 : Any, R : Any>(
@@ -31,5 +31,5 @@ abstract class UsecaseA1<A0 : Any, R : Any>(
 
     final override val args get() = listOf(a0)
     abstract val executor: (authentication: UserModel?, a0: A0) -> R
-    fun execute(authentication: UserModel?, a0: A0) = executor(authentication, a0)
+    operator fun invoke(authentication: UserModel?, a0: A0) = executor(authentication, a0)
 }

@@ -52,13 +52,13 @@ fun SchemaBuilder.usecase(usecase: UsecaseType<*>) {
 
 fun <R, U : UsecaseA0<R>> AbstractOperationDSL.usecase(usecase: U): ResolverDSL {
     return resolver { ctx: Context ->
-        usecase.execute(ctx.get<UserPrincipal>()?.toUserModel())
+        usecase(ctx.get<UserPrincipal>()?.toUserModel())
     }
 }
 
 fun <R, A0, U : UsecaseA1<A0, R>> AbstractOperationDSL.usecase(usecase: U): ResolverDSL {
     return resolver { ctx: Context, a0: A0 ->
-        usecase.execute(ctx.get<UserPrincipal>()?.toUserModel(), a0)
+        usecase(ctx.get<UserPrincipal>()?.toUserModel(), a0)
     }
 }
 

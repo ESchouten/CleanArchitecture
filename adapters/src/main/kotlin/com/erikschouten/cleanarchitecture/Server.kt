@@ -33,7 +33,7 @@ fun Application.module(testing: Boolean = false) {
             verifier(authenticator.verifier)
             validate { credential ->
                 if (credential.payload.audience.contains(authenticator.audience)) {
-                    UserPrincipal(get<AuthenticateUser>().execute(null, uuidFrom(credential.payload.subject)))
+                    UserPrincipal(get<AuthenticateUser>()(null, uuidFrom(credential.payload.subject)))
                 } else {
                     null
                 }
