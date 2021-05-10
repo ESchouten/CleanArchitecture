@@ -25,7 +25,7 @@ abstract class UsecaseA0<R : Any>(
 }
 
 abstract class UsecaseA1<A0 : Any, R : Any>(
-    val a0: KClass<A0>,
+    private val a0: KClass<A0>,
     result: KClass<R>
 ) : UsecaseType<R>(result) {
 

@@ -10,7 +10,7 @@ import com.erikschouten.cleanarchitecture.Config
 class AuthenticatorImpl(
     private val issuer: String,
     val audience: String,
-    private val realm: String,
+    val realm: String,
     private val secret: Algorithm = Algorithm.HMAC256(uuid4().toString()),
 ) : Authenticator {
     val verifier = JWT

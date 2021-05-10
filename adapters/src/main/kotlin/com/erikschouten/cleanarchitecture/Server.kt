@@ -35,6 +35,7 @@ fun Application.module(testing: Boolean = false) {
             val authenticator = get<Authenticator>() as AuthenticatorImpl
             val userRepository = get<UserRepository>()
             verifier(authenticator.verifier)
+            realm = authenticator.realm
             validate { credential ->
                 if (credential.payload.audience.contains(authenticator.audience)) {
                     userRepository.findById(uuidFrom(credential.payload.subject))?.let {
