@@ -8,6 +8,7 @@ import com.apurebase.kgraphql.schema.dsl.operations.AbstractOperationDSL
 import com.apurebase.kgraphql.schema.model.InputValueDef
 import com.apurebase.kgraphql.schema.model.MutableSchemaDefinition
 import com.apurebase.kgraphql.schema.model.TypeDef
+import com.erikschouten.cleanarchitecture.auth.UserPrincipal
 import com.erikschouten.cleanarchitecture.usecases.*
 import kotlin.reflect.KClass
 import kotlin.reflect.full.*

@@ -20,6 +20,7 @@ dependencies {
     implementation("io.insert-koin:koin-ktor:$koinVersion")
     implementation("io.insert-koin:koin-core-ext:$koinVersion")
     implementation("com.apurebase:kgraphql-ktor:0.17.8")
+    implementation("at.favre.lib:bcrypt:0.9.0")
 
     implementation(kotlin("reflect"))
 

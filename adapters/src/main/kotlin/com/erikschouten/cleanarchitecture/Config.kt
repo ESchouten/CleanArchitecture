@@ -1,11 +1,14 @@
 package com.erikschouten.cleanarchitecture
 
+import com.erikschouten.cleanarchitecture.auth.AuthenticatorImpl
+import com.erikschouten.cleanarchitecture.auth.PasswordEncoderImpl
 import com.erikschouten.cleanarchitecture.entities.Authorities
 import com.erikschouten.cleanarchitecture.entities.User
 import io.ktor.application.*
 import com.erikschouten.cleanarchitecture.repositories.UserRepository
 import com.erikschouten.cleanarchitecture.usecases.user.*
 import com.erikschouten.cleanarchitecture.repositories.UserRepositoryImpl
+import org.koin.core.module.Module
 import org.koin.dsl.module
 import org.koin.experimental.builder.single
 import org.koin.experimental.builder.singleBy
@@ -26,16 +29,20 @@ data class Config(
     val development: Boolean,
 )
 
-fun userModule(config: Config) = module {
+fun modules(config: Config): List<Module> {
+    return listOf(userModule(config))
+}
+
+private fun userModule(config: Config) = module {
     single<AuthenticatedUser>()
-    single<AuthenticateUser>()
     single<Authenticator> { AuthenticatorImpl(config) }
     single<CreateUser>()
     single<LoginUser>()
+    singleBy<PasswordEncoder, PasswordEncoderImpl>()
     single<UserExists>()
     singleBy<UserRepository, UserRepositoryImpl>()
 }
 
-fun setup(userRepository: UserRepository) {
-    userRepository.save(User("erik@erikschouten.com", listOf(Authorities.USER), "pass"))
+fun setup(userRepository: UserRepository, passwordEncoder: PasswordEncoder) {
+    userRepository.save(User("erik@erikschouten.com", listOf(Authorities.USER), passwordEncoder.encode("pass")))
 }

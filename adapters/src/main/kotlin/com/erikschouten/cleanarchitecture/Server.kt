@@ -2,6 +2,10 @@ package com.erikschouten.cleanarchitecture
 
 import com.apurebase.kgraphql.GraphQL
 import com.benasher44.uuid.uuidFrom
+import com.erikschouten.cleanarchitecture.auth.AuthenticatorImpl
+import com.erikschouten.cleanarchitecture.auth.UserPrincipal
+import com.erikschouten.cleanarchitecture.models.UserModel
+import com.erikschouten.cleanarchitecture.repositories.UserRepository
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.auth.jwt.*
@@ -11,7 +15,6 @@ import org.koin.ktor.ext.Koin
 import org.koin.ktor.ext.get
 import com.erikschouten.cleanarchitecture.usecases.UsecaseType
 import com.erikschouten.cleanarchitecture.usecases.user.*
-import org.koin.ktor.ext.getKoin
 
 fun main(args: Array<String>) = EngineMain.main(args)
 
@@ -22,18 +25,19 @@ fun Application.module(testing: Boolean = false) {
     val config = config()
 
     install(Koin) {
-        modules(
-            userModule(config)
-        )
+        modules(modules(config))
     }
 
     install(Authentication) {
         jwt {
             val authenticator = get<Authenticator>() as AuthenticatorImpl
+            val userRepository = get<UserRepository>()
             verifier(authenticator.verifier)
             validate { credential ->
                 if (credential.payload.audience.contains(authenticator.audience)) {
-                    UserPrincipal(get<AuthenticateUser>()(null, uuidFrom(credential.payload.subject)))
+                    userRepository.findById(uuidFrom(credential.payload.subject))?.let {
+                        UserPrincipal(UserModel.of(it))
+                    }
                 } else {
                     null
                 }
@@ -43,7 +47,6 @@ fun Application.module(testing: Boolean = false) {
 
     val usecases = arrayOf<UsecaseType<*>>(
         get<AuthenticatedUser>(),
-        get<AuthenticateUser>(),
         get<CreateUser>(),
         get<LoginUser>(),
         get<UserExists>(),
@@ -53,5 +56,5 @@ fun Application.module(testing: Boolean = false) {
         configure(usecases, config.development)
     }
 
-    if (config.development) setup(get())
+    if (config.development) setup(get(), get())
 }

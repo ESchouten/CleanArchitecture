@@ -1,9 +1,11 @@
-package com.erikschouten.cleanarchitecture
+package com.erikschouten.cleanarchitecture.auth
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuid4
+import com.erikschouten.cleanarchitecture.Authenticator
+import com.erikschouten.cleanarchitecture.Config
 
 class AuthenticatorImpl(
     val issuer: String,

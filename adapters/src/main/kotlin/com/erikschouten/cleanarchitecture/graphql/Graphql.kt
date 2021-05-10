@@ -3,6 +3,7 @@ package com.erikschouten.cleanarchitecture
 import com.apurebase.kgraphql.GraphQL
 import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuidFrom
+import com.erikschouten.cleanarchitecture.auth.UserPrincipal
 import io.ktor.auth.*
 import com.erikschouten.cleanarchitecture.usecases.UsecaseType
 
