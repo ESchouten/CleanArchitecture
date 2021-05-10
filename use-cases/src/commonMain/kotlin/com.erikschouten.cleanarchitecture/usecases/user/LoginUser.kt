@@ -1,7 +1,6 @@
 package com.erikschouten.cleanarchitecture.usecases.user
 
 import com.erikschouten.cleanarchitecture.LoginException
-import com.benasher44.uuid.Uuid
 import com.erikschouten.cleanarchitecture.Authenticator
 import com.erikschouten.cleanarchitecture.PasswordEncoder
 import com.erikschouten.cleanarchitecture.models.LoginUserModel

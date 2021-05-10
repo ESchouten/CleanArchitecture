@@ -4,6 +4,7 @@ import com.apurebase.kgraphql.GraphQL
 import com.benasher44.uuid.uuidFrom
 import com.erikschouten.cleanarchitecture.auth.AuthenticatorImpl
 import com.erikschouten.cleanarchitecture.auth.UserPrincipal
+import com.erikschouten.cleanarchitecture.graphql.configure
 import com.erikschouten.cleanarchitecture.models.UserModel
 import com.erikschouten.cleanarchitecture.repositories.UserRepository
 import io.ktor.application.*
@@ -18,6 +19,7 @@ import com.erikschouten.cleanarchitecture.usecases.user.*
 
 fun main(args: Array<String>) = EngineMain.main(args)
 
+@Suppress("unused")
 fun Application.module(testing: Boolean = false) {
     install(DefaultHeaders)
     install(CallLogging)

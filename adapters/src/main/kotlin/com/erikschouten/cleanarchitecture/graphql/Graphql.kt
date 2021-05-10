@@ -1,4 +1,4 @@
-package com.erikschouten.cleanarchitecture
+package com.erikschouten.cleanarchitecture.graphql
 
 import com.apurebase.kgraphql.GraphQL
 import com.benasher44.uuid.Uuid

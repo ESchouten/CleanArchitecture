@@ -1,4 +1,4 @@
-package com.erikschouten.cleanarchitecture
+package com.erikschouten.cleanarchitecture.graphql
 
 import com.apurebase.kgraphql.Context
 import com.apurebase.kgraphql.schema.Publisher
@@ -11,6 +11,7 @@ import com.apurebase.kgraphql.schema.model.TypeDef
 import com.erikschouten.cleanarchitecture.auth.UserPrincipal
 import com.erikschouten.cleanarchitecture.usecases.*
 import kotlin.reflect.KClass
+import kotlin.reflect.KType
 import kotlin.reflect.full.*
 import kotlin.reflect.jvm.isAccessible
 import kotlin.reflect.jvm.jvmErasure
@@ -43,7 +44,7 @@ fun SchemaBuilder.usecase(usecase: UsecaseType<*>) {
         when (usecase) {
             is UsecaseA0<*> -> usecase(usecase)
             is UsecaseA1<*, *> -> usecase(usecase)
-            else -> throw Exception("Invalid com.erikschouten.cleanarchitecture.usecase")
+            else -> throw Exception("Invalid com.erikschouten.cleanarchitecture.graphql.usecase")
         }.apply {
             setReturnType(usecase.result.createType())
             addInputValues(usecase.args.mapIndexed { index, kClass -> InputValueDef(kClass, "a${index}") })
@@ -97,10 +98,13 @@ inline fun <reified T : Any, R> T.privateProperty(name: String): R =
 
 fun properties(type: KClass<*>): List<KClass<*>> {
     return type.memberProperties.map { it.returnType }.map {
-        if ((it.classifier as KClass<*>).supertypes.map { it.jvmErasure }.any { it == Collection::class.starProjectedType.jvmErasure || it == Array::class.starProjectedType.jvmErasure }) {
+        if (it.isCollection()) {
             it.arguments.first().type!!.classifier as KClass<*>
         } else {
             it.classifier as KClass<*>
         }
     }
 }
+
+fun KType.isCollection() = (this.classifier as KClass<*>).supertypes.map { superType -> superType.jvmErasure }
+    .any { kClass -> kClass == Collection::class.starProjectedType.jvmErasure || kClass == Array::class.starProjectedType.jvmErasure }

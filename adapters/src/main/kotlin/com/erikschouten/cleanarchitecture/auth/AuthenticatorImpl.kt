@@ -8,23 +8,23 @@ import com.erikschouten.cleanarchitecture.Authenticator
 import com.erikschouten.cleanarchitecture.Config
 
 class AuthenticatorImpl(
-    val issuer: String,
+    private val issuer: String,
     val audience: String,
-    val realm: String,
+    private val realm: String,
     private val secret: Algorithm = Algorithm.HMAC256(uuid4().toString()),
 ) : Authenticator {
     val verifier = JWT
         .require(secret)
         .withAudience(audience)
         .withIssuer(issuer)
-        .build()
+        .build()!!
 
     override fun generate(id: Uuid) = JWT
         .create()
         .withAudience(audience)
         .withIssuer(issuer)
         .withSubject(id.toString())
-        .sign(secret)
+        .sign(secret)!!
 
     constructor(config: Config) : this(config.jwtDomain, config.jwtAudience, config.jwtRealm)
 }
