@@ -3,10 +3,12 @@ package com.erikschouten.cleanarchitecture
 import com.erikschouten.cleanarchitecture.entities.Authorities
 import com.erikschouten.cleanarchitecture.entities.User
 import io.ktor.application.*
-import org.koin.dsl.module
 import com.erikschouten.cleanarchitecture.repositories.UserRepository
 import com.erikschouten.cleanarchitecture.usecases.user.*
 import com.erikschouten.cleanarchitecture.repositories.UserRepositoryImpl
+import org.koin.dsl.module
+import org.koin.experimental.builder.single
+import org.koin.experimental.builder.singleBy
 
 fun Application.config() = environment.config.run {
     Config(
@@ -24,13 +26,14 @@ data class Config(
     val development: Boolean,
 )
 
-fun userModule(authenticator: Authenticator) = module {
-    single { AuthenticateUser(get()) }
-    single { AuthenticatedUser() }
-    single { CreateUser(get()) }
-    single { LoginUser(get(), authenticator::encode) }
-    single { UserExists(get()) }
-    single<UserRepository> { UserRepositoryImpl() }
+fun userModule(config: Config) = module {
+    single<AuthenticatedUser>()
+    single<AuthenticateUser>()
+    single<Authenticator> { AuthenticatorImpl(config) }
+    single<CreateUser>()
+    single<LoginUser>()
+    single<UserExists>()
+    singleBy<UserRepository, UserRepositoryImpl>()
 }
 
 fun setup(userRepository: UserRepository) {

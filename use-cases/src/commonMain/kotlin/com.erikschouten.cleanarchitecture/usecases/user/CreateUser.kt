@@ -10,8 +10,10 @@ import com.erikschouten.cleanarchitecture.models.CreateUserModel
 import com.erikschouten.cleanarchitecture.models.UserModel
 import com.erikschouten.cleanarchitecture.password
 import com.erikschouten.cleanarchitecture.repositories.UserRepository
+import com.erikschouten.cleanarchitecture.usecases.Mutation
 import com.erikschouten.cleanarchitecture.usecases.UsecaseA1
 
+@Mutation
 class CreateUser(
     private val repository: UserRepository
 ) : UsecaseA1<CreateUserModel, UserModel>(CreateUserModel::class, UserModel::class) {

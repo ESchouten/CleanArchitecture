@@ -3,6 +3,12 @@ package com.erikschouten.cleanarchitecture.usecases
 import com.erikschouten.cleanarchitecture.models.UserModel
 import kotlin.reflect.KClass
 
+@Target(AnnotationTarget.CLASS)
+annotation class Query
+
+@Target(AnnotationTarget.CLASS)
+annotation class Mutation
+
 sealed class UsecaseType<R : Any>(
     val result: KClass<R>
 ) {

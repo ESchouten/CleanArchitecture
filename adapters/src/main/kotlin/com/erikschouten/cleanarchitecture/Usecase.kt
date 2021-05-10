@@ -1,20 +1,16 @@
 package com.erikschouten.cleanarchitecture
 
 import com.apurebase.kgraphql.Context
+import com.apurebase.kgraphql.schema.Publisher
 import com.apurebase.kgraphql.schema.dsl.ResolverDSL
 import com.apurebase.kgraphql.schema.dsl.SchemaBuilder
 import com.apurebase.kgraphql.schema.dsl.operations.AbstractOperationDSL
 import com.apurebase.kgraphql.schema.model.InputValueDef
 import com.apurebase.kgraphql.schema.model.MutableSchemaDefinition
 import com.apurebase.kgraphql.schema.model.TypeDef
-import com.erikschouten.cleanarchitecture.usecases.UsecaseA0
-import com.erikschouten.cleanarchitecture.usecases.UsecaseA1
-import com.erikschouten.cleanarchitecture.usecases.UsecaseType
+import com.erikschouten.cleanarchitecture.usecases.*
 import kotlin.reflect.KClass
-import kotlin.reflect.full.createType
-import kotlin.reflect.full.isSubclassOf
-import kotlin.reflect.full.memberProperties
-import kotlin.reflect.full.starProjectedType
+import kotlin.reflect.full.*
 import kotlin.reflect.jvm.isAccessible
 import kotlin.reflect.jvm.jvmErasure
 
@@ -31,6 +27,27 @@ fun SchemaBuilder.usecases(usecases: Array<UsecaseType<*>>) {
         .map { it.kClass }
 
     types(types, scalars).forEach { type(it) }
+}
+
+fun SchemaBuilder.usecase(usecase: UsecaseType<*>) {
+    val type: ((String, AbstractOperationDSL.() -> Unit) -> Publisher)? = usecase::class.let {
+        when {
+            it.hasAnnotation<Query>() -> ::query
+            it.hasAnnotation<Mutation>() -> ::mutation
+            else -> null
+        }
+    }
+
+    type?.invoke(usecase::class.simpleName!!) {
+        when (usecase) {
+            is UsecaseA0<*> -> usecase(usecase)
+            is UsecaseA1<*, *> -> usecase(usecase)
+            else -> throw Exception("Invalid com.erikschouten.cleanarchitecture.usecase")
+        }.apply {
+            setReturnType(usecase.result.createType())
+            addInputValues(usecase.args.mapIndexed { index, kClass -> InputValueDef(kClass, "a${index}") })
+        }
+    }
 }
 
 fun <R, U : UsecaseA0<R>> AbstractOperationDSL.usecase(usecase: U): ResolverDSL {
@@ -68,19 +85,6 @@ fun SchemaBuilder.type(type: KClass<*>) {
 
 fun <T : Enum<T>> SchemaBuilder.enum(type: KClass<T>) {
     enum(kClass = type, enumValues = type.java.enumConstants as Array<T>, block = null)
-}
-
-fun SchemaBuilder.usecase(usecase: UsecaseType<*>) {
-    query(usecase::class.simpleName!!) {
-        when (usecase) {
-            is UsecaseA0<*> -> usecase(usecase)
-            is UsecaseA1<*, *> -> usecase(usecase)
-            else -> throw Exception("Invalid com.erikschouten.cleanarchitecture.usecase")
-        }.apply {
-            setReturnType(usecase.result.createType())
-            addInputValues(usecase.args.mapIndexed { index, kClass -> InputValueDef(kClass, "a${index}") })
-        }
-    }
 }
 
 inline fun <reified T : Any, R> T.privateProperty(name: String): R =

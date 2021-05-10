@@ -10,9 +10,8 @@ import io.ktor.server.cio.*
 import org.koin.ktor.ext.Koin
 import org.koin.ktor.ext.get
 import com.erikschouten.cleanarchitecture.usecases.UsecaseType
-import com.erikschouten.cleanarchitecture.usecases.user.AuthenticateUser
-import com.erikschouten.cleanarchitecture.usecases.user.AuthenticatedUser
-import com.erikschouten.cleanarchitecture.usecases.user.LoginUser
+import com.erikschouten.cleanarchitecture.usecases.user.*
+import org.koin.ktor.ext.getKoin
 
 fun main(args: Array<String>) = EngineMain.main(args)
 
@@ -21,21 +20,20 @@ fun Application.module(testing: Boolean = false) {
     install(CallLogging)
 
     val config = config()
-    val authenticator = Authenticator(config)
 
     install(Koin) {
         modules(
-            userModule(authenticator)
+            userModule(config)
         )
     }
 
     install(Authentication) {
         jwt {
+            val authenticator = get<Authenticator>() as AuthenticatorImpl
             verifier(authenticator.verifier)
             validate { credential ->
                 if (credential.payload.audience.contains(authenticator.audience)) {
-                    val authenticateUser: AuthenticateUser = get()
-                    UserPrincipal(authenticateUser.execute(null, uuidFrom(credential.payload.subject)))
+                    UserPrincipal(get<AuthenticateUser>().execute(null, uuidFrom(credential.payload.subject)))
                 } else {
                     null
                 }
@@ -44,8 +42,11 @@ fun Application.module(testing: Boolean = false) {
     }
 
     val usecases = arrayOf<UsecaseType<*>>(
-        LoginUser(get(), authenticator::encode),
-        AuthenticatedUser(),
+        get<AuthenticatedUser>(),
+        get<AuthenticateUser>(),
+        get<CreateUser>(),
+        get<LoginUser>(),
+        get<UserExists>(),
     )
 
     install(GraphQL) {
