@@ -12,8 +12,8 @@ pluginManagement {
 }
 
 include(
-    ":entities",
-    ":use-cases",
-    ":adapters"
+    ":domain",
+    ":use-case",
+    ":adapter"
 )
 
