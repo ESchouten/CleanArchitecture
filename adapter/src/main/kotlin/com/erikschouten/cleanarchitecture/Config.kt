@@ -6,8 +6,11 @@ import com.erikschouten.cleanarchitecture.entity.Authorities
 import com.erikschouten.cleanarchitecture.entity.User
 import io.ktor.application.*
 import com.erikschouten.cleanarchitecture.repository.UserRepository
-import com.erikschouten.cleanarchitecture.usecase.user.*
 import com.erikschouten.cleanarchitecture.repository.UserRepositoryImpl
+import com.erikschouten.cleanarchitecture.usecase.user.AuthenticatedUser
+import com.erikschouten.cleanarchitecture.usecase.user.CreateUser
+import com.erikschouten.cleanarchitecture.usecase.user.LoginUser
+import com.erikschouten.cleanarchitecture.usecase.user.UserExists
 import org.koin.core.module.Module
 import org.koin.dsl.module
 import org.koin.experimental.builder.single

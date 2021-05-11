@@ -15,7 +15,10 @@ import io.ktor.server.cio.*
 import org.koin.ktor.ext.Koin
 import org.koin.ktor.ext.get
 import com.erikschouten.cleanarchitecture.usecase.UsecaseType
-import com.erikschouten.cleanarchitecture.usecase.user.*
+import com.erikschouten.cleanarchitecture.usecase.user.AuthenticatedUser
+import com.erikschouten.cleanarchitecture.usecase.user.CreateUser
+import com.erikschouten.cleanarchitecture.usecase.user.LoginUser
+import com.erikschouten.cleanarchitecture.usecase.user.UserExists
 
 fun main(args: Array<String>) = EngineMain.main(args)
 
@@ -39,7 +42,7 @@ fun Application.module(testing: Boolean = false) {
             validate { credential ->
                 if (credential.payload.audience.contains(authenticator.audience)) {
                     userRepository.findById(uuidFrom(credential.payload.subject))?.let {
-                        UserPrincipal(UserModel.of(it))
+                        UserPrincipal(UserModel(it))
                     }
                 } else {
                     null

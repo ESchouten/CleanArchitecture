@@ -24,7 +24,4 @@ dependencies {
     implementation("at.favre.lib:bcrypt:0.9.0")
 
     implementation(kotlin("reflect"))
-
-    testImplementation(kotlin("test"))
-    testImplementation("io.ktor:ktor-server-test-host:$ktorVersion")
 }

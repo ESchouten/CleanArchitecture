@@ -10,9 +10,7 @@ data class UserModel(
     val email: String,
     val authorities: List<Authorities>,
 ) {
-    companion object {
-        fun of(user: User) = UserModel(user.id, user.email, user.roles)
-    }
+    constructor(user: User) : this(user.id, user.email, user.roles)
 }
 
 data class CreateUserModel(

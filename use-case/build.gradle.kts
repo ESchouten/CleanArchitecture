@@ -11,5 +11,12 @@ kotlin {
                 api(project(":domain"))
             }
         }
+
+        val jvmTest by getting {
+            dependencies {
+                implementation(kotlin("test"))
+                implementation("io.mockk:mockk:1.11.0")
+            }
+        }
     }
 }

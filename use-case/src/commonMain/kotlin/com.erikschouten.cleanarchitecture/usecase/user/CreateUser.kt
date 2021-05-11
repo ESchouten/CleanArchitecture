@@ -16,10 +16,11 @@ class CreateUser(
 ) : UsecaseA1<CreateUserModel, UserModel>(CreateUserModel::class, UserModel::class) {
 
     override val executor = { authentication: UserModel?, a0: CreateUserModel ->
-        if (authentication == null || !authentication.authorities.contains(Authorities.USER)) throw AuthorizationException()
+        if (authentication == null) throw LoginException()
+        if (!authentication.authorities.contains(Authorities.USER)) throw AuthorizationException()
         if (!email(a0.email)) throw EmailInvalidException()
         if (!password(a0.password)) throw PasswordInvalidException()
         if (userExists(authentication, a0.email)) throw EmailAlreadyExistsException()
-        UserModel.of(repository.save(a0.toUser(passwordEncoder)))
+        UserModel(repository.save(a0.toUser(passwordEncoder)))
     }
 }
