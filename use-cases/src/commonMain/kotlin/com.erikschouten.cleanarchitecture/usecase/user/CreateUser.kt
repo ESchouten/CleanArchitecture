@@ -1,6 +1,7 @@
 package com.erikschouten.cleanarchitecture.usecase.user
 
 import com.erikschouten.cleanarchitecture.*
+import com.erikschouten.cleanarchitecture.dependency.PasswordEncoder
 import com.erikschouten.cleanarchitecture.entity.Authorities
 import com.erikschouten.cleanarchitecture.model.CreateUserModel
 import com.erikschouten.cleanarchitecture.model.UserModel

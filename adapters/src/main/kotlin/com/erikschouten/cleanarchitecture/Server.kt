@@ -4,6 +4,7 @@ import com.apurebase.kgraphql.GraphQL
 import com.benasher44.uuid.uuidFrom
 import com.erikschouten.cleanarchitecture.auth.AuthenticatorImpl
 import com.erikschouten.cleanarchitecture.auth.UserPrincipal
+import com.erikschouten.cleanarchitecture.dependency.Authenticator
 import com.erikschouten.cleanarchitecture.graphql.configure
 import com.erikschouten.cleanarchitecture.model.UserModel
 import com.erikschouten.cleanarchitecture.repository.UserRepository

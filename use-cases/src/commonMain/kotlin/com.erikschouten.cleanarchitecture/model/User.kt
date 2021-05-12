@@ -1,7 +1,7 @@
 package com.erikschouten.cleanarchitecture.model
 
 import com.benasher44.uuid.Uuid
-import com.erikschouten.cleanarchitecture.PasswordEncoder
+import com.erikschouten.cleanarchitecture.dependency.PasswordEncoder
 import com.erikschouten.cleanarchitecture.entity.Authorities
 import com.erikschouten.cleanarchitecture.entity.Email
 import com.erikschouten.cleanarchitecture.entity.Password

@@ -1,4 +1,4 @@
-package com.erikschouten.cleanarchitecture
+package com.erikschouten.cleanarchitecture.dependency
 
 import com.benasher44.uuid.Uuid
 

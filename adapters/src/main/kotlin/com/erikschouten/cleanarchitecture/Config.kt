@@ -2,6 +2,8 @@ package com.erikschouten.cleanarchitecture
 
 import com.erikschouten.cleanarchitecture.auth.AuthenticatorImpl
 import com.erikschouten.cleanarchitecture.auth.PasswordEncoderImpl
+import com.erikschouten.cleanarchitecture.dependency.Authenticator
+import com.erikschouten.cleanarchitecture.dependency.PasswordEncoder
 import com.erikschouten.cleanarchitecture.entity.Authorities
 import com.erikschouten.cleanarchitecture.entity.User
 import io.ktor.application.*
