@@ -13,7 +13,7 @@ pluginManagement {
 
 include(
     ":domain",
-    ":use-case",
-    ":adapter"
+    ":use-cases",
+    ":adapters"
 )
 

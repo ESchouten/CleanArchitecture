@@ -11,7 +11,7 @@ dependencies {
     val ktorVersion = "1.5.4"
     val koinVersion = "3.0.1"
 
-    implementation(project(":use-case"))
+    implementation(project(":use-cases"))
 
     implementation("io.ktor:ktor-server-core:$ktorVersion")
     implementation("io.ktor:ktor-server-cio:$ktorVersion")
