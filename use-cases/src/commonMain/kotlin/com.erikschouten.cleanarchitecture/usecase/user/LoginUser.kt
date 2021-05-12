@@ -18,7 +18,7 @@ class LoginUser(
 
     override val executor = { _: UserModel?, a0: LoginUserModel ->
         val user = repository.findByEmail(a0.email)
-        if (user == null || !passwordEncoder.matches(a0.password, user.password)) throw LoginException()
+        if (user == null || !passwordEncoder.matches(a0.password, user.password.value)) throw LoginException()
         authenticator.generate(user.id)
     }
 }

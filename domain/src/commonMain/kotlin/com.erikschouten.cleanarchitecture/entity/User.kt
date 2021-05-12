@@ -1,11 +1,30 @@
 package com.erikschouten.cleanarchitecture.entity
 
+import com.erikschouten.cleanarchitecture.EmailInvalidException
+import com.erikschouten.cleanarchitecture.PasswordInvalidException
+import kotlin.jvm.JvmInline
+
 data class User(
-    val email: String,
+    val email: Email,
     val roles: List<Authorities>,
-    val password: String,
+    val password: Password,
 ) : UUIDEntity()
 
 enum class Authorities {
     USER
+}
+
+@JvmInline
+value class Email(val value: String) {
+    init {
+        if (!value.contains('@')) throw EmailInvalidException()
+    }
+}
+
+@JvmInline
+value class Password(val value: String) {
+    init {
+        if (!value.matches(Regex("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@\$%^&*-]).{8,}\$")))
+            throw PasswordInvalidException()
+    }
 }

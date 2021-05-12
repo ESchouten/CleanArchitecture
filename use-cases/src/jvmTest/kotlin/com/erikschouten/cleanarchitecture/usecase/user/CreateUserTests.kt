@@ -46,6 +46,8 @@ class CreateUserTests {
     @Test
     fun `Invalid email`() {
         assertFailsWith<EmailInvalidException> {
+            every { repository.findByEmail("erik") } returns null
+            every { passwordEncoder.encode(password) } returns password.reversed()
             createUser(userModel, createUserModel.copy(email = "erik"))
         }
     }
@@ -53,6 +55,8 @@ class CreateUserTests {
     @Test
     fun `Invalid password`() {
         assertFailsWith<PasswordInvalidException> {
+            every { repository.findByEmail(email) } returns null
+            every { passwordEncoder.encode("pass") } returns "pass".reversed()
             createUser(userModel, createUserModel.copy(password = "pass"))
         }
     }

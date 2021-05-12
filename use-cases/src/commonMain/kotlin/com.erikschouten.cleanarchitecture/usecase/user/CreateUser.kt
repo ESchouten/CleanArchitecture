@@ -18,8 +18,6 @@ class CreateUser(
     override val executor = { authentication: UserModel?, a0: CreateUserModel ->
         if (authentication == null) throw LoginException()
         if (!authentication.authorities.contains(Authorities.USER)) throw AuthorizationException()
-        if (!email(a0.email)) throw EmailInvalidException()
-        if (!password(a0.password)) throw PasswordInvalidException()
         if (userExists(authentication, a0.email)) throw EmailAlreadyExistsException()
         UserModel(repository.save(a0.toUser(passwordEncoder)))
     }
