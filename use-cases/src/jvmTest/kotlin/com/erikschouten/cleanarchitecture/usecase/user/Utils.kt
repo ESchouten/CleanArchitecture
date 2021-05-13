@@ -5,5 +5,6 @@ import com.erikschouten.cleanarchitecture.model.UserModel
 
 val email = Email("erik@erikschouten.com")
 val password = Password("P@ssw0rd!")
-val user = User(email, listOf(Authorities.USER), PasswordHash(password.value.reversed()))
+val passwordHash = PasswordHash(password.value.reversed())
+val user = User(email, listOf(Authorities.USER), passwordHash)
 val userModel = UserModel(user)
