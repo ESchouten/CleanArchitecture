@@ -1,5 +1,6 @@
 package com.erikschouten.cleanarchitecture.usecase
 
+import com.erikschouten.cleanarchitecture.LoginException
 import com.erikschouten.cleanarchitecture.model.UserModel
 import kotlin.reflect.KClass
 
@@ -13,6 +14,9 @@ sealed class UsecaseType<R : Any>(
     val result: KClass<R>
 ) {
     abstract val args: List<KClass<*>>
+    open val authenticated = true
+    fun auth(authentication: UserModel?): UserModel? =
+        if (authenticated) authentication ?: throw LoginException() else authentication
 }
 
 abstract class UsecaseA0<R : Any>(
@@ -21,7 +25,7 @@ abstract class UsecaseA0<R : Any>(
 
     final override val args get() = emptyList<KClass<*>>()
     abstract val executor: (authentication: UserModel?) -> R
-    operator fun invoke(authentication: UserModel?) = executor(authentication)
+    operator fun invoke(authentication: UserModel?) = executor(auth(authentication))
 }
 
 abstract class UsecaseA1<A0 : Any, R : Any>(
@@ -31,5 +35,5 @@ abstract class UsecaseA1<A0 : Any, R : Any>(
 
     final override val args get() = listOf(a0)
     abstract val executor: (authentication: UserModel?, a0: A0) -> R
-    operator fun invoke(authentication: UserModel?, a0: A0) = executor(authentication, a0)
+    operator fun invoke(authentication: UserModel?, a0: A0) = executor(auth(authentication), a0)
 }

@@ -3,6 +3,8 @@ package com.erikschouten.cleanarchitecture.usecase.user
 import com.erikschouten.cleanarchitecture.dependency.Authenticator
 import com.erikschouten.cleanarchitecture.LoginException
 import com.erikschouten.cleanarchitecture.dependency.PasswordEncoder
+import com.erikschouten.cleanarchitecture.entity.Password
+import com.erikschouten.cleanarchitecture.entity.PasswordHash
 import com.erikschouten.cleanarchitecture.model.LoginUserModel
 import com.erikschouten.cleanarchitecture.repository.UserRepository
 import io.mockk.every
@@ -18,12 +20,12 @@ class LoginUserTests {
     val authenticator = mockk<Authenticator>()
     val usecase = LoginUser(repository, authenticator, passwordEncoder)
 
-    val loginUserModel = LoginUserModel(email, password)
+    val loginUserModel = LoginUserModel(email.value, password.value)
 
     @Test
     fun `Successful login`() {
         every { repository.findByEmail(email) } returns user
-        every { passwordEncoder.matches(password, password.reversed()) } returns true
+        every { passwordEncoder.matches(password, PasswordHash(password.value.reversed())) } returns true
         every { authenticator.generate(user.id) } returns "token"
         val result = usecase(null, loginUserModel)
         assertEquals(result, "token")
@@ -40,9 +42,10 @@ class LoginUserTests {
     @Test
     fun `Invalid password`() {
         assertFailsWith<LoginException> {
+            val pass = password.value + 1
             every { repository.findByEmail(email) } returns user
-            every { passwordEncoder.matches("pass", password.reversed()) } returns false
-            usecase(null, loginUserModel.copy(password = "pass"))
+            every { passwordEncoder.matches(Password(pass), PasswordHash(password.value.reversed())) } returns false
+            usecase(null, loginUserModel.copy(password = pass))
         }
     }
 }

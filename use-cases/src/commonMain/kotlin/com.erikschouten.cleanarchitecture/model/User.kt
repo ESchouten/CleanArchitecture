@@ -2,10 +2,7 @@ package com.erikschouten.cleanarchitecture.model
 
 import com.benasher44.uuid.Uuid
 import com.erikschouten.cleanarchitecture.dependency.PasswordEncoder
-import com.erikschouten.cleanarchitecture.entity.Authorities
-import com.erikschouten.cleanarchitecture.entity.Email
-import com.erikschouten.cleanarchitecture.entity.Password
-import com.erikschouten.cleanarchitecture.entity.User
+import com.erikschouten.cleanarchitecture.entity.*
 
 data class UserModel(
     val id: Uuid,
@@ -20,7 +17,7 @@ data class CreateUserModel(
     val authorities: List<Authorities>,
     val password: String,
 ) {
-    fun toUser(encoder: PasswordEncoder) = User(Email(email), authorities, Password(encoder.encode(password)))
+    fun toUser(encoder: PasswordEncoder) = User(Email(email), authorities, encoder.encode(Password(password)))
 }
 
 data class LoginUserModel(

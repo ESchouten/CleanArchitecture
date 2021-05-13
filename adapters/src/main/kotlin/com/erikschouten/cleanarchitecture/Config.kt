@@ -51,5 +51,5 @@ private fun userModule(config: Config) = module {
 }
 
 fun setup(userRepository: UserRepository, passwordEncoder: PasswordEncoder) {
-    userRepository.save(User(Email("erik@erikschouten.com"), listOf(Authorities.USER), Password(passwordEncoder.encode("P@ssw0rd!"))))
+    userRepository.save(User(Email("erik@erikschouten.com"), listOf(Authorities.USER), passwordEncoder.encode(Password("P@ssw0rd!"))))
 }

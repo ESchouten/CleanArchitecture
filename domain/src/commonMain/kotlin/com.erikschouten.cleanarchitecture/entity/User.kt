@@ -7,7 +7,7 @@ import kotlin.jvm.JvmInline
 data class User(
     val email: Email,
     val roles: List<Authorities>,
-    val password: Password,
+    val password: PasswordHash,
 ) : UUIDEntity()
 
 enum class Authorities {
@@ -28,3 +28,6 @@ value class Password(val value: String) {
             throw PasswordInvalidException()
     }
 }
+
+@JvmInline
+value class PasswordHash(val value: String)
