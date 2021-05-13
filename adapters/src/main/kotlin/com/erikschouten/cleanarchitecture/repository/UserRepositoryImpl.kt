@@ -1,6 +1,7 @@
 package com.erikschouten.cleanarchitecture.repository
 
 import com.benasher44.uuid.Uuid
+import com.erikschouten.cleanarchitecture.entity.Email
 import com.erikschouten.cleanarchitecture.entity.User
 
 class UserRepositoryImpl : UserRepository {
@@ -13,5 +14,5 @@ class UserRepositoryImpl : UserRepository {
         return entity
     }
 
-    override fun findByEmail(email: String) = users.find { it.email == email }
+    override fun findByEmail(email: Email) = users.find { it.email == email }
 }

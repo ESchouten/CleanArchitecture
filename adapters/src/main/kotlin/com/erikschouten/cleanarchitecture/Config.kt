@@ -5,6 +5,8 @@ import com.erikschouten.cleanarchitecture.auth.PasswordEncoderImpl
 import com.erikschouten.cleanarchitecture.dependency.Authenticator
 import com.erikschouten.cleanarchitecture.dependency.PasswordEncoder
 import com.erikschouten.cleanarchitecture.entity.Authorities
+import com.erikschouten.cleanarchitecture.entity.Email
+import com.erikschouten.cleanarchitecture.entity.Password
 import com.erikschouten.cleanarchitecture.entity.User
 import io.ktor.application.*
 import com.erikschouten.cleanarchitecture.repository.UserRepository
@@ -49,5 +51,5 @@ private fun userModule(config: Config) = module {
 }
 
 fun setup(userRepository: UserRepository, passwordEncoder: PasswordEncoder) {
-    userRepository.save(User("erik@erikschouten.com", listOf(Authorities.USER), passwordEncoder.encode("pass")))
+    userRepository.save(User(Email("erik@erikschouten.com"), listOf(Authorities.USER), Password(passwordEncoder.encode("P@ssw0rd!"))))
 }

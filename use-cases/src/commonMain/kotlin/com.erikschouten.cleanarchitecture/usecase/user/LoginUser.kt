@@ -3,6 +3,7 @@ package com.erikschouten.cleanarchitecture.usecase.user
 import com.erikschouten.cleanarchitecture.LoginException
 import com.erikschouten.cleanarchitecture.dependency.Authenticator
 import com.erikschouten.cleanarchitecture.dependency.PasswordEncoder
+import com.erikschouten.cleanarchitecture.entity.Email
 import com.erikschouten.cleanarchitecture.model.LoginUserModel
 import com.erikschouten.cleanarchitecture.model.UserModel
 import com.erikschouten.cleanarchitecture.repository.UserRepository
@@ -17,7 +18,7 @@ class LoginUser(
 ) : UsecaseA1<LoginUserModel, String>(LoginUserModel::class, String::class) {
 
     override val executor = { _: UserModel?, a0: LoginUserModel ->
-        val user = repository.findByEmail(a0.email)
+        val user = repository.findByEmail(Email(a0.email))
         if (user == null || !passwordEncoder.matches(a0.password, user.password.value)) throw LoginException()
         authenticator.generate(user.id)
     }

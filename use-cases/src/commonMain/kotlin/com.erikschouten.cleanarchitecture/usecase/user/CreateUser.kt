@@ -3,6 +3,7 @@ package com.erikschouten.cleanarchitecture.usecase.user
 import com.erikschouten.cleanarchitecture.*
 import com.erikschouten.cleanarchitecture.dependency.PasswordEncoder
 import com.erikschouten.cleanarchitecture.entity.Authorities
+import com.erikschouten.cleanarchitecture.entity.Email
 import com.erikschouten.cleanarchitecture.model.CreateUserModel
 import com.erikschouten.cleanarchitecture.model.UserModel
 import com.erikschouten.cleanarchitecture.repository.UserRepository
@@ -19,7 +20,7 @@ class CreateUser(
     override val executor = { authentication: UserModel?, a0: CreateUserModel ->
         if (authentication == null) throw LoginException()
         if (!authentication.authorities.contains(Authorities.USER)) throw AuthorizationException()
-        if (userExists(authentication, a0.email)) throw EmailAlreadyExistsException()
+        if (userExists(authentication, Email(a0.email))) throw EmailAlreadyExistsException()
         UserModel(repository.save(a0.toUser(passwordEncoder)))
     }
 }
