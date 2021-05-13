@@ -15,6 +15,7 @@ kotlin {
         val jvmTest by getting {
             dependencies {
                 implementation(kotlin("test"))
+                implementation(kotlin("reflect"))
                 implementation("io.mockk:mockk:1.11.0")
             }
         }
