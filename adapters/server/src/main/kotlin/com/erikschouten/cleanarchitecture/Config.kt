@@ -10,7 +10,6 @@ import com.erikschouten.cleanarchitecture.entity.Password
 import com.erikschouten.cleanarchitecture.entity.User
 import io.ktor.application.*
 import com.erikschouten.cleanarchitecture.repository.UserRepository
-import com.erikschouten.cleanarchitecture.repository.UserRepositoryImpl
 import com.erikschouten.cleanarchitecture.usecase.user.AuthenticatedUser
 import com.erikschouten.cleanarchitecture.usecase.user.CreateUser
 import com.erikschouten.cleanarchitecture.usecase.user.LoginUser

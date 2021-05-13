@@ -44,7 +44,7 @@ fun SchemaBuilder.usecase(usecase: UsecaseType<*>) {
         when (usecase) {
             is UsecaseA0<*> -> usecase(usecase)
             is UsecaseA1<*, *> -> usecase(usecase)
-            else -> throw Exception("Invalid com.erikschouten.cleanarchitecture.graphql.usecase")
+            else -> throw Exception("Invalid usecase")
         }.apply {
             setReturnType(usecase.result.createType())
             addInputValues(usecase.args.mapIndexed { index, kClass -> InputValueDef(kClass, "a${index}") })
