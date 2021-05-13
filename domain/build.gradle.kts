@@ -11,5 +11,10 @@ kotlin {
                 api("com.benasher44:uuid:0.2.3")
             }
         }
+        val commonTest by getting {
+            dependencies {
+                implementation(kotlin("test"))
+            }
+        }
     }
 }
