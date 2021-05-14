@@ -1,9 +1,9 @@
 package com.erikschouten.cleanarchitecture
 
 import com.benasher44.uuid.Uuid
-import com.erikschouten.cleanarchitecture.entity.Email
-import com.erikschouten.cleanarchitecture.entity.User
-import com.erikschouten.cleanarchitecture.repository.UserRepository
+import com.erikschouten.cleanarchitecture.domain.entity.Email
+import com.erikschouten.cleanarchitecture.domain.entity.User
+import com.erikschouten.cleanarchitecture.domain.repository.UserRepository
 
 class UserRepositoryImpl : UserRepository {
     private val users: MutableList<User> = mutableListOf()

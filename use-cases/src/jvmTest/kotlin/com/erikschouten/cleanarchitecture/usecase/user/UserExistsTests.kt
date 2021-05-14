@@ -1,7 +1,8 @@
 package com.erikschouten.cleanarchitecture.usecase.user
 
-import com.erikschouten.cleanarchitecture.LoginException
-import com.erikschouten.cleanarchitecture.repository.UserRepository
+import com.erikschouten.cleanarchitecture.domain.LoginException
+import com.erikschouten.cleanarchitecture.domain.repository.UserRepository
+import com.erikschouten.cleanarchitecture.usecases.usecase.user.UserExists
 import io.mockk.every
 import io.mockk.mockk
 import kotlin.test.Test

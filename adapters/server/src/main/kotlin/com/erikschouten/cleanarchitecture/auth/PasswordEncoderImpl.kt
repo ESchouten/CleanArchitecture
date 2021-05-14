@@ -1,9 +1,9 @@
 package com.erikschouten.cleanarchitecture.auth
 
 import at.favre.lib.crypto.bcrypt.BCrypt
-import com.erikschouten.cleanarchitecture.dependency.PasswordEncoder
-import com.erikschouten.cleanarchitecture.entity.Password
-import com.erikschouten.cleanarchitecture.entity.PasswordHash
+import com.erikschouten.cleanarchitecture.domain.entity.Password
+import com.erikschouten.cleanarchitecture.domain.entity.PasswordHash
+import com.erikschouten.cleanarchitecture.usecases.dependency.PasswordEncoder
 
 class PasswordEncoderImpl : PasswordEncoder {
     override fun encode(password: Password) = PasswordHash(BCrypt.withDefaults().hashToString(12, password.value.toCharArray()))

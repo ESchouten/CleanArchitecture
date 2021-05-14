@@ -1,7 +1,7 @@
 package com.erikschouten.cleanarchitecture.usecase.user
 
-import com.erikschouten.cleanarchitecture.entity.*
-import com.erikschouten.cleanarchitecture.model.UserModel
+import com.erikschouten.cleanarchitecture.domain.entity.*
+import com.erikschouten.cleanarchitecture.usecases.model.UserModel
 
 val email = Email("erik@erikschouten.com")
 val password = Password("P@ssw0rd!")

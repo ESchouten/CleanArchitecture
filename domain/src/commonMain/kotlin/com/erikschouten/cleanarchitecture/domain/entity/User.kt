@@ -1,7 +1,7 @@
-package com.erikschouten.cleanarchitecture.entity
+package com.erikschouten.cleanarchitecture.domain.entity
 
-import com.erikschouten.cleanarchitecture.EmailInvalidException
-import com.erikschouten.cleanarchitecture.PasswordInvalidException
+import com.erikschouten.cleanarchitecture.domain.EmailInvalidException
+import com.erikschouten.cleanarchitecture.domain.PasswordInvalidException
 import kotlin.jvm.JvmInline
 
 data class User(

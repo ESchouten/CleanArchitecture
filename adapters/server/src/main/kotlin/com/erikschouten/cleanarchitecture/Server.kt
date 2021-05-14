@@ -4,10 +4,10 @@ import com.apurebase.kgraphql.GraphQL
 import com.benasher44.uuid.uuidFrom
 import com.erikschouten.cleanarchitecture.auth.AuthenticatorImpl
 import com.erikschouten.cleanarchitecture.auth.UserPrincipal
-import com.erikschouten.cleanarchitecture.dependency.Authenticator
+import com.erikschouten.cleanarchitecture.domain.repository.UserRepository
 import com.erikschouten.cleanarchitecture.graphql.configure
-import com.erikschouten.cleanarchitecture.model.UserModel
-import com.erikschouten.cleanarchitecture.repository.UserRepository
+import com.erikschouten.cleanarchitecture.usecases.dependency.Authenticator
+import com.erikschouten.cleanarchitecture.usecases.model.UserModel
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.auth.jwt.*
@@ -15,11 +15,11 @@ import io.ktor.features.*
 import io.ktor.server.cio.*
 import org.koin.ktor.ext.Koin
 import org.koin.ktor.ext.get
-import com.erikschouten.cleanarchitecture.usecase.UsecaseType
-import com.erikschouten.cleanarchitecture.usecase.user.AuthenticatedUser
-import com.erikschouten.cleanarchitecture.usecase.user.CreateUser
-import com.erikschouten.cleanarchitecture.usecase.user.LoginUser
-import com.erikschouten.cleanarchitecture.usecase.user.UserExists
+import com.erikschouten.cleanarchitecture.usecases.usecase.UsecaseType
+import com.erikschouten.cleanarchitecture.usecases.usecase.user.AuthenticatedUser
+import com.erikschouten.cleanarchitecture.usecases.usecase.user.CreateUser
+import com.erikschouten.cleanarchitecture.usecases.usecase.user.LoginUser
+import com.erikschouten.cleanarchitecture.usecases.usecase.user.UserExists
 
 fun main(args: Array<String>) = EngineMain.main(args)
 

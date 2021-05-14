@@ -11,6 +11,7 @@ dependencies {
     val ktorVersion = "1.5.4"
     val koinVersion = "3.0.1"
 
+    implementation(project(":domain"))
     implementation(project(":use-cases"))
     implementation(project(":adapters:repositories"))
 

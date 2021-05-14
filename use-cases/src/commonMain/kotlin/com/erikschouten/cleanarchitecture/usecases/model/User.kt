@@ -1,8 +1,8 @@
-package com.erikschouten.cleanarchitecture.model
+package com.erikschouten.cleanarchitecture.usecases.model
 
 import com.benasher44.uuid.Uuid
-import com.erikschouten.cleanarchitecture.dependency.PasswordEncoder
-import com.erikschouten.cleanarchitecture.entity.*
+import com.erikschouten.cleanarchitecture.domain.entity.*
+import com.erikschouten.cleanarchitecture.usecases.dependency.PasswordEncoder
 
 data class UserModel(
     val id: Uuid,

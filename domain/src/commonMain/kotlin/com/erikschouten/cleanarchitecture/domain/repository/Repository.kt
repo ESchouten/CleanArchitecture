@@ -1,4 +1,4 @@
-package com.erikschouten.cleanarchitecture.repository
+package com.erikschouten.cleanarchitecture.domain.repository
 
 interface Repository<Entity, ID> {
     fun findById(id: ID): Entity?

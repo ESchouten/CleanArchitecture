@@ -4,8 +4,8 @@ import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuid4
-import com.erikschouten.cleanarchitecture.dependency.Authenticator
 import com.erikschouten.cleanarchitecture.Config
+import com.erikschouten.cleanarchitecture.usecases.dependency.Authenticator
 
 class AuthenticatorImpl(
     private val issuer: String,

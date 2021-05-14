@@ -5,7 +5,7 @@ import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuidFrom
 import com.erikschouten.cleanarchitecture.auth.UserPrincipal
 import io.ktor.auth.*
-import com.erikschouten.cleanarchitecture.usecase.UsecaseType
+import com.erikschouten.cleanarchitecture.usecases.usecase.UsecaseType
 
 fun GraphQL.Configuration.configure(usecases: Array<UsecaseType<*>>, development: Boolean = false) {
     this.playground = development

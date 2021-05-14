@@ -1,12 +1,13 @@
 package com.erikschouten.cleanarchitecture.usecase.user
 
-import com.erikschouten.cleanarchitecture.dependency.Authenticator
-import com.erikschouten.cleanarchitecture.LoginException
-import com.erikschouten.cleanarchitecture.dependency.PasswordEncoder
-import com.erikschouten.cleanarchitecture.entity.Password
-import com.erikschouten.cleanarchitecture.entity.PasswordHash
-import com.erikschouten.cleanarchitecture.model.LoginUserModel
-import com.erikschouten.cleanarchitecture.repository.UserRepository
+import com.erikschouten.cleanarchitecture.domain.LoginException
+import com.erikschouten.cleanarchitecture.domain.entity.Password
+import com.erikschouten.cleanarchitecture.domain.entity.PasswordHash
+import com.erikschouten.cleanarchitecture.domain.repository.UserRepository
+import com.erikschouten.cleanarchitecture.usecases.dependency.Authenticator
+import com.erikschouten.cleanarchitecture.usecases.dependency.PasswordEncoder
+import com.erikschouten.cleanarchitecture.usecases.model.LoginUserModel
+import com.erikschouten.cleanarchitecture.usecases.usecase.user.LoginUser
 import io.mockk.every
 import io.mockk.mockk
 import kotlin.test.Test

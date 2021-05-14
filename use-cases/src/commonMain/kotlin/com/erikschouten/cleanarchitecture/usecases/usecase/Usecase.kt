@@ -1,7 +1,7 @@
-package com.erikschouten.cleanarchitecture.usecase
+package com.erikschouten.cleanarchitecture.usecases.usecase
 
-import com.erikschouten.cleanarchitecture.LoginException
-import com.erikschouten.cleanarchitecture.model.UserModel
+import com.erikschouten.cleanarchitecture.domain.LoginException
+import com.erikschouten.cleanarchitecture.usecases.model.UserModel
 import kotlin.reflect.KClass
 
 @Target(AnnotationTarget.CLASS)

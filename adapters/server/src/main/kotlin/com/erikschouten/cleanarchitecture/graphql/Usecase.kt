@@ -9,7 +9,7 @@ import com.apurebase.kgraphql.schema.model.InputValueDef
 import com.apurebase.kgraphql.schema.model.MutableSchemaDefinition
 import com.apurebase.kgraphql.schema.model.TypeDef
 import com.erikschouten.cleanarchitecture.auth.UserPrincipal
-import com.erikschouten.cleanarchitecture.usecase.*
+import com.erikschouten.cleanarchitecture.usecases.usecase.*
 import kotlin.reflect.KClass
 import kotlin.reflect.KType
 import kotlin.reflect.full.*

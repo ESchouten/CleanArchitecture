@@ -1,8 +1,8 @@
-package com.erikschouten.cleanarchitecture.dependency
+package com.erikschouten.cleanarchitecture.usecases.dependency
 
 import com.benasher44.uuid.Uuid
-import com.erikschouten.cleanarchitecture.entity.Password
-import com.erikschouten.cleanarchitecture.entity.PasswordHash
+import com.erikschouten.cleanarchitecture.domain.entity.Password
+import com.erikschouten.cleanarchitecture.domain.entity.PasswordHash
 
 interface Authenticator {
     fun generate(id: Uuid): String
