@@ -6,19 +6,18 @@ import com.erikschouten.cleanarchitecture.authentication.JWTAuthenticatorImpl
 import com.erikschouten.cleanarchitecture.config.modules
 import com.erikschouten.cleanarchitecture.config.setup
 import com.erikschouten.cleanarchitecture.domain.repository.UserRepository
+import com.erikschouten.cleanarchitecture.graphql.usecases
 import com.erikschouten.cleanarchitecture.usecases.dependency.Authenticator
 import com.erikschouten.cleanarchitecture.usecases.model.UserModel
+import com.erikschouten.cleanarchitecture.usecases.usecase.user.AuthenticatedUser
+import com.erikschouten.cleanarchitecture.usecases.usecase.user.CreateUser
+import com.erikschouten.cleanarchitecture.usecases.usecase.user.LoginUser
+import com.erikschouten.cleanarchitecture.usecases.usecase.user.UserExists
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.auth.jwt.*
 import io.ktor.features.*
 import io.ktor.server.cio.*
-import com.erikschouten.cleanarchitecture.usecases.usecase.UsecaseType
-import com.erikschouten.cleanarchitecture.usecases.usecase.user.AuthenticatedUser
-import com.erikschouten.cleanarchitecture.usecases.usecase.user.CreateUser
-import com.erikschouten.cleanarchitecture.usecases.usecase.user.LoginUser
-import com.erikschouten.cleanarchitecture.usecases.usecase.user.UserExists
-import com.erikschouten.cleanarchitecture.graphql.schema
 import org.koin.ktor.ext.Koin
 import org.koin.ktor.ext.get
 
@@ -53,13 +52,6 @@ fun Application.module(testing: Boolean = false) {
         }
     }
 
-    val usecases = arrayOf<UsecaseType<*>>(
-        get<AuthenticatedUser>(),
-        get<CreateUser>(),
-        get<LoginUser>(),
-        get<UserExists>(),
-    )
-
     install(GraphQL) {
         this.playground = config.development
 
@@ -73,7 +65,16 @@ fun Application.module(testing: Boolean = false) {
             }
         }
 
-        schema(schema(usecases))
+        schema(
+            usecases(
+                arrayOf(
+                    get<AuthenticatedUser>(),
+                    get<CreateUser>(),
+                    get<LoginUser>(),
+                    get<UserExists>()
+                )
+            )
+        )
     }
 
     if (config.development) setup(get(), get())

@@ -14,8 +14,10 @@ import com.erikschouten.cleanarchitecture.usecases.usecase.user.AuthenticatedUse
 import com.erikschouten.cleanarchitecture.usecases.usecase.user.CreateUser
 import com.erikschouten.cleanarchitecture.usecases.usecase.user.LoginUser
 import com.erikschouten.cleanarchitecture.usecases.usecase.user.UserExists
+import org.koin.core.definition.Definitions
 import org.koin.core.module.Module
 import org.koin.dsl.module
+import org.koin.experimental.builder.create
 import org.koin.experimental.builder.single
 import org.koin.experimental.builder.singleBy
 
@@ -30,7 +32,13 @@ private fun userModule(config: Config) = module {
     single<LoginUser>()
     singleBy<PasswordEncoder, PasswordEncoderImpl>()
     single<UserExists>()
-    singleBy<UserRepository, UserRepositoryImpl>()
+    single {
+        create(
+            when (config.database) {
+                Database.LOCAL -> UserRepositoryImpl::class
+                Database.EXPOSED -> TODO()
+            }
+        ) as UserRepository }
 }
 
 fun setup(userRepository: UserRepository, passwordEncoder: PasswordEncoder) {

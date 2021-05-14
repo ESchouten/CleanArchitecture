@@ -14,7 +14,7 @@ import kotlin.collections.ArrayList
 import kotlin.reflect.KClass
 import kotlin.reflect.full.*
 
-fun schema(usecases: Array<UsecaseType<*>>): SchemaBuilder.() -> Unit = {
+fun usecases(usecases: Array<UsecaseType<*>>): SchemaBuilder.() -> Unit = {
     stringScalar<UUID> {
         deserialize = { id: String -> UUID.fromString(id) }
         serialize = UUID::toString
