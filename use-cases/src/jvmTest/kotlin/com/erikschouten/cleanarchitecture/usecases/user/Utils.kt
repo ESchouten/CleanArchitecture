@@ -1,4 +1,4 @@
-package com.erikschouten.cleanarchitecture.usecase.user
+package com.erikschouten.cleanarchitecture.usecases.user
 
 import com.erikschouten.cleanarchitecture.domain.entity.*
 import com.erikschouten.cleanarchitecture.usecases.model.UserModel

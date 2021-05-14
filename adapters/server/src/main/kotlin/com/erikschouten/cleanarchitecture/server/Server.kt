@@ -1,11 +1,11 @@
-package com.erikschouten.cleanarchitecture
+package com.erikschouten.cleanarchitecture.server
 
 import com.apurebase.kgraphql.GraphQL
 import com.benasher44.uuid.uuidFrom
-import com.erikschouten.cleanarchitecture.auth.AuthenticatorImpl
-import com.erikschouten.cleanarchitecture.auth.UserPrincipal
+import com.erikschouten.cleanarchitecture.server.auth.AuthenticatorImpl
+import com.erikschouten.cleanarchitecture.server.auth.UserPrincipal
 import com.erikschouten.cleanarchitecture.domain.repository.UserRepository
-import com.erikschouten.cleanarchitecture.graphql.configure
+import com.erikschouten.cleanarchitecture.server.graphql.configure
 import com.erikschouten.cleanarchitecture.usecases.dependency.Authenticator
 import com.erikschouten.cleanarchitecture.usecases.model.UserModel
 import io.ktor.application.*

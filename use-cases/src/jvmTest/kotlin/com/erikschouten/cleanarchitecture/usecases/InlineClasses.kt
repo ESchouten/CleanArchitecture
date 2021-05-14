@@ -1,4 +1,4 @@
-package com.erikschouten.cleanarchitecture
+package com.erikschouten.cleanarchitecture.usecases
 
 import io.mockk.ConstantMatcher
 import io.mockk.MockKGateway.CallRecorder

@@ -1,9 +1,9 @@
-package com.erikschouten.cleanarchitecture.graphql
+package com.erikschouten.cleanarchitecture.server.graphql
 
 import com.apurebase.kgraphql.GraphQL
 import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuidFrom
-import com.erikschouten.cleanarchitecture.auth.UserPrincipal
+import com.erikschouten.cleanarchitecture.server.auth.UserPrincipal
 import io.ktor.auth.*
 import com.erikschouten.cleanarchitecture.usecases.usecase.UsecaseType
 

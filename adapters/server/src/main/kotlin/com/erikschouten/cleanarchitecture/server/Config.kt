@@ -1,12 +1,13 @@
-package com.erikschouten.cleanarchitecture
+package com.erikschouten.cleanarchitecture.server
 
-import com.erikschouten.cleanarchitecture.auth.AuthenticatorImpl
-import com.erikschouten.cleanarchitecture.auth.PasswordEncoderImpl
+import com.erikschouten.cleanarchitecture.server.auth.AuthenticatorImpl
+import com.erikschouten.cleanarchitecture.server.auth.PasswordEncoderImpl
 import com.erikschouten.cleanarchitecture.domain.entity.Authorities
 import com.erikschouten.cleanarchitecture.domain.entity.Email
 import com.erikschouten.cleanarchitecture.domain.entity.Password
 import com.erikschouten.cleanarchitecture.domain.entity.User
 import com.erikschouten.cleanarchitecture.domain.repository.UserRepository
+import com.erikschouten.cleanarchitecture.repositories.UserRepositoryImpl
 import com.erikschouten.cleanarchitecture.usecases.dependency.Authenticator
 import com.erikschouten.cleanarchitecture.usecases.dependency.PasswordEncoder
 import io.ktor.application.*

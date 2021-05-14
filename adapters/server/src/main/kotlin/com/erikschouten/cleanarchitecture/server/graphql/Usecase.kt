@@ -1,4 +1,4 @@
-package com.erikschouten.cleanarchitecture.graphql
+package com.erikschouten.cleanarchitecture.server.graphql
 
 import com.apurebase.kgraphql.Context
 import com.apurebase.kgraphql.schema.Publisher
@@ -8,7 +8,7 @@ import com.apurebase.kgraphql.schema.dsl.operations.AbstractOperationDSL
 import com.apurebase.kgraphql.schema.model.InputValueDef
 import com.apurebase.kgraphql.schema.model.MutableSchemaDefinition
 import com.apurebase.kgraphql.schema.model.TypeDef
-import com.erikschouten.cleanarchitecture.auth.UserPrincipal
+import com.erikschouten.cleanarchitecture.server.auth.UserPrincipal
 import com.erikschouten.cleanarchitecture.usecases.usecase.*
 import kotlin.reflect.KClass
 import kotlin.reflect.KType

@@ -1,4 +1,4 @@
-package com.erikschouten.cleanarchitecture.usecase.user
+package com.erikschouten.cleanarchitecture.usecases.user
 
 import com.erikschouten.cleanarchitecture.*
 import com.erikschouten.cleanarchitecture.domain.*
@@ -11,6 +11,7 @@ import com.erikschouten.cleanarchitecture.usecases.dependency.PasswordEncoder
 import com.erikschouten.cleanarchitecture.usecases.model.CreateUserModel
 import com.erikschouten.cleanarchitecture.usecases.usecase.user.CreateUser
 import com.erikschouten.cleanarchitecture.usecases.usecase.user.UserExists
+import com.erikschouten.cleanarchitecture.usecases.value
 import io.mockk.every
 import io.mockk.mockk
 import kotlin.test.Test
