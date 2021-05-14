@@ -1,4 +1,4 @@
-package com.erikschouten.cleanarchitecture.server.auth
+package com.erikschouten.cleanarchitecture.authentication
 
 import at.favre.lib.crypto.bcrypt.BCrypt
 import com.erikschouten.cleanarchitecture.domain.entity.Password

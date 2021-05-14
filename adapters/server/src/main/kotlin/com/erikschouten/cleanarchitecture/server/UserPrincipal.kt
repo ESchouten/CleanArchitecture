@@ -1,4 +1,4 @@
-package com.erikschouten.cleanarchitecture.server.auth
+package com.erikschouten.cleanarchitecture.server
 
 import com.benasher44.uuid.Uuid
 import com.erikschouten.cleanarchitecture.domain.entity.Authorities

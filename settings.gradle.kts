@@ -14,7 +14,8 @@ pluginManagement {
 include(
     ":domain",
     ":use-cases",
-    ":adapters:server",
-    ":adapters:repositories"
+    ":adapters:authentication",
+    ":adapters:repositories",
+    ":adapters:server"
 )
 

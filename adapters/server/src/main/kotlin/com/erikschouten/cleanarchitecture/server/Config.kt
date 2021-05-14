@@ -1,7 +1,7 @@
 package com.erikschouten.cleanarchitecture.server
 
-import com.erikschouten.cleanarchitecture.server.auth.AuthenticatorImpl
-import com.erikschouten.cleanarchitecture.server.auth.PasswordEncoderImpl
+import com.erikschouten.cleanarchitecture.authentication.AuthenticatorImpl
+import com.erikschouten.cleanarchitecture.authentication.PasswordEncoderImpl
 import com.erikschouten.cleanarchitecture.domain.entity.Authorities
 import com.erikschouten.cleanarchitecture.domain.entity.Email
 import com.erikschouten.cleanarchitecture.domain.entity.Password
@@ -42,7 +42,7 @@ fun modules(config: Config): List<Module> {
 
 private fun userModule(config: Config) = module {
     single<AuthenticatedUser>()
-    single<Authenticator> { AuthenticatorImpl(config) }
+    single<Authenticator> { AuthenticatorImpl(config.jwtDomain, config.jwtAudience, config.jwtRealm) }
     single<CreateUser>()
     single<LoginUser>()
     singleBy<PasswordEncoder, PasswordEncoderImpl>()

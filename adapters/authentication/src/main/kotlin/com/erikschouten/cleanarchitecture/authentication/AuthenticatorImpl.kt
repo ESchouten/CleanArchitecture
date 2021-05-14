@@ -1,10 +1,9 @@
-package com.erikschouten.cleanarchitecture.server.auth
+package com.erikschouten.cleanarchitecture.authentication
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuid4
-import com.erikschouten.cleanarchitecture.server.Config
 import com.erikschouten.cleanarchitecture.usecases.dependency.Authenticator
 
 class AuthenticatorImpl(
@@ -25,6 +24,4 @@ class AuthenticatorImpl(
         .withIssuer(issuer)
         .withSubject(id.toString())
         .sign(secret)!!
-
-    constructor(config: Config) : this(config.jwtDomain, config.jwtAudience, config.jwtRealm)
 }

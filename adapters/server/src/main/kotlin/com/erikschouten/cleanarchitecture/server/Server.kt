@@ -2,8 +2,7 @@ package com.erikschouten.cleanarchitecture.server
 
 import com.apurebase.kgraphql.GraphQL
 import com.benasher44.uuid.uuidFrom
-import com.erikschouten.cleanarchitecture.server.auth.AuthenticatorImpl
-import com.erikschouten.cleanarchitecture.server.auth.UserPrincipal
+import com.erikschouten.cleanarchitecture.authentication.AuthenticatorImpl
 import com.erikschouten.cleanarchitecture.domain.repository.UserRepository
 import com.erikschouten.cleanarchitecture.server.graphql.configure
 import com.erikschouten.cleanarchitecture.usecases.dependency.Authenticator
