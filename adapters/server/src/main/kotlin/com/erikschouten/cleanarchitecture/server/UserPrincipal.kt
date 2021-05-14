@@ -12,5 +12,6 @@ class UserPrincipal private constructor(
     private val authorities: List<Authorities>,
 ) : Principal {
     constructor(user: UserModel) : this(user.id, Email(user.email), user.authorities)
+
     fun toUserModel() = UserModel(id, email.value, authorities)
 }

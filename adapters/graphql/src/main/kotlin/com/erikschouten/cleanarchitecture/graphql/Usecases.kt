@@ -10,9 +10,10 @@ import com.apurebase.kgraphql.schema.model.MutableSchemaDefinition
 import com.apurebase.kgraphql.schema.model.TypeDef
 import com.erikschouten.cleanarchitecture.usecases.usecase.*
 import java.util.*
-import kotlin.collections.ArrayList
 import kotlin.reflect.KClass
-import kotlin.reflect.full.*
+import kotlin.reflect.full.createType
+import kotlin.reflect.full.hasAnnotation
+import kotlin.reflect.full.isSubclassOf
 
 fun usecases(usecases: Array<UsecaseType<*>>): SchemaBuilder.() -> Unit = {
     stringScalar<UUID> {

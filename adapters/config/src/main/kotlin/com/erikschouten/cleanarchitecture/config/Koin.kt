@@ -14,7 +14,6 @@ import com.erikschouten.cleanarchitecture.usecases.usecase.user.AuthenticatedUse
 import com.erikschouten.cleanarchitecture.usecases.usecase.user.CreateUser
 import com.erikschouten.cleanarchitecture.usecases.usecase.user.LoginUser
 import com.erikschouten.cleanarchitecture.usecases.usecase.user.UserExists
-import org.koin.core.definition.Definitions
 import org.koin.core.module.Module
 import org.koin.dsl.module
 import org.koin.experimental.builder.create
@@ -25,6 +24,7 @@ fun modules(config: Config): List<Module> {
     return listOf(userModule(config))
 }
 
+@Suppress("USELESS_CAST")
 private fun userModule(config: Config) = module {
     single<AuthenticatedUser>()
     single<Authenticator> { JWTAuthenticatorImpl(config.jwt.domain, config.jwt.audience, config.jwt.realm) }
@@ -38,9 +38,16 @@ private fun userModule(config: Config) = module {
                 Database.LOCAL -> UserRepositoryImpl::class
                 Database.EXPOSED -> TODO()
             }
-        ) as UserRepository }
+        ) as UserRepository
+    }
 }
 
 fun setup(userRepository: UserRepository, passwordEncoder: PasswordEncoder) {
-    userRepository.save(User(Email("erik@erikschouten.com"), listOf(Authorities.USER), passwordEncoder.encode(Password("P@ssw0rd!"))))
+    userRepository.save(
+        User(
+            Email("erik@erikschouten.com"),
+            listOf(Authorities.USER),
+            passwordEncoder.encode(Password("P@ssw0rd!"))
+        )
+    )
 }

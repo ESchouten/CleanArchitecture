@@ -1,13 +1,13 @@
 package com.erikschouten.cleanarchitecture.usecases.usecase.user
 
 import com.erikschouten.cleanarchitecture.domain.LoginException
-import com.erikschouten.cleanarchitecture.usecases.dependency.Authenticator
-import com.erikschouten.cleanarchitecture.usecases.dependency.PasswordEncoder
 import com.erikschouten.cleanarchitecture.domain.entity.Email
 import com.erikschouten.cleanarchitecture.domain.entity.Password
+import com.erikschouten.cleanarchitecture.domain.repository.UserRepository
+import com.erikschouten.cleanarchitecture.usecases.dependency.Authenticator
+import com.erikschouten.cleanarchitecture.usecases.dependency.PasswordEncoder
 import com.erikschouten.cleanarchitecture.usecases.model.LoginUserModel
 import com.erikschouten.cleanarchitecture.usecases.model.UserModel
-import com.erikschouten.cleanarchitecture.domain.repository.UserRepository
 import com.erikschouten.cleanarchitecture.usecases.usecase.Query
 import com.erikschouten.cleanarchitecture.usecases.usecase.UsecaseA1
 

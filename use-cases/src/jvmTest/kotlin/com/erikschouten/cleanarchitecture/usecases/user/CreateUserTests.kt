@@ -1,6 +1,5 @@
 package com.erikschouten.cleanarchitecture.usecases.user
 
-import com.erikschouten.cleanarchitecture.*
 import com.erikschouten.cleanarchitecture.domain.*
 import com.erikschouten.cleanarchitecture.domain.entity.Authorities
 import com.erikschouten.cleanarchitecture.domain.entity.Email
