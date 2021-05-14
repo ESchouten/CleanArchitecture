@@ -6,14 +6,16 @@ import com.benasher44.uuid.Uuid
 import com.benasher44.uuid.uuid4
 import com.erikschouten.cleanarchitecture.usecases.dependency.Authenticator
 
-class AuthenticatorImpl(
+class JWTAuthenticatorImpl(
     private val issuer: String,
     val audience: String,
     val realm: String,
-    private val secret: Algorithm = Algorithm.HMAC256(uuid4().toString()),
+    secret: String = uuid4().toString(),
 ) : Authenticator {
+    private val algorithm: Algorithm = Algorithm.HMAC256(secret)
+
     val verifier = JWT
-        .require(secret)
+        .require(algorithm)
         .withAudience(audience)
         .withIssuer(issuer)
         .build()!!
@@ -23,5 +25,5 @@ class AuthenticatorImpl(
         .withAudience(audience)
         .withIssuer(issuer)
         .withSubject(id.toString())
-        .sign(secret)!!
+        .sign(algorithm)!!
 }
