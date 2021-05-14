@@ -14,6 +14,10 @@ pluginManagement {
 include(
     ":domain",
     ":use-cases",
-    ":adapters"
+    ":adapters:authentication",
+    ":adapters:config",
+    ":adapters:graphql",
+    ":adapters:repositories",
+    ":adapters:server"
 )
 
