@@ -1,7 +1,3 @@
-plugins {
-    kotlin("jvm")
-}
-
 dependencies {
     val koinVersion = "3.0.1"
 
