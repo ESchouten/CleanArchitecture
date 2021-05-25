@@ -33,7 +33,6 @@ inline fun <reified T : Any> MockKMatcherScope.anyInlineValue(): T {
     return valueConstructor.call(anyMatcher)
 }
 
-
 val KClass<*>.isInline: Boolean
     get() = !isData &&
             primaryConstructor?.parameters?.size == 1 &&

@@ -1,23 +1,11 @@
 plugins {
-    kotlin("multiplatform")
+    kotlin("jvm")
 }
 
-kotlin {
-    jvm()
+dependencies {
+    implementation(project(":domain"))
 
-    sourceSets {
-        val commonMain by getting {
-            dependencies {
-                implementation(project(":domain"))
-            }
-        }
-
-        val jvmTest by getting {
-            dependencies {
-                implementation(kotlin("test"))
-                implementation(kotlin("reflect"))
-                implementation("io.mockk:mockk:1.11.0")
-            }
-        }
-    }
+    testImplementation(kotlin("test"))
+    testImplementation(kotlin("reflect"))
+    testImplementation("io.mockk:mockk:1.11.0")
 }

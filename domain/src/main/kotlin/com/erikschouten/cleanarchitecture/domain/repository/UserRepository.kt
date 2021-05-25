@@ -1,9 +1,9 @@
 package com.erikschouten.cleanarchitecture.domain.repository
 
-import com.benasher44.uuid.Uuid
 import com.erikschouten.cleanarchitecture.domain.entity.Email
 import com.erikschouten.cleanarchitecture.domain.entity.User
+import java.util.*
 
-interface UserRepository : Repository<User, Uuid> {
+interface UserRepository : Repository<User, UUID> {
     fun findByEmail(email: Email): User?
 }

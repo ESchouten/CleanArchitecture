@@ -1,7 +1,6 @@
 package com.erikschouten.cleanarchitecture.server
 
 import com.apurebase.kgraphql.GraphQL
-import com.benasher44.uuid.uuidFrom
 import com.erikschouten.cleanarchitecture.authentication.JWTAuthenticatorImpl
 import com.erikschouten.cleanarchitecture.config.modules
 import com.erikschouten.cleanarchitecture.config.setup
@@ -20,6 +19,7 @@ import io.ktor.features.*
 import io.ktor.server.cio.*
 import org.koin.ktor.ext.Koin
 import org.koin.ktor.ext.get
+import java.util.*
 
 fun main(args: Array<String>) = EngineMain.main(args)
 
@@ -42,7 +42,7 @@ fun Application.module(testing: Boolean = false) {
             realm = authenticator.realm
             validate { credential ->
                 if (credential.payload.audience.contains(authenticator.audience)) {
-                    userRepository.findById(uuidFrom(credential.payload.subject))?.let {
+                    userRepository.findById(UUID.fromString(credential.payload.subject))?.let {
                         UserPrincipal(UserModel(it))
                     }
                 } else {

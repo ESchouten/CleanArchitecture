@@ -1,11 +1,11 @@
 package com.erikschouten.cleanarchitecture.usecases.dependency
 
-import com.benasher44.uuid.Uuid
 import com.erikschouten.cleanarchitecture.domain.entity.Password
 import com.erikschouten.cleanarchitecture.domain.entity.PasswordHash
+import java.util.*
 
 interface Authenticator {
-    fun generate(id: Uuid): String
+    fun generate(id: UUID): String
 }
 
 interface PasswordEncoder {
