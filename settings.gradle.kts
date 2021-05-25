@@ -18,8 +18,6 @@ enableFeaturePreview("VERSION_CATALOGS")
 dependencyResolutionManagement {
     versionCatalogs {
         create("libs") {
-            version("kotlin", "1.5.10")
-            version("mockk", "1.11.0")
             version("ktor", "1.5.4")
             version("logback", "1.2.3")
             version("koin", "3.0.2")
