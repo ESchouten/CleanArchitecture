@@ -12,4 +12,9 @@ subprojects {
         mavenCentral()
     }
     apply(plugin = "kotlin")
+
+    dependencies {
+        "testImplementation"(kotlin("test"))
+        "testImplementation"("io.mockk:mockk:1.11.0")
+    }
 }
