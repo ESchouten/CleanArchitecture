@@ -2,7 +2,6 @@ package com.erikschouten.cleanarchitecture.domain.entity
 
 import com.erikschouten.cleanarchitecture.domain.EmailInvalidException
 import com.erikschouten.cleanarchitecture.domain.PasswordInvalidException
-import kotlin.jvm.JvmInline
 
 data class User(
     val email: Email,
