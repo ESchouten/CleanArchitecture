@@ -24,7 +24,6 @@ fun modules(config: Config): List<Module> {
     return listOf(userModule(config))
 }
 
-@Suppress("USELESS_CAST")
 private fun userModule(config: Config) = module {
     single<AuthenticatedUser>()
     single<Authenticator> { JWTAuthenticatorImpl(config.jwt.domain, config.jwt.audience, config.jwt.realm) }
