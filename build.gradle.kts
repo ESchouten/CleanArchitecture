@@ -1,5 +1,5 @@
 plugins {
-    kotlin("jvm") version "1.5.0" apply false
+    kotlin("jvm") version "1.5.10" apply false
 }
 
 allprojects {
@@ -8,10 +8,10 @@ allprojects {
 }
 
 subprojects {
+    apply(plugin = "kotlin")
     repositories {
         mavenCentral()
     }
-    apply(plugin = "kotlin")
 
     dependencies {
         "testImplementation"(kotlin("test"))

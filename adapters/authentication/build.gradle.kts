@@ -2,6 +2,6 @@ dependencies {
     implementation(project(":domain"))
     implementation(project(":use-cases"))
 
-    implementation("com.auth0:java-jwt:3.16.0")
-    implementation("at.favre.lib:bcrypt:0.9.0")
+    implementation("com.auth0", "java-jwt", libs.versions.jwt.get())
+    implementation("at.favre.lib", "bcrypt", libs.versions.bcrypt.get())
 }
