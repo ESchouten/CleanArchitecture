@@ -10,6 +10,7 @@ import com.erikschouten.cleanarchitecture.usecases.model.LoginUserModel
 import com.erikschouten.cleanarchitecture.usecases.usecase.user.LoginUser
 import io.mockk.every
 import io.mockk.mockk
+import kotlinx.coroutines.runBlocking
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
@@ -25,28 +26,34 @@ class LoginUserTests {
 
     @Test
     fun `Successful login`() {
-        every { repository.findByEmail(email) } returns user
-        every { passwordEncoder.matches(password, PasswordHash(password.value.reversed())) } returns true
-        every { authenticator.generate(user.id) } returns "token"
-        val result = usecase(null, loginUserModel)
-        assertEquals(result, "token")
+        runBlocking {
+            every { runBlocking { repository.findByEmail(email) } } returns user
+            every { passwordEncoder.matches(password, PasswordHash(password.value.reversed())) } returns true
+            every { authenticator.generate(user.id) } returns "token"
+            val result = usecase(null, loginUserModel)
+            assertEquals(result, "token")
+        }
     }
 
     @Test
     fun `Invalid email`() {
-        assertFailsWith<LoginException> {
-            every { repository.findByEmail(email) } returns null
-            usecase(null, loginUserModel)
+        runBlocking {
+            assertFailsWith<LoginException> {
+                every { runBlocking { repository.findByEmail(email) } } returns null
+                usecase(null, loginUserModel)
+            }
         }
     }
 
     @Test
     fun `Invalid password`() {
-        assertFailsWith<LoginException> {
-            val pass = password.value + 1
-            every { repository.findByEmail(email) } returns user
-            every { passwordEncoder.matches(Password(pass), PasswordHash(password.value.reversed())) } returns false
-            usecase(null, loginUserModel.copy(password = pass))
+        runBlocking {
+            assertFailsWith<LoginException> {
+                val pass = password.value + 1
+                every { runBlocking { repository.findByEmail(email) } } returns user
+                every { passwordEncoder.matches(Password(pass), PasswordHash(password.value.reversed())) } returns false
+                usecase(null, loginUserModel.copy(password = pass))
+            }
         }
     }
 }

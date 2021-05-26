@@ -13,6 +13,7 @@ import com.erikschouten.cleanarchitecture.usecases.usecase.user.UserExists
 import com.erikschouten.cleanarchitecture.usecases.value
 import io.mockk.every
 import io.mockk.mockk
+import kotlinx.coroutines.runBlocking
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
@@ -28,50 +29,62 @@ class CreateUserTests {
 
     @Test
     fun `Successful creation`() {
-        every { repository.findByEmail(email) } returns null
-        every { repository.create(any()) } returns user
-        every { passwordEncoder.encode(password) } returns value(PasswordHash(password.value.reversed()))
-        val result = createUser(userModel, createUserModel)
+        runBlocking {
+            every { runBlocking { repository.findByEmail(email) } } returns null
+            every { runBlocking { repository.create(any()) } } returns user
+            every { passwordEncoder.encode(password) } returns value(PasswordHash(password.value.reversed()))
+            val result = createUser(userModel, createUserModel)
 
-        assertEquals(result, userModel)
+            assertEquals(result, userModel)
+        }
     }
 
     @Test
     fun Unauthenticated() {
-        assertFailsWith<LoginException> {
-            createUser(null, createUserModel)
+        runBlocking {
+            assertFailsWith<LoginException> {
+                createUser(null, createUserModel)
+            }
         }
     }
 
     @Test
     fun `No User role`() {
-        assertFailsWith<AuthorizationException> {
-            createUser(userModel.copy(authorities = emptyList()), createUserModel)
+        runBlocking {
+            assertFailsWith<AuthorizationException> {
+                createUser(userModel.copy(authorities = emptyList()), createUserModel)
+            }
         }
     }
 
     @Test
     fun `Invalid email`() {
-        assertFailsWith<EmailInvalidException> {
-            every { repository.findByEmail(Email("erik")) } returns null
-            createUser(userModel, createUserModel.copy(email = "erik"))
+        runBlocking {
+            assertFailsWith<EmailInvalidException> {
+                every { runBlocking { repository.findByEmail(Email("erik")) } } returns null
+                createUser(userModel, createUserModel.copy(email = "erik"))
+            }
         }
     }
 
     @Test
     fun `Invalid password`() {
-        assertFailsWith<PasswordInvalidException> {
-            every { repository.findByEmail(email) } returns null
-            every { passwordEncoder.encode(Password("pass")) } returns PasswordHash("pass".reversed())
-            createUser(userModel, createUserModel.copy(password = "pass"))
+        runBlocking {
+            assertFailsWith<PasswordInvalidException> {
+                every { runBlocking { repository.findByEmail(email) } } returns null
+                every { passwordEncoder.encode(Password("pass")) } returns PasswordHash("pass".reversed())
+                createUser(userModel, createUserModel.copy(password = "pass"))
+            }
         }
     }
 
     @Test
     fun `User already exists`() {
-        assertFailsWith<EmailAlreadyExistsException> {
-            every { repository.findByEmail(email) } returns user
-            createUser(userModel, createUserModel)
+        runBlocking {
+            assertFailsWith<EmailAlreadyExistsException> {
+                every { runBlocking { repository.findByEmail(email) } } returns user
+                createUser(userModel, createUserModel)
+            }
         }
     }
 }

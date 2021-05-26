@@ -18,6 +18,7 @@ enableFeaturePreview("VERSION_CATALOGS")
 dependencyResolutionManagement {
     versionCatalogs {
         create("libs") {
+            version("coroutines", "1.5.0")
             version("ktor", "1.5.4")
             version("logback", "1.2.3")
             version("koin", "3.0.2")
