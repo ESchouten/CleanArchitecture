@@ -7,7 +7,8 @@ import com.erikschouten.cleanarchitecture.domain.entity.Email
 import com.erikschouten.cleanarchitecture.domain.entity.Password
 import com.erikschouten.cleanarchitecture.domain.entity.User
 import com.erikschouten.cleanarchitecture.domain.repository.UserRepository
-import com.erikschouten.cleanarchitecture.repositories.UserRepositoryImpl
+import com.erikschouten.cleanarchitecture.repositories.ExposedUserRepository
+import com.erikschouten.cleanarchitecture.repositories.InMemoryUserRepository
 import com.erikschouten.cleanarchitecture.usecases.dependency.Authenticator
 import com.erikschouten.cleanarchitecture.usecases.dependency.PasswordEncoder
 import com.erikschouten.cleanarchitecture.usecases.usecase.user.AuthenticatedUser
@@ -35,19 +36,19 @@ private fun userModule(config: Config) = module {
     single {
         create(
             when (config.database) {
-                Database.LOCAL -> UserRepositoryImpl::class
-                Database.EXPOSED -> TODO()
+                Database.LOCAL -> InMemoryUserRepository::class
+                Database.EXPOSED -> ExposedUserRepository::class
             }
         ) as UserRepository
     }
 }
 
 fun setup(userRepository: UserRepository, passwordEncoder: PasswordEncoder) {
-    userRepository.save(
+    userRepository.create(
         User(
-            Email("erik@erikschouten.com"),
-            listOf(Authorities.USER),
-            passwordEncoder.encode(Password("P@ssw0rd!"))
+            email = Email("erik@erikschouten.com"),
+            authorities = listOf(Authorities.USER),
+            password = passwordEncoder.encode(Password("P@ssw0rd!"))
         )
     )
 }

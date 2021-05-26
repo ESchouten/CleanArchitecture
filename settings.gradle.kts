@@ -25,6 +25,9 @@ dependencyResolutionManagement {
             version("exposed", "0.31.1")
             version("jwt", "3.16.0")
             version("bcrypt", "0.9.0")
+            version("hikari", "4.0.3")
+            version("mariadb", "2.7.3")
+            version("flyway", "7.9.1")
         }
     }
 }

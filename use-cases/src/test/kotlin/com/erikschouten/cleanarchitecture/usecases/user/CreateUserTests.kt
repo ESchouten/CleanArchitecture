@@ -29,7 +29,7 @@ class CreateUserTests {
     @Test
     fun `Successful creation`() {
         every { repository.findByEmail(email) } returns null
-        every { repository.save(any()) } returns user
+        every { repository.create(any()) } returns user
         every { passwordEncoder.encode(password) } returns value(PasswordHash(password.value.reversed()))
         val result = createUser(userModel, createUserModel)
 
