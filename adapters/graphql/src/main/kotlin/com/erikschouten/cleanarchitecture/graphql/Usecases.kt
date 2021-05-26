@@ -15,7 +15,7 @@ import kotlin.reflect.full.createType
 import kotlin.reflect.full.hasAnnotation
 import kotlin.reflect.full.isSubclassOf
 
-fun usecases(usecases: Array<UsecaseType<*>>): SchemaBuilder.() -> Unit = {
+fun usecases(usecases: Collection<UsecaseType<*>>): SchemaBuilder.() -> Unit = {
     stringScalar<UUID> {
         deserialize = { id: String -> UUID.fromString(id) }
         serialize = UUID::toString
@@ -24,7 +24,7 @@ fun usecases(usecases: Array<UsecaseType<*>>): SchemaBuilder.() -> Unit = {
     usecases(usecases)
 }
 
-fun SchemaBuilder.usecases(usecases: Array<UsecaseType<*>>) {
+fun SchemaBuilder.usecases(usecases: Collection<UsecaseType<*>>) {
     val types = mutableSetOf<KClass<*>>()
     usecases.forEach {
         usecase(it)

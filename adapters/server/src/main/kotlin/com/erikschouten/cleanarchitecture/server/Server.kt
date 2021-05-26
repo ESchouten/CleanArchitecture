@@ -2,12 +2,14 @@ package com.erikschouten.cleanarchitecture.server
 
 import com.apurebase.kgraphql.GraphQL
 import com.erikschouten.cleanarchitecture.authentication.JWTAuthenticatorImpl
+import com.erikschouten.cleanarchitecture.config.getAll
 import com.erikschouten.cleanarchitecture.config.modules
 import com.erikschouten.cleanarchitecture.config.setup
 import com.erikschouten.cleanarchitecture.domain.repository.UserRepository
 import com.erikschouten.cleanarchitecture.graphql.usecases
 import com.erikschouten.cleanarchitecture.usecases.dependency.Authenticator
 import com.erikschouten.cleanarchitecture.usecases.model.UserModel
+import com.erikschouten.cleanarchitecture.usecases.usecase.UsecaseType
 import com.erikschouten.cleanarchitecture.usecases.usecase.user.AuthenticatedUser
 import com.erikschouten.cleanarchitecture.usecases.usecase.user.CreateUser
 import com.erikschouten.cleanarchitecture.usecases.usecase.user.LoginUser
@@ -18,12 +20,15 @@ import io.ktor.auth.jwt.*
 import io.ktor.features.*
 import io.ktor.server.cio.*
 import kotlinx.coroutines.runBlocking
+import org.koin.core.annotation.KoinInternalApi
 import org.koin.ktor.ext.Koin
 import org.koin.ktor.ext.get
+import org.koin.ktor.ext.getKoin
 import java.util.*
 
 fun main(args: Array<String>) = EngineMain.main(args)
 
+@KoinInternalApi
 @Suppress("unused")
 fun Application.module(testing: Boolean = false) {
     install(DefaultHeaders)
@@ -66,16 +71,7 @@ fun Application.module(testing: Boolean = false) {
             }
         }
 
-        schema(
-            usecases(
-                arrayOf(
-                    get<AuthenticatedUser>(),
-                    get<CreateUser>(),
-                    get<LoginUser>(),
-                    get<UserExists>()
-                )
-            )
-        )
+        schema(usecases(getAll()))
     }
 
     if (config.development) {
