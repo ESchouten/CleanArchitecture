@@ -6,13 +6,7 @@ data class Config(
     val jwt: JWTConfig,
     val development: Boolean,
     val database: Database,
-) {
-    init {
-        if (database === Database.EXPOSED) {
-            DatabaseFactory.init()
-        }
-    }
-}
+)
 
 data class JWTConfig(
     val domain: String,
@@ -20,6 +14,19 @@ data class JWTConfig(
     val realm: String,
 )
 
-enum class Database {
+data class Database(
+    val type: DatabaseType,
+    val schema: String,
+    val username: String,
+    val password: String
+) {
+    init {
+        if (type === DatabaseType.EXPOSED) {
+            DatabaseFactory.init(schema, username, password)
+        }
+    }
+}
+
+enum class DatabaseType {
     LOCAL, EXPOSED
 }

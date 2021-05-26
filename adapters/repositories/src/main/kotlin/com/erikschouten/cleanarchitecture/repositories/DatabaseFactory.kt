@@ -8,12 +8,12 @@ import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransacti
 import org.jetbrains.exposed.sql.transactions.transaction
 
 object DatabaseFactory {
-    fun init() {
+    fun init(schema: String, username: String = "", password: String = "") {
         val config = HikariConfig().apply {
             driverClassName = "org.mariadb.jdbc.Driver"
-            jdbcUrl = "jdbc:mariadb://localhost:3306/clean-architecture"
-            username = "root"
-            password = "root"
+            jdbcUrl = "jdbc:mariadb://localhost:3306/$schema"
+            this.username = username
+            this.password = password
             maximumPoolSize = 3
             isAutoCommit = false
             transactionIsolation = "TRANSACTION_REPEATABLE_READ"
