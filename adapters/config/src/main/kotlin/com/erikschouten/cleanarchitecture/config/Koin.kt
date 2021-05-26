@@ -44,11 +44,14 @@ private fun userModule(config: Config) = module {
 }
 
 suspend fun setup(userRepository: UserRepository, passwordEncoder: PasswordEncoder) {
-    userRepository.create(
-        User(
-            email = Email("erik@erikschouten.com"),
-            authorities = listOf(Authorities.USER),
-            password = passwordEncoder.encode(Password("P@ssw0rd!"))
+    val email = Email("erik@erikschouten.com")
+    if (userRepository.findByEmail(email) == null) {
+        userRepository.create(
+            User(
+                email = email,
+                authorities = listOf(Authorities.USER),
+                password = passwordEncoder.encode(Password("P@ssw0rd!"))
+            )
         )
-    )
+    }
 }
