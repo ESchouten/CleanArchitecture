@@ -9,7 +9,11 @@ class UserTests {
 
     @Test
     fun Valid() {
-        User(email = Email("erik@erikschouten.com"), authorities = listOf(Authorities.USER), password = PasswordHash("P@ssw0rd!".reversed()))
+        User(
+            email = Email("erik@erikschouten.com"),
+            authorities = listOf(Authorities.USER),
+            password = PasswordHash("P@ssw0rd!".reversed())
+        )
     }
 
     @Test

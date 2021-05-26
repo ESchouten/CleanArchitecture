@@ -3,10 +3,8 @@ package com.erikschouten.cleanarchitecture.repositories
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import org.flywaydb.core.Flyway
-import org.flywaydb.core.api.Location
 import org.flywaydb.core.api.MigrationVersion
 import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.Schema
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
@@ -42,7 +40,6 @@ object DatabaseFactory {
             .load()
             .migrate()
     }
-
 
 
     suspend fun <T> query(

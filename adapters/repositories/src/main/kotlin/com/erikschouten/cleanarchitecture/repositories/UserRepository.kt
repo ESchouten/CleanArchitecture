@@ -17,12 +17,15 @@ class ExposedUserRepository : UserRepository {
     override suspend fun findByEmail(email: Email) = query {
         UserEntity.find { UserTable.email eq email.value }.firstOrNull()?.toUser()
     }
+
     override suspend fun findById(id: UUID) = query {
         UserEntity.findById(id)?.toUser()
     }
+
     override suspend fun findAll() = query {
         UserEntity.all().map { it.toUser() }
     }
+
     override suspend fun create(entity: User) = query {
         UserEntity.new {
             email = entity.email
@@ -30,6 +33,7 @@ class ExposedUserRepository : UserRepository {
             password = entity.password
         }.toUser()
     }
+
     override suspend fun update(entity: User) = query {
         UserEntity[entity.id].apply {
             email = entity.email
@@ -46,12 +50,12 @@ internal object UserTable : UUIDTable() {
 }
 
 internal class UserEntity(id: EntityID<UUID>) : UUIDEntity(id) {
-    var email by UserTable.email.transform({ email -> email.value}, { email -> Email(email) })
+    var email by UserTable.email.transform({ email -> email.value }, { email -> Email(email) })
     var authorities by UserTable.authorities.transform(
         { authorities -> authorities.joinToString(SEPARATOR) },
         { authorities -> authorities.split(SEPARATOR).map { Authorities.valueOf(it) } }
     )
-    var password by UserTable.password.transform({ password -> password.value}, { password -> PasswordHash(password) })
+    var password by UserTable.password.transform({ password -> password.value }, { password -> PasswordHash(password) })
 
     companion object : UUIDEntityClass<UserEntity>(UserTable) {
         private const val SEPARATOR = ":"

@@ -16,7 +16,6 @@ import com.erikschouten.cleanarchitecture.usecases.usecase.user.CreateUser
 import com.erikschouten.cleanarchitecture.usecases.usecase.user.LoginUser
 import com.erikschouten.cleanarchitecture.usecases.usecase.user.UserExists
 import org.koin.core.annotation.KoinInternalApi
-import org.koin.core.component.KoinComponent
 import org.koin.core.definition.Kind
 import org.koin.core.module.Module
 import org.koin.dsl.module
@@ -66,6 +65,6 @@ inline fun <reified T : Any> getAll(): Collection<T> =
     getKoin().let { koin ->
         koin.getRootScope()._scopeDefinition.definitions.toList()
             .filter { it.kind == Kind.Single }
-            .filter { it.primaryType.isSubclassOf(T::class)}
-            .map { koin.get<T>(clazz = it.primaryType, qualifier = null, parameters = null) }
+            .filter { it.primaryType.isSubclassOf(T::class) }
+            .map { koin.get(clazz = it.primaryType, qualifier = null, parameters = null) }
     }

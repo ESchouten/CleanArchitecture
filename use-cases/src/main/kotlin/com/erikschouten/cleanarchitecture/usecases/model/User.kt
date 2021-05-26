@@ -20,7 +20,8 @@ data class CreateUserModel(
     val authorities: List<Authorities>,
     val password: String,
 ) {
-    fun toUser(encoder: PasswordEncoder) = User(email = Email(email), authorities = authorities, password = encoder.encode(Password(password)))
+    fun toUser(encoder: PasswordEncoder) =
+        User(email = Email(email), authorities = authorities, password = encoder.encode(Password(password)))
 }
 
 data class LoginUserModel(

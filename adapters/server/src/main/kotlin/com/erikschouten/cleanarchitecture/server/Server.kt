@@ -9,11 +9,6 @@ import com.erikschouten.cleanarchitecture.domain.repository.UserRepository
 import com.erikschouten.cleanarchitecture.graphql.usecases
 import com.erikschouten.cleanarchitecture.usecases.dependency.Authenticator
 import com.erikschouten.cleanarchitecture.usecases.model.UserModel
-import com.erikschouten.cleanarchitecture.usecases.usecase.UsecaseType
-import com.erikschouten.cleanarchitecture.usecases.usecase.user.AuthenticatedUser
-import com.erikschouten.cleanarchitecture.usecases.usecase.user.CreateUser
-import com.erikschouten.cleanarchitecture.usecases.usecase.user.LoginUser
-import com.erikschouten.cleanarchitecture.usecases.usecase.user.UserExists
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.auth.jwt.*
@@ -23,7 +18,6 @@ import kotlinx.coroutines.runBlocking
 import org.koin.core.annotation.KoinInternalApi
 import org.koin.ktor.ext.Koin
 import org.koin.ktor.ext.get
-import org.koin.ktor.ext.getKoin
 import java.util.*
 
 fun main(args: Array<String>) = EngineMain.main(args)
