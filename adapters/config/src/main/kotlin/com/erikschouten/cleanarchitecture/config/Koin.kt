@@ -43,7 +43,7 @@ private fun userModule(config: Config) = module {
     }
 }
 
-fun setup(userRepository: UserRepository, passwordEncoder: PasswordEncoder) {
+suspend fun setup(userRepository: UserRepository, passwordEncoder: PasswordEncoder) {
     userRepository.create(
         User(
             email = Email("erik@erikschouten.com"),

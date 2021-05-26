@@ -5,5 +5,5 @@ import com.erikschouten.cleanarchitecture.domain.entity.User
 import java.util.*
 
 interface UserRepository : Repository<User, UUID> {
-    fun findByEmail(email: Email): User?
+    suspend fun findByEmail(email: Email): User?
 }

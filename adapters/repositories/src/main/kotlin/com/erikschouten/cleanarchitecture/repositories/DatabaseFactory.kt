@@ -25,4 +25,8 @@ object DatabaseFactory {
             SchemaUtils.create(UserTable)
         }
     }
+
+    suspend fun <T> query(
+        block: suspend () -> T
+    ): T = newSuspendedTransaction { block() }
 }

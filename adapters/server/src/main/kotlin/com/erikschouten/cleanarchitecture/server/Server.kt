@@ -17,6 +17,7 @@ import io.ktor.auth.*
 import io.ktor.auth.jwt.*
 import io.ktor.features.*
 import io.ktor.server.cio.*
+import kotlinx.coroutines.runBlocking
 import org.koin.ktor.ext.Koin
 import org.koin.ktor.ext.get
 import java.util.*
@@ -77,5 +78,9 @@ fun Application.module(testing: Boolean = false) {
         )
     }
 
-    if (config.development) setup(get(), get())
+    if (config.development) {
+        runBlocking {
+            setup(get(), get())
+        }
+    }
 }

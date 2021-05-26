@@ -7,7 +7,7 @@ import com.erikschouten.cleanarchitecture.usecases.usecase.UsecaseA0
 @Query
 class AuthenticatedUser : UsecaseA0<UserModel>(UserModel::class) {
 
-    override val executor = { authentication: UserModel? ->
+    override val executor: suspend (UserModel?) -> UserModel = { authentication ->
         authentication!!
     }
 }

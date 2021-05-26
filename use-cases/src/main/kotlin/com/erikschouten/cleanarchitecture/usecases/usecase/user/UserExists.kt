@@ -11,7 +11,7 @@ class UserExists(
     private val repository: UserRepository
 ) : UsecaseA1<Email, Boolean>(Email::class, Boolean::class) {
 
-    override val executor = { _: UserModel?, a0: Email ->
+    override val executor: suspend (UserModel?, Email) -> Boolean = { _, a0 ->
         repository.findByEmail(a0) != null
     }
 }

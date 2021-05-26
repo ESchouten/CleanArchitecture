@@ -19,7 +19,7 @@ class LoginUser(
 ) : UsecaseA1<LoginUserModel, String>(LoginUserModel::class, String::class) {
 
     override val authenticated = false
-    override val executor = { _: UserModel?, a0: LoginUserModel ->
+    override val executor: suspend (UserModel?, LoginUserModel) -> String = { _, a0 ->
         val user = repository.findByEmail(Email(a0.email))
         if (user == null || !passwordEncoder.matches(Password(a0.password), user.password)) throw LoginException()
         authenticator.generate(user.id)
