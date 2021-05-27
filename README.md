@@ -12,7 +12,7 @@ The domain and usecases modules do not have any external dependencies.
 GraphQL endpoints are auto-generated from the Usecases
 
 ##### Technologies:
-Ktor, JWT, Exposed, Flyway, KGraphQL/GraphQL generated endpoints.
+Ktor, JWT, Exposed, Flyway, KGraphQL/GraphQL generated endpoints, Gradle.
 
 ![image](https://user-images.githubusercontent.com/9130193/119733737-3afed980-be7a-11eb-8970-3891fc2632f1.png)
 
