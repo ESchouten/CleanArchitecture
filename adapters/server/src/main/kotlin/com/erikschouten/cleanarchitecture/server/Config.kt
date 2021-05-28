@@ -1,8 +1,8 @@
 package com.erikschouten.cleanarchitecture.server
 
 import com.erikschouten.cleanarchitecture.config.Config
-import com.erikschouten.cleanarchitecture.config.JDBC
 import com.erikschouten.cleanarchitecture.config.DatabaseType
+import com.erikschouten.cleanarchitecture.config.JDBC
 import com.erikschouten.cleanarchitecture.config.JWTConfig
 import io.ktor.application.*
 
@@ -16,7 +16,7 @@ fun Application.config() = environment.config.run {
         ),
         development = property("ktor.development").getString().toBoolean(),
         database = databaseType,
-        jdbc = when(databaseType) {
+        jdbc = when (databaseType) {
             DatabaseType.JDBC -> JDBC(
                 driver = property("ktor.database.jdbc.driver").getString(),
                 url = property("ktor.database.jdbc.url").getString(),

@@ -10,7 +10,14 @@ import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransacti
 import org.jetbrains.exposed.sql.transactions.transaction
 
 object DatabaseFactory {
-    fun init(driver: String, url: String, schema: String, username: String = "", password: String = "", development: Boolean = false) {
+    fun init(
+        driver: String,
+        url: String,
+        schema: String,
+        username: String = "",
+        password: String = "",
+        development: Boolean = false
+    ) {
         val config = HikariConfig().apply {
             driverClassName = driver
             jdbcUrl = url + schema

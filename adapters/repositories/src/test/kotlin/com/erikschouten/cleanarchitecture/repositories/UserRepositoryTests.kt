@@ -24,18 +24,18 @@ class UserRepositoryTests {
             assertNull(repository.findByEmail(email))
             // No users exist
             assertEquals(0, repository.findAll().size)
-            //Create user
+            // Create user
             val created = repository.create(user)
             assertNotNull(created)
-            //Database should generate own UUID
+            // Database should generate own UUID
             assertNotEquals(user.id, created.id)
-            //Rest should be equal
+            // Rest should be equal
             assertEquals(user.email, created.email)
             assertEquals(user.authorities, created.authorities)
             assertEquals(user.password, created.password)
-            //Get created user
+            // Get created user
             assertEquals(created, repository.findByEmail(email))
-            //Get all created users
+            // Get all created users
             assertEquals(1, repository.findAll().size)
             assertEquals(created, repository.findAll().first())
         }
