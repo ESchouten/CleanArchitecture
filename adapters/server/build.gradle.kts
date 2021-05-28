@@ -7,10 +7,10 @@ application {
 }
 
 dependencies {
-    implementation(project(":domain"))
-    implementation(project(":use-cases"))
-    implementation(project(":adapters:config"))
-    implementation(project(":adapters:graphql"))
+    implementation(projects.domain)
+    implementation(projects.useCases)
+    implementation(projects.adapters.config)
+    implementation(projects.adapters.graphql)
 
     implementation("io.ktor", "ktor-server-core", libs.versions.ktor.get())
     implementation("io.ktor", "ktor-server-cio", libs.versions.ktor.get())

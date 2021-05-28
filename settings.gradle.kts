@@ -4,6 +4,7 @@ pluginManagement {
     }
 }
 
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 include(
     ":domain",
     ":use-cases",

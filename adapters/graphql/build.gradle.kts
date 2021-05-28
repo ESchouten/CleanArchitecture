@@ -1,5 +1,5 @@
 dependencies {
-    implementation(project(":use-cases"))
+    implementation(projects.useCases)
 
     implementation("com.apurebase", "kgraphql", libs.versions.kgraphql.get())
 

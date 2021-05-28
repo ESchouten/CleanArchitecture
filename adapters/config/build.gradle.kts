@@ -1,8 +1,8 @@
 dependencies {
-    implementation(project(":domain"))
-    implementation(project(":use-cases"))
-    api(project(":adapters:authentication"))
-    implementation(project(":adapters:repositories"))
+    implementation(projects.domain)
+    implementation(projects.useCases)
+    api(projects.adapters.authentication)
+    implementation(projects.adapters.repositories)
 
     api("io.insert-koin", "koin-core", libs.versions.koin.get())
     api("io.insert-koin", "koin-core-ext", libs.versions.koin.get())
