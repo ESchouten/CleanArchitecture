@@ -13,7 +13,7 @@ object DatabaseFactory {
     fun init(driver: String, url: String, schema: String, username: String = "", password: String = "", development: Boolean = false) {
         val config = HikariConfig().apply {
             driverClassName = driver
-            jdbcUrl = url.trimEnd('/') + '/' + schema
+            jdbcUrl = url + schema
             this.username = username
             this.password = password
             maximumPoolSize = 3
