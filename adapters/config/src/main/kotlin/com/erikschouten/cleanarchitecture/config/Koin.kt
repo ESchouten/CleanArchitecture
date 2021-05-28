@@ -39,9 +39,9 @@ private fun userModule(config: Config) = module {
     single<UserExists>()
     single {
         create(
-            when (config.database.type) {
+            when (config.database) {
                 DatabaseType.LOCAL -> InMemoryUserRepository::class
-                DatabaseType.EXPOSED -> ExposedUserRepository::class
+                DatabaseType.JDBC -> ExposedUserRepository::class
             }
         ) as UserRepository
     }

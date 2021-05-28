@@ -3,7 +3,6 @@ package com.erikschouten.cleanarchitecture.repositories
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import org.flywaydb.core.Flyway
-import org.flywaydb.core.api.MigrationVersion
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.Table
@@ -11,10 +10,10 @@ import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransacti
 import org.jetbrains.exposed.sql.transactions.transaction
 
 object DatabaseFactory {
-    fun init(schema: String, username: String = "", password: String = "", development: Boolean = false) {
+    fun init(driver: String, url: String, schema: String, username: String = "", password: String = "", development: Boolean = false) {
         val config = HikariConfig().apply {
-            driverClassName = "org.mariadb.jdbc.Driver"
-            jdbcUrl = "jdbc:mariadb://localhost:3306/$schema"
+            driverClassName = driver
+            jdbcUrl = url.trimEnd('/') + '/' + schema
             this.username = username
             this.password = password
             maximumPoolSize = 3
@@ -33,8 +32,12 @@ object DatabaseFactory {
             }
         }
 
+        transaction {
+            SchemaUtils.createMissingTablesAndColumns(UserTable)
+        }
+
         Flyway.configure()
-            .baselineVersion(MigrationVersion.EMPTY)
+            .baselineOnMigrate(true)
             .locations("classpath:com/erikschouten/cleanarchitecture/repositories/db/migration")
             .dataSource(ds)
             .load()

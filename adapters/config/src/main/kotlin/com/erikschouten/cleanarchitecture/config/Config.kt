@@ -5,11 +5,12 @@ import com.erikschouten.cleanarchitecture.repositories.DatabaseFactory
 data class Config(
     val jwt: JWTConfig,
     val development: Boolean,
-    val database: Database,
+    val database: DatabaseType,
+    val jdbc: JDBC?,
 ) {
     init {
-        if (database.type === DatabaseType.EXPOSED) {
-            DatabaseFactory.init(database.schema, database.username, database.password, development)
+        if (database === DatabaseType.JDBC) {
+            DatabaseFactory.init(jdbc!!.driver, jdbc.url, jdbc.schema, jdbc.username, jdbc.password, development)
         }
     }
 }
@@ -20,13 +21,14 @@ data class JWTConfig(
     val realm: String,
 )
 
-data class Database(
-    val type: DatabaseType,
+data class JDBC(
+    val driver: String,
+    val url: String,
     val schema: String,
     val username: String,
     val password: String
 )
 
 enum class DatabaseType {
-    LOCAL, EXPOSED
+    LOCAL, JDBC
 }
