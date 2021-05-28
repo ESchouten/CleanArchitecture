@@ -4,12 +4,12 @@ import com.erikschouten.cleanarchitecture.domain.EmailInvalidException
 import com.erikschouten.cleanarchitecture.domain.PasswordInvalidException
 import java.util.*
 
-class User(
-    id: UUID = UUID.randomUUID(),
+data class User(
+    val id: UUID = UUID.randomUUID(),
     val email: Email,
     val authorities: List<Authorities>,
     val password: PasswordHash,
-) : UUIDEntity(id)
+)
 
 enum class Authorities {
     USER
