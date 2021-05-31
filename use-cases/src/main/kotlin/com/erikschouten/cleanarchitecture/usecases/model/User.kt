@@ -9,22 +9,22 @@ import java.util.*
 
 data class UserModel(
     val id: UUID,
-    val email: String,
+    val email: Email,
     val authorities: List<Authorities>,
 ) {
-    constructor(user: User) : this(user.id, user.email.value, user.authorities)
+    constructor(user: User) : this(user.id, user.email, user.authorities)
 }
 
 data class CreateUserModel(
-    val email: String,
+    val email: Email,
     val authorities: List<Authorities>,
-    val password: String,
+    val password: Password,
 ) {
     fun toUser(encoder: PasswordEncoder) =
-        User(email = Email(email), authorities = authorities, password = encoder.encode(Password(password)))
+        User(email = email, authorities = authorities, password = encoder.encode(password))
 }
 
 data class LoginUserModel(
-    val email: String,
-    val password: String,
+    val email: Email,
+    val password: Password,
 )

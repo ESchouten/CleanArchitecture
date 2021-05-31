@@ -5,15 +5,17 @@ import com.apurebase.kgraphql.schema.Publisher
 import com.apurebase.kgraphql.schema.dsl.ResolverDSL
 import com.apurebase.kgraphql.schema.dsl.SchemaBuilder
 import com.apurebase.kgraphql.schema.dsl.operations.AbstractOperationDSL
+import com.apurebase.kgraphql.schema.dsl.types.ScalarDSL
 import com.apurebase.kgraphql.schema.model.InputValueDef
 import com.apurebase.kgraphql.schema.model.MutableSchemaDefinition
 import com.apurebase.kgraphql.schema.model.TypeDef
+import com.apurebase.kgraphql.schema.model.ast.ValueNode
+import com.apurebase.kgraphql.schema.scalar.ScalarCoercion
+import com.apurebase.kgraphql.schema.scalar.StringScalarCoercion
 import com.erikschouten.cleanarchitecture.usecases.usecase.*
 import java.util.*
 import kotlin.reflect.KClass
-import kotlin.reflect.full.createType
-import kotlin.reflect.full.hasAnnotation
-import kotlin.reflect.full.isSubclassOf
+import kotlin.reflect.full.*
 
 fun usecases(usecases: Collection<UsecaseType<*>>): SchemaBuilder.() -> Unit = {
     stringScalar<UUID> {
@@ -88,12 +90,33 @@ fun types(types: Set<KClass<*>>, scalars: List<KClass<*>>): Set<KClass<*>> {
 }
 
 @Suppress("UNCHECKED_CAST")
-fun SchemaBuilder.type(type: KClass<*>) {
-    if (type.isSubclassOf(Enum::class)) {
-        enum(type as KClass<Enum<*>>)
-    } else type(type) {}
+fun <T : Any> SchemaBuilder.type(type: KClass<T>) {
+    when {
+        type.isSubclassOf(Enum::class) -> enum(type as KClass<Enum<*>>)
+        type.isValue -> valueClassScalar(type)
+        else -> type(type) {}
+    }
 }
 
 fun <T : Enum<T>> SchemaBuilder.enum(type: KClass<T>) {
     enum(kClass = type, enumValues = type.java.enumConstants as Array<T>, block = null)
+}
+
+fun <T : Any> SchemaBuilder.valueClassScalar(value: KClass<T>) {
+    when (value.constructors.first().parameters.first().type) {
+        String::class.starProjectedType -> stringScalar(value, scalar(value, String::class))
+        Int::class.starProjectedType -> intScalar(value, scalar(value, Int::class))
+        Long::class.starProjectedType -> longScalar(value, scalar(value, Long::class))
+        Double::class.starProjectedType -> floatScalar(value, scalar(value, Double::class))
+        Float::class.starProjectedType -> floatScalar(value, scalar(value, Double::class))
+        Boolean::class.starProjectedType -> booleanScalar(value, scalar(value, Boolean::class))
+        else -> throw Exception("Unsupported coercion")
+    }
+}
+
+fun <S : Any, R : Any> scalar(scalar: KClass<S>, raw: KClass<R>): ScalarDSL<S, R>.() -> Unit {
+    return {
+        deserialize = { value: R -> scalar.constructors.first().call(value) }
+        serialize = { value: S -> raw.cast(scalar.memberProperties.first().get(value)) }
+    }
 }
