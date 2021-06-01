@@ -5,11 +5,11 @@ import com.erikschouten.cleanarchitecture.domain.PasswordInvalidException
 import java.util.*
 
 data class User(
-    val id: UUID = UUID.randomUUID(),
+    override val id: UUID = UUID.randomUUID(),
     val email: Email,
     val authorities: List<Authorities>,
     val password: PasswordHash,
-)
+) : UUIDEntity
 
 enum class Authorities {
     USER
