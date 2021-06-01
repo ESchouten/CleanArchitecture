@@ -2,10 +2,10 @@ package com.erikschouten.cleanarchitecture.config
 
 import com.erikschouten.cleanarchitecture.authentication.JWTAuthenticatorImpl
 import com.erikschouten.cleanarchitecture.authentication.PasswordEncoderImpl
-import com.erikschouten.cleanarchitecture.domain.entity.Authorities
-import com.erikschouten.cleanarchitecture.domain.entity.Email
-import com.erikschouten.cleanarchitecture.domain.entity.Password
-import com.erikschouten.cleanarchitecture.domain.entity.User
+import com.erikschouten.cleanarchitecture.domain.entity.user.Authorities
+import com.erikschouten.cleanarchitecture.domain.entity.user.Email
+import com.erikschouten.cleanarchitecture.domain.entity.user.Password
+import com.erikschouten.cleanarchitecture.domain.entity.user.User
 import com.erikschouten.cleanarchitecture.domain.repository.UserRepository
 import com.erikschouten.cleanarchitecture.repositories.ExposedUserRepository
 import com.erikschouten.cleanarchitecture.repositories.InMemoryUserRepository

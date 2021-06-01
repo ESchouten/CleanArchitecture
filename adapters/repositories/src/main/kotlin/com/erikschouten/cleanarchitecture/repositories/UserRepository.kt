@@ -1,10 +1,10 @@
 package com.erikschouten.cleanarchitecture.repositories
 
 import com.erikschouten.cleanarchitecture.domain.AlreadyExistsException
-import com.erikschouten.cleanarchitecture.domain.entity.Authorities
-import com.erikschouten.cleanarchitecture.domain.entity.Email
-import com.erikschouten.cleanarchitecture.domain.entity.PasswordHash
-import com.erikschouten.cleanarchitecture.domain.entity.User
+import com.erikschouten.cleanarchitecture.domain.entity.user.Authorities
+import com.erikschouten.cleanarchitecture.domain.entity.user.Email
+import com.erikschouten.cleanarchitecture.domain.entity.user.PasswordHash
+import com.erikschouten.cleanarchitecture.domain.entity.user.User
 import com.erikschouten.cleanarchitecture.domain.repository.UserRepository
 import com.erikschouten.cleanarchitecture.repositories.DatabaseFactory.query
 import org.jetbrains.exposed.dao.UUIDEntity

@@ -1,8 +1,8 @@
 package com.erikschouten.cleanarchitecture.authentication
 
 import at.favre.lib.crypto.bcrypt.BCrypt
-import com.erikschouten.cleanarchitecture.domain.entity.Password
-import com.erikschouten.cleanarchitecture.domain.entity.PasswordHash
+import com.erikschouten.cleanarchitecture.domain.entity.user.Password
+import com.erikschouten.cleanarchitecture.domain.entity.user.PasswordHash
 import com.erikschouten.cleanarchitecture.usecases.dependency.PasswordEncoder
 
 class PasswordEncoderImpl : PasswordEncoder {

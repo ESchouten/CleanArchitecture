@@ -1,9 +1,9 @@
 package com.erikschouten.cleanarchitecture.usecases.model
 
-import com.erikschouten.cleanarchitecture.domain.entity.Authorities
-import com.erikschouten.cleanarchitecture.domain.entity.Email
-import com.erikschouten.cleanarchitecture.domain.entity.Password
-import com.erikschouten.cleanarchitecture.domain.entity.User
+import com.erikschouten.cleanarchitecture.domain.entity.user.Authorities
+import com.erikschouten.cleanarchitecture.domain.entity.user.Email
+import com.erikschouten.cleanarchitecture.domain.entity.user.Password
+import com.erikschouten.cleanarchitecture.domain.entity.user.User
 import com.erikschouten.cleanarchitecture.usecases.dependency.PasswordEncoder
 import java.util.*
 

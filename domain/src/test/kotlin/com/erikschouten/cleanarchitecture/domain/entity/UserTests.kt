@@ -2,6 +2,7 @@ package com.erikschouten.cleanarchitecture.domain.entity
 
 import com.erikschouten.cleanarchitecture.domain.EmailInvalidException
 import com.erikschouten.cleanarchitecture.domain.PasswordInvalidException
+import com.erikschouten.cleanarchitecture.domain.entity.user.*
 import kotlin.test.Test
 import kotlin.test.assertFailsWith
 

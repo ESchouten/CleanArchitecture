@@ -1,7 +1,8 @@
-package com.erikschouten.cleanarchitecture.domain.entity
+package com.erikschouten.cleanarchitecture.domain.entity.user
 
 import com.erikschouten.cleanarchitecture.domain.EmailInvalidException
 import com.erikschouten.cleanarchitecture.domain.PasswordInvalidException
+import com.erikschouten.cleanarchitecture.domain.entity.UUIDEntity
 import java.util.*
 
 data class User(

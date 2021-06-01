@@ -2,8 +2,7 @@ package com.erikschouten.cleanarchitecture.usecases.usecase.user
 
 import com.erikschouten.cleanarchitecture.domain.AuthorizationException
 import com.erikschouten.cleanarchitecture.domain.EmailAlreadyExistsException
-import com.erikschouten.cleanarchitecture.domain.entity.Authorities
-import com.erikschouten.cleanarchitecture.domain.entity.Email
+import com.erikschouten.cleanarchitecture.domain.entity.user.Authorities
 import com.erikschouten.cleanarchitecture.domain.repository.UserRepository
 import com.erikschouten.cleanarchitecture.usecases.dependency.PasswordEncoder
 import com.erikschouten.cleanarchitecture.usecases.model.CreateUserModel

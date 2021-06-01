@@ -1,7 +1,7 @@
 package com.erikschouten.cleanarchitecture.server
 
-import com.erikschouten.cleanarchitecture.domain.entity.Authorities
-import com.erikschouten.cleanarchitecture.domain.entity.Email
+import com.erikschouten.cleanarchitecture.domain.entity.user.Authorities
+import com.erikschouten.cleanarchitecture.domain.entity.user.Email
 import com.erikschouten.cleanarchitecture.usecases.model.UserModel
 import io.ktor.auth.*
 import java.util.*

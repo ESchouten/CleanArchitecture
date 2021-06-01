@@ -1,6 +1,6 @@
 package com.erikschouten.cleanarchitecture.repositories
 
-import com.erikschouten.cleanarchitecture.domain.entity.*
+import com.erikschouten.cleanarchitecture.domain.entity.user.*
 import kotlinx.coroutines.runBlocking
 import kotlin.test.*
 

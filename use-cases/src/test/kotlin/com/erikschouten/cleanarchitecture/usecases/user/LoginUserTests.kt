@@ -1,8 +1,8 @@
 package com.erikschouten.cleanarchitecture.usecases.user
 
 import com.erikschouten.cleanarchitecture.domain.LoginException
-import com.erikschouten.cleanarchitecture.domain.entity.Password
-import com.erikschouten.cleanarchitecture.domain.entity.PasswordHash
+import com.erikschouten.cleanarchitecture.domain.entity.user.Password
+import com.erikschouten.cleanarchitecture.domain.entity.user.PasswordHash
 import com.erikschouten.cleanarchitecture.domain.repository.UserRepository
 import com.erikschouten.cleanarchitecture.usecases.dependency.Authenticator
 import com.erikschouten.cleanarchitecture.usecases.dependency.PasswordEncoder
