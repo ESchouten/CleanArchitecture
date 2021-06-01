@@ -22,7 +22,7 @@ class LoginUserTests {
     val authenticator = mockk<Authenticator>()
     val usecase = LoginUser(repository, authenticator, passwordEncoder)
 
-    val loginUserModel = LoginUserModel(email.value, password.value)
+    val loginUserModel = LoginUserModel(email, password)
 
     @Test
     fun `Successful login`() {
@@ -49,9 +49,9 @@ class LoginUserTests {
     fun `Invalid password`() {
         runBlocking {
             assertFailsWith<LoginException> {
-                val pass = password.value + 1
+                val pass = Password(password.value + 1)
                 every { runBlocking { repository.findByEmail(email) } } returns user
-                every { passwordEncoder.matches(Password(pass), PasswordHash(password.value.reversed())) } returns false
+                every { passwordEncoder.matches(pass, PasswordHash(password.value.reversed())) } returns false
                 usecase(null, loginUserModel.copy(password = pass))
             }
         }

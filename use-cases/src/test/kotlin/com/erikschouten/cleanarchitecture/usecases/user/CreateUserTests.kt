@@ -25,7 +25,7 @@ class CreateUserTests {
     val userExists = UserExists(repository)
     val createUser = CreateUser(repository, userExists, passwordEncoder)
 
-    val createUserModel = CreateUserModel(email.value, listOf(Authorities.USER), password.value)
+    val createUserModel = CreateUserModel(email, listOf(Authorities.USER), password)
 
     @Test
     fun `Successful creation`() {
@@ -62,7 +62,7 @@ class CreateUserTests {
         runBlocking {
             assertFailsWith<EmailInvalidException> {
                 every { runBlocking { repository.findByEmail(Email("erik")) } } returns null
-                createUser(userModel, createUserModel.copy(email = "erik"))
+                createUser(userModel, createUserModel.copy(email = Email("erik")))
             }
         }
     }
@@ -73,7 +73,7 @@ class CreateUserTests {
             assertFailsWith<PasswordInvalidException> {
                 every { runBlocking { repository.findByEmail(email) } } returns null
                 every { passwordEncoder.encode(Password("pass")) } returns PasswordHash("pass".reversed())
-                createUser(userModel, createUserModel.copy(password = "pass"))
+                createUser(userModel, createUserModel.copy(password = Password("pass")))
             }
         }
     }
