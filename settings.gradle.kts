@@ -31,6 +31,7 @@ dependencyResolutionManagement {
             version("mariadb", "2.7.3")
             version("h2", "1.4.200")
             version("flyway", "7.9.1")
+            version("mockk", "1.11.0")
         }
     }
 }

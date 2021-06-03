@@ -13,8 +13,10 @@ subprojects {
         mavenCentral()
     }
 
-    dependencies {
-        "testImplementation"(kotlin("test"))
-        "testImplementation"("io.mockk", "mockk", "1.11.0")
+    afterEvaluate {
+        dependencies {
+            "testImplementation"(kotlin("test"))
+            "testImplementation"("io.mockk", "mockk", libs.versions.mockk.get())
+        }
     }
 }
