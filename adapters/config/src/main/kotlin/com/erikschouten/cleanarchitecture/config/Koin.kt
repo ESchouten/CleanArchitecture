@@ -7,8 +7,8 @@ import com.erikschouten.cleanarchitecture.domain.entity.user.Email
 import com.erikschouten.cleanarchitecture.domain.entity.user.Password
 import com.erikschouten.cleanarchitecture.domain.entity.user.User
 import com.erikschouten.cleanarchitecture.domain.repository.UserRepository
-import com.erikschouten.cleanarchitecture.repositories.ExposedUserRepository
-import com.erikschouten.cleanarchitecture.repositories.InMemoryUserRepository
+import com.erikschouten.cleanarchitecture.repositories.repository.UserRepositoryImpl
+import com.erikschouten.cleanarchitecture.repositories.repository.InMemoryUserRepository
 import com.erikschouten.cleanarchitecture.usecases.dependency.Authenticator
 import com.erikschouten.cleanarchitecture.usecases.dependency.PasswordEncoder
 import com.erikschouten.cleanarchitecture.usecases.usecase.user.AuthenticatedUser
@@ -41,7 +41,7 @@ private fun userModule(config: Config) = module {
         create(
             when (config.database) {
                 DatabaseType.LOCAL -> InMemoryUserRepository::class
-                DatabaseType.JDBC -> ExposedUserRepository::class
+                DatabaseType.JDBC -> UserRepositoryImpl::class
             }
         ) as UserRepository
     }

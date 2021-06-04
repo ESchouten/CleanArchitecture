@@ -1,6 +1,7 @@
 package com.erikschouten.cleanarchitecture.repositories
 
 import com.erikschouten.cleanarchitecture.domain.entity.user.*
+import com.erikschouten.cleanarchitecture.repositories.repository.UserRepositoryImpl
 import kotlinx.coroutines.runBlocking
 import kotlin.test.*
 
@@ -19,7 +20,7 @@ class UserRepositoryTests {
     @Test
     fun `User tests`() {
         runBlocking {
-            val repository = ExposedUserRepository()
+            val repository = UserRepositoryImpl()
             // User does not exist
             assertNull(repository.findByEmail(email))
             // No users exist
