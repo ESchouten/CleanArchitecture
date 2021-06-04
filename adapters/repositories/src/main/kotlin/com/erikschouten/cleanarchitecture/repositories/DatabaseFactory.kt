@@ -1,6 +1,6 @@
 package com.erikschouten.cleanarchitecture.repositories
 
-import com.erikschouten.cleanarchitecture.repositories.table.UserTable
+import com.erikschouten.cleanarchitecture.repositories.user.UserTable
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import org.flywaydb.core.Flyway

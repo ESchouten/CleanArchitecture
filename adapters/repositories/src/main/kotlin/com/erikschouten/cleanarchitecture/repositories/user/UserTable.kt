@@ -1,4 +1,4 @@
-package com.erikschouten.cleanarchitecture.repositories.table
+package com.erikschouten.cleanarchitecture.repositories.user
 
 import com.erikschouten.cleanarchitecture.domain.entity.user.Authorities
 import com.erikschouten.cleanarchitecture.domain.entity.user.Email

@@ -1,12 +1,10 @@
-package com.erikschouten.cleanarchitecture.repositories.repository
+package com.erikschouten.cleanarchitecture.repositories.user
 
 import com.erikschouten.cleanarchitecture.domain.AlreadyExistsException
 import com.erikschouten.cleanarchitecture.domain.entity.user.Email
 import com.erikschouten.cleanarchitecture.domain.entity.user.User
 import com.erikschouten.cleanarchitecture.domain.repository.UserRepository
 import com.erikschouten.cleanarchitecture.repositories.DatabaseFactory.query
-import com.erikschouten.cleanarchitecture.repositories.table.UserEntity
-import com.erikschouten.cleanarchitecture.repositories.table.UserTable
 import java.util.*
 
 class UserRepositoryImpl : UserRepository {

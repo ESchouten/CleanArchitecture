@@ -1,7 +1,7 @@
 package com.erikschouten.cleanarchitecture.repositories
 
 import com.erikschouten.cleanarchitecture.domain.entity.user.*
-import com.erikschouten.cleanarchitecture.repositories.repository.UserRepositoryImpl
+import com.erikschouten.cleanarchitecture.repositories.user.UserRepositoryImpl
 import kotlinx.coroutines.runBlocking
 import kotlin.test.*
 
