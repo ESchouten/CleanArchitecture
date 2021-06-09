@@ -11,10 +11,7 @@ import com.erikschouten.cleanarchitecture.repositories.user.UserRepositoryImpl
 import com.erikschouten.cleanarchitecture.repositories.user.InMemoryUserRepository
 import com.erikschouten.cleanarchitecture.usecases.dependency.Authenticator
 import com.erikschouten.cleanarchitecture.usecases.dependency.PasswordEncoder
-import com.erikschouten.cleanarchitecture.usecases.usecase.user.AuthenticatedUser
-import com.erikschouten.cleanarchitecture.usecases.usecase.user.CreateUser
-import com.erikschouten.cleanarchitecture.usecases.usecase.user.LoginUser
-import com.erikschouten.cleanarchitecture.usecases.usecase.user.UserExists
+import com.erikschouten.cleanarchitecture.usecases.usecase.user.*
 import org.koin.core.annotation.KoinInternalApi
 import org.koin.core.definition.Kind
 import org.koin.core.module.Module
@@ -34,6 +31,7 @@ private fun userModule(config: Config) = module {
     single<AuthenticatedUser>()
     single<Authenticator> { JWTAuthenticatorImpl(config.jwt.domain, config.jwt.audience, config.jwt.realm) }
     single<CreateUser>()
+    single<ListUsers>()
     single<LoginUser>()
     singleBy<PasswordEncoder, PasswordEncoderImpl>()
     single<UserExists>()

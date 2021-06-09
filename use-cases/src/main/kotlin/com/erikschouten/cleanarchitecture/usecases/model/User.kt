@@ -7,6 +7,23 @@ import com.erikschouten.cleanarchitecture.domain.entity.user.User
 import com.erikschouten.cleanarchitecture.usecases.dependency.PasswordEncoder
 import java.util.*
 
+data class UserModelArray(
+    val items: Array<UserModel>
+) {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is UserModelArray) return false
+
+        if (!items.contentEquals(other.items)) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return items.contentHashCode()
+    }
+}
+
 data class UserModel(
     val id: UUID,
     val email: Email,
