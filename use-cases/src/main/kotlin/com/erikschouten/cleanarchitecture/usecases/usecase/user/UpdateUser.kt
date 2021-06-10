@@ -17,8 +17,8 @@ class UpdateUser(
     private val userExists: UserExists,
 ) : UsecaseA1<UserModel, UserModel>(UserModel::class, UserModel::class) {
 
+    override val authorities = listOf(Authorities.USER)
     override val executor: suspend (UserModel?, UserModel) -> UserModel = { authentication, a0 ->
-        if (!authentication!!.authorities.contains(Authorities.USER)) throw AuthorizationException()
         val old = repository.findById(a0.id) ?: throw UserNotFoundException()
         if (old.email != a0.email && userExists(authentication, a0.email)) throw EmailAlreadyExistsException()
         UserModel(repository.update(a0.toUser(old.password)))

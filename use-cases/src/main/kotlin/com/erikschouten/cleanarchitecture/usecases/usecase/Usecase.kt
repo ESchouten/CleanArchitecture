@@ -1,6 +1,8 @@
 package com.erikschouten.cleanarchitecture.usecases.usecase
 
+import com.erikschouten.cleanarchitecture.domain.AuthorizationException
 import com.erikschouten.cleanarchitecture.domain.LoginException
+import com.erikschouten.cleanarchitecture.domain.entity.user.Authorities
 import com.erikschouten.cleanarchitecture.usecases.model.UserModel
 import kotlin.reflect.KClass
 
@@ -13,10 +15,17 @@ annotation class Mutation
 sealed class UsecaseType<R : Any>(
     val result: KClass<R>
 ) {
+    abstract val authorities: List<Authorities>
     abstract val args: List<KClass<*>>
     open val authenticated = true
     fun auth(authentication: UserModel?): UserModel? =
-        if (authenticated) authentication ?: throw LoginException() else authentication
+        if (authenticated) {
+            if (authentication == null) authentication ?: throw LoginException()
+            if (authorities.isNotEmpty() && !authorities.any { it in authentication.authorities }) {
+                throw AuthorizationException()
+            }
+            authentication
+        } else authentication
 }
 
 abstract class UsecaseA0<R : Any>(

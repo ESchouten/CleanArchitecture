@@ -18,6 +18,7 @@ class ChangePassword(
     private val passwordEncoder: PasswordEncoder
 ) : UsecaseA1<ChangePasswordModel, UserModel>(ChangePasswordModel::class, UserModel::class) {
 
+    override val authorities = emptyList<Authorities>()
     override val executor: suspend (UserModel?, ChangePasswordModel) -> UserModel = { authentication, a0 ->
         if (authentication!!.id != a0.id && !authentication.authorities.contains(Authorities.USER)) throw AuthorizationException()
         val user = repository.findById(a0.id) ?: throw UserNotFoundException()

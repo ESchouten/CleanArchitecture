@@ -18,8 +18,8 @@ class ListUsers(
     private val repository: UserRepository,
 ) : UsecaseA0<UserModelArray>(UserModelArray::class) {
 
-    override val executor: suspend (UserModel?) -> UserModelArray = { authentication ->
-        if (!authentication!!.authorities.contains(Authorities.USER)) throw AuthorizationException()
+    override val authorities = listOf(Authorities.USER)
+    override val executor: suspend (UserModel?) -> UserModelArray = { _ ->
         UserModelArray(repository.findAll().map { UserModel(it) }.toTypedArray())
     }
 }

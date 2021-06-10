@@ -1,6 +1,7 @@
 package com.erikschouten.cleanarchitecture.usecases.usecase.user
 
 import com.erikschouten.cleanarchitecture.domain.LoginException
+import com.erikschouten.cleanarchitecture.domain.entity.user.Authorities
 import com.erikschouten.cleanarchitecture.domain.repository.UserRepository
 import com.erikschouten.cleanarchitecture.usecases.dependency.Authenticator
 import com.erikschouten.cleanarchitecture.usecases.dependency.PasswordEncoder
@@ -17,6 +18,7 @@ class LoginUser(
 ) : UsecaseA1<LoginUserModel, String>(LoginUserModel::class, String::class) {
 
     override val authenticated = false
+    override val authorities = emptyList<Authorities>()
     override val executor: suspend (UserModel?, LoginUserModel) -> String = { _, a0 ->
         val user = repository.findByEmail(a0.email)
         if (user == null || !passwordEncoder.matches(a0.password, user.password)) throw LoginException()
