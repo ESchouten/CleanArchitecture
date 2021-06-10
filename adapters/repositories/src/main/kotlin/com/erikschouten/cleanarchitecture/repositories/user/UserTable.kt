@@ -16,7 +16,7 @@ internal object UserTable : UUIDTable() {
     val password = varchar("password", 200)
 }
 
-internal class UserEntity(id: EntityID<UUID>) : UUIDEntity(id) {
+class UserEntity(id: EntityID<UUID>) : UUIDEntity(id) {
     var email by UserTable.email.transform({ email -> email.value }, { email -> Email(email) })
     var authorities by UserTable.authorities.transform(
         { authorities -> authorities.joinToString(SEPARATOR).takeIf { it.isNotBlank() } },
