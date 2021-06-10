@@ -1,4 +1,6 @@
-package com.erikschouten.cleanarchitecture.usecases.model
+package com.erikschouten.cleanarchitecture.usecases.model.common
+
+import com.erikschouten.cleanarchitecture.usecases.model.UserModelArray
 
 abstract class ModelArray<T : Any>(
     val items: Array<T>

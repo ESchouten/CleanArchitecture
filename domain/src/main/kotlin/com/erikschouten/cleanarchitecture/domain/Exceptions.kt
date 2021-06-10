@@ -9,3 +9,6 @@ class PasswordInvalidException(message: String = "Password invalid") : InvalidPr
 
 open class AuthorizationException(message: String = "No authority for this action") : Exception(message)
 class LoginException(message: String = "Invalid authentication") : AuthorizationException(message)
+
+open class NotFoundException(message: String = "Not found") : Exception(message)
+class UserNotFoundException(message: String = "User not found") : NotFoundException(message)

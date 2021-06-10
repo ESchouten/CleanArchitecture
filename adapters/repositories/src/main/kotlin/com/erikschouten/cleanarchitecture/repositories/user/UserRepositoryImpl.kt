@@ -35,6 +35,14 @@ class UserRepositoryImpl : UserRepository {
             password = entity.password
         }.toUser()
     }
+
+    override suspend fun delete(id: UUID) = query {
+        UserEntity[id].delete()
+    }
+
+    override suspend fun count() = query {
+        UserEntity.count()
+    }
 }
 
 class InMemoryUserRepository : UserRepository {
@@ -51,6 +59,12 @@ class InMemoryUserRepository : UserRepository {
         users[entity.id] = entity
         return entity
     }
+
+    override suspend fun delete(id: UUID) {
+        users.remove(id)
+    }
+
+    override suspend fun count() = users.size.toLong()
 
     override suspend fun findByEmail(email: Email) = users.values.find { it.email == email }
 }

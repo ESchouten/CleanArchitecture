@@ -30,9 +30,13 @@ fun modules(config: Config): List<Module> {
 private fun userModule(config: Config) = module {
     single<AuthenticatedUser>()
     single<Authenticator> { JWTAuthenticatorImpl(config.jwt.domain, config.jwt.audience, config.jwt.realm) }
+    single<ChangeOwnPassword>()
+    single<ChangePassword>()
     single<CreateUser>()
+    single<DeleteUser>()
     single<ListUsers>()
     single<LoginUser>()
+    single<UpdateUser>()
     singleBy<PasswordEncoder, PasswordEncoderImpl>()
     single<UserExists>()
     single {
