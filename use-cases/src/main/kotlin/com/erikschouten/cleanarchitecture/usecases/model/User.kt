@@ -2,12 +2,12 @@ package com.erikschouten.cleanarchitecture.usecases.model
 
 import com.erikschouten.cleanarchitecture.domain.entity.user.*
 import com.erikschouten.cleanarchitecture.usecases.dependency.PasswordEncoder
-import com.erikschouten.cleanarchitecture.usecases.model.common.ModelArray
+import com.erikschouten.cleanarchitecture.usecases.model.common.ModelList
 import java.util.*
 
-class UserModelArray(
-    items: Array<UserModel>
-) : ModelArray<UserModel>(items)
+class UserModelList(
+    items: List<UserModel>
+) : ModelList<UserModel>(items)
 
 data class UserModel(
     val id: UUID,

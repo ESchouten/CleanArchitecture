@@ -29,7 +29,6 @@ fun modules(config: Config): List<Module> {
 @Suppress("USELESS_CAST")
 private fun userModule(config: Config) = module {
     single<AuthenticatedUser>()
-    single<Authenticator> { JWTAuthenticatorImpl(config.jwt.domain, config.jwt.audience, config.jwt.realm) }
     single<ChangeOwnPassword>()
     single<ChangePassword>()
     single<CreateUser>()
@@ -37,8 +36,8 @@ private fun userModule(config: Config) = module {
     single<ListUsers>()
     single<LoginUser>()
     single<UpdateUser>()
-    singleBy<PasswordEncoder, PasswordEncoderImpl>()
     single<UserExists>()
+
     single {
         create(
             when (config.database) {
@@ -47,6 +46,9 @@ private fun userModule(config: Config) = module {
             }
         ) as UserRepository
     }
+
+    single<Authenticator> { JWTAuthenticatorImpl(config.jwt.domain, config.jwt.audience, config.jwt.realm) }
+    singleBy<PasswordEncoder, PasswordEncoderImpl>()
 }
 
 suspend fun setup(userRepository: UserRepository, passwordEncoder: PasswordEncoder) {
