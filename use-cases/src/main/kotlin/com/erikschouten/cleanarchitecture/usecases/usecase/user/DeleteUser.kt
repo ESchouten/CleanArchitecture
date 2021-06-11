@@ -14,10 +14,11 @@ import java.util.*
 @Mutation
 class DeleteUser(
     private val repository: UserRepository,
-) : UsecaseA1<UUID, Unit>(UUID::class, Unit::class) {
+) : UsecaseA1<UUID, Boolean>(UUID::class, Boolean::class) {
 
     override val authorities = listOf(Authorities.USER)
-    override val executor: suspend (UserModel?, UUID) -> Unit = { _, a0 ->
+    override val executor: suspend (UserModel?, UUID) -> Boolean = { _, a0 ->
         repository.delete(a0)
+        true
     }
 }
