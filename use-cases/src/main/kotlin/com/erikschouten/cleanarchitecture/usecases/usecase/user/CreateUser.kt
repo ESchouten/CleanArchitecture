@@ -1,6 +1,5 @@
 package com.erikschouten.cleanarchitecture.usecases.usecase.user
 
-import com.erikschouten.cleanarchitecture.domain.AuthorizationException
 import com.erikschouten.cleanarchitecture.domain.EmailAlreadyExistsException
 import com.erikschouten.cleanarchitecture.domain.entity.user.Authorities
 import com.erikschouten.cleanarchitecture.domain.repository.UserRepository

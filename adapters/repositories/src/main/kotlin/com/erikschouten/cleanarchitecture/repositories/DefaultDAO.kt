@@ -5,9 +5,9 @@ import com.erikschouten.cleanarchitecture.repositories.DatabaseFactory.query
 import org.jetbrains.exposed.dao.Entity
 import org.jetbrains.exposed.dao.EntityClass
 
-abstract class DefaultDAO<Domain, ID: Comparable<ID>, E : Entity<ID>>(
+abstract class DefaultDAO<Domain, ID : Comparable<ID>, E : Entity<ID>>(
     private val dao: EntityClass<ID, E>
-): Repository<Domain, ID> {
+) : Repository<Domain, ID> {
     abstract fun E.toDomain(): Domain
 
     override suspend fun findById(id: ID) = query {

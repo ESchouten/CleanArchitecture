@@ -7,8 +7,8 @@ import com.erikschouten.cleanarchitecture.domain.entity.user.Email
 import com.erikschouten.cleanarchitecture.domain.entity.user.Password
 import com.erikschouten.cleanarchitecture.domain.entity.user.User
 import com.erikschouten.cleanarchitecture.domain.repository.UserRepository
-import com.erikschouten.cleanarchitecture.repositories.user.UserRepositoryImpl
 import com.erikschouten.cleanarchitecture.repositories.user.InMemoryUserRepository
+import com.erikschouten.cleanarchitecture.repositories.user.UserRepositoryImpl
 import com.erikschouten.cleanarchitecture.usecases.dependency.Authenticator
 import com.erikschouten.cleanarchitecture.usecases.dependency.PasswordEncoder
 import com.erikschouten.cleanarchitecture.usecases.usecase.user.*

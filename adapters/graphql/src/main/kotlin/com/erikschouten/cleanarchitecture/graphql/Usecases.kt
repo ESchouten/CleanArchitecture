@@ -9,9 +9,6 @@ import com.apurebase.kgraphql.schema.dsl.types.ScalarDSL
 import com.apurebase.kgraphql.schema.model.InputValueDef
 import com.apurebase.kgraphql.schema.model.MutableSchemaDefinition
 import com.apurebase.kgraphql.schema.model.TypeDef
-import com.apurebase.kgraphql.schema.model.ast.ValueNode
-import com.apurebase.kgraphql.schema.scalar.ScalarCoercion
-import com.apurebase.kgraphql.schema.scalar.StringScalarCoercion
 import com.erikschouten.cleanarchitecture.usecases.usecase.*
 import java.util.*
 import kotlin.reflect.KClass

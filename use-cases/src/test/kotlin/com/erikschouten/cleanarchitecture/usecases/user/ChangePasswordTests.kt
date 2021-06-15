@@ -1,6 +1,8 @@
 package com.erikschouten.cleanarchitecture.usecases.user
 
-import com.erikschouten.cleanarchitecture.domain.*
+import com.erikschouten.cleanarchitecture.domain.AuthorizationException
+import com.erikschouten.cleanarchitecture.domain.LoginException
+import com.erikschouten.cleanarchitecture.domain.UserNotFoundException
 import com.erikschouten.cleanarchitecture.domain.entity.user.Password
 import com.erikschouten.cleanarchitecture.domain.entity.user.PasswordHash
 import com.erikschouten.cleanarchitecture.domain.repository.UserRepository
@@ -58,7 +60,14 @@ class ChangePasswordTests {
         runBlocking {
             every { runBlocking { repository.findById(userModel.id) } } returns user
             every { passwordEncoder.matches(password, PasswordHash(password.value.reversed())) } returns true
-            every { runBlocking { changePasswordMock.invoke(any(), any()) } } returns UserModel(user.copy(password = newPasswordHash))
+            every {
+                runBlocking {
+                    changePasswordMock.invoke(
+                        any(),
+                        any()
+                    )
+                }
+            } returns UserModel(user.copy(password = newPasswordHash))
 
             changeOwnPassword(userModel, changeOwnPasswordModel)
         }
@@ -89,7 +98,10 @@ class ChangePasswordTests {
     fun `No User role, other user`() {
         runBlocking {
             assertFailsWith<AuthorizationException> {
-                changePassword(userModel.copy(authorities = emptyList()), changePasswordModel.copy(id = UUID.randomUUID()))
+                changePassword(
+                    userModel.copy(authorities = emptyList()),
+                    changePasswordModel.copy(id = UUID.randomUUID())
+                )
             }
         }
     }

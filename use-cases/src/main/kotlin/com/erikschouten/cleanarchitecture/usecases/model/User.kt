@@ -15,6 +15,13 @@ data class UserModel(
     val authorities: List<Authorities>,
 ) {
     constructor(user: User) : this(user.id, user.email, user.authorities)
+}
+
+data class UpdateUserModel(
+    val id: UUID,
+    val email: Email,
+    val authorities: List<Authorities>,
+) {
     fun toUser(hash: PasswordHash) = User(email = email, authorities = authorities, password = hash)
 }
 
