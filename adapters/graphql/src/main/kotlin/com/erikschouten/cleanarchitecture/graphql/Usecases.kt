@@ -30,10 +30,11 @@ fun SchemaBuilder.usecases(usecases: Collection<UsecaseType<*>>) {
         types.addAll(types(it))
     }
 
-    val scalars: List<KClass<*>> = this
+    val scalars: Set<KClass<*>> = this
         .privateProperty<SchemaBuilder, MutableSchemaDefinition>("model")
         .privateProperty<MutableSchemaDefinition, ArrayList<TypeDef.Scalar<*>>>("scalars")
         .map { it.kClass }
+        .toSet()
 
     types(types, scalars).forEach { type(it) }
 }
@@ -75,14 +76,11 @@ fun types(usecase: UsecaseType<*>): List<KClass<*>> {
     return usecase.args + listOf(usecase.result)
 }
 
-fun types(types: Set<KClass<*>>, scalars: List<KClass<*>>): Set<KClass<*>> {
-    val found = types.filterNotTo(mutableSetOf()) { it in scalars }
-    found.addAll(
-        found.flatMap {
-            val props = properties(it)
-            props.flatMap { types(props.toSet(), scalars) }
-        }
-    )
+fun types(types: Set<KClass<*>>, ignore: Set<KClass<*>>): Set<KClass<*>> {
+    val found = types.filterNot { it in ignore }.toMutableSet()
+    types.forEach {
+        found.addAll(types(properties(it).toSet(), ignore + found))
+    }
     return found.toSet()
 }
 
