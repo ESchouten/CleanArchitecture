@@ -5,6 +5,7 @@ import com.erikschouten.cleanarchitecture.domain.EmailAlreadyExistsException
 import com.erikschouten.cleanarchitecture.domain.LoginException
 import com.erikschouten.cleanarchitecture.domain.entity.user.Email
 import com.erikschouten.cleanarchitecture.domain.repository.UserRepository
+import com.erikschouten.cleanarchitecture.usecases.model.UpdateUserModel
 import com.erikschouten.cleanarchitecture.usecases.model.UserModel
 import com.erikschouten.cleanarchitecture.usecases.usecase.user.UpdateUser
 import com.erikschouten.cleanarchitecture.usecases.usecase.user.UserExists
@@ -21,16 +22,17 @@ class UpdateUserTests {
     val userExists = UserExists(repository)
     val usecase = UpdateUser(repository, userExists)
 
-    val userModel = UserModel(user.id, user.email, user.authorities)
+    val updateUserModel = UpdateUserModel(user.id, user.email, user.authorities)
+    val userModel = UserModel(updateUserModel.id, updateUserModel.email, updateUserModel.authorities)
 
     @Test
     fun `Successful update`() {
         runBlocking {
-            every { runBlocking { repository.findById(userModel.id) } } returns user
+            every { runBlocking { repository.findById(updateUserModel.id) } } returns user
             every { runBlocking { repository.update(any()) } } returns user
-            val result = usecase(userModel, userModel)
+            val result = usecase(userModel, updateUserModel)
 
-            assertEquals(result, userModel)
+            assertEquals(userModel, result)
         }
     }
 
@@ -38,7 +40,7 @@ class UpdateUserTests {
     fun Unauthenticated() {
         runBlocking {
             assertFailsWith<LoginException> {
-                usecase(null, userModel)
+                usecase(null, updateUserModel)
             }
         }
     }
@@ -47,7 +49,7 @@ class UpdateUserTests {
     fun `No User role`() {
         runBlocking {
             assertFailsWith<AuthorizationException> {
-                usecase(userModel.copy(authorities = emptyList()), userModel)
+                usecase(userModel.copy(authorities = emptyList()), updateUserModel)
             }
         }
     }
@@ -57,12 +59,12 @@ class UpdateUserTests {
         runBlocking {
             assertFailsWith<EmailAlreadyExistsException> {
                 val newEmail = Email("calvin@cargoledger.nl")
-                every { runBlocking { repository.findById(userModel.id) } } returns user
+                every { runBlocking { repository.findById(updateUserModel.id) } } returns user
                 every { runBlocking { repository.findByEmail(newEmail) } } returns user.copy(email = newEmail)
                 every { runBlocking { repository.update(any()) } } returns user
-                val result = usecase(userModel, userModel.copy(email = newEmail))
+                val result = usecase(userModel, updateUserModel.copy(email = newEmail))
 
-                assertEquals(result, userModel)
+                assertEquals(result, userModel.copy(email = newEmail))
             }
         }
     }
