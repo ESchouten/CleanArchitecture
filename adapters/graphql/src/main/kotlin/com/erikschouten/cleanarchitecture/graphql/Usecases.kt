@@ -9,10 +9,12 @@ import com.apurebase.kgraphql.schema.dsl.types.ScalarDSL
 import com.apurebase.kgraphql.schema.model.InputValueDef
 import com.apurebase.kgraphql.schema.model.MutableSchemaDefinition
 import com.apurebase.kgraphql.schema.model.TypeDef
+import com.erikschouten.cleanarchitecture.domain.entity.ValueClass
 import com.erikschouten.cleanarchitecture.usecases.usecase.*
 import java.util.*
 import kotlin.reflect.KClass
 import kotlin.reflect.full.*
+import kotlin.reflect.jvm.jvmErasure
 
 fun usecases(usecases: Collection<UsecaseType<*>>): SchemaBuilder.() -> Unit = {
     stringScalar<UUID> {
@@ -88,7 +90,7 @@ fun types(types: Set<KClass<*>>, ignore: Set<KClass<*>>): Set<KClass<*>> {
 fun <T : Any> SchemaBuilder.type(type: KClass<T>) {
     when {
         type.isSubclassOf(Enum::class) -> enum(type as KClass<Enum<*>>)
-        type.isValue -> valueClassScalar(type)
+        type.isValue || type.supertypes.any { it.jvmErasure == ValueClass::class.starProjectedType.jvmErasure } -> valueClassScalar(type)
         else -> type(type) {}
     }
 }
