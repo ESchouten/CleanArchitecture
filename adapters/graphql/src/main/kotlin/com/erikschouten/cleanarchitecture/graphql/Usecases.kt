@@ -100,7 +100,7 @@ fun <T : Enum<T>> SchemaBuilder.enum(type: KClass<T>) {
 }
 
 fun <T : Any> SchemaBuilder.valueClassScalar(value: KClass<T>) {
-    when (value.constructors.first().parameters.first().type) {
+    when (value.primaryConstructor!!.parameters.first().type) {
         String::class.starProjectedType -> stringScalar(value, scalar(value, String::class))
         Int::class.starProjectedType -> intScalar(value, scalar(value, Int::class))
         Long::class.starProjectedType -> longScalar(value, scalar(value, Long::class))
