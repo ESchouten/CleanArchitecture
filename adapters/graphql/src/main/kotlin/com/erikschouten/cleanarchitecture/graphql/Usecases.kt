@@ -79,8 +79,10 @@ fun types(usecase: UsecaseType<*>): List<KClass<*>> {
 }
 
 fun types(types: Set<KClass<*>>, ignore: Set<KClass<*>>): Set<KClass<*>> {
-    val found = types.filterNot { it in ignore }.toMutableSet()
-    types.forEach {
+    val filteredTypes = types.filterNot { it in ignore }.toSet()
+    val found = filteredTypes.toMutableSet()
+
+    filteredTypes.forEach {
         found.addAll(types(properties(it).toSet(), ignore + found))
     }
     return found.toSet()
