@@ -14,7 +14,7 @@ import io.ktor.auth.*
 import io.ktor.auth.jwt.*
 import io.ktor.features.*
 import io.ktor.server.cio.*
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.launch
 import org.koin.core.annotation.KoinInternalApi
 import org.koin.ktor.ext.Koin
 import org.koin.ktor.ext.get
@@ -69,7 +69,7 @@ fun Application.module(testing: Boolean = false) {
     }
 
     if (config.development) {
-        runBlocking {
+        launch {
             setup(get(), get())
         }
     }
