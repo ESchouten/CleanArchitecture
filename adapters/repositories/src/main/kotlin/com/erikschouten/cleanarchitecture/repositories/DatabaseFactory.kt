@@ -1,5 +1,6 @@
 package com.erikschouten.cleanarchitecture.repositories
 
+import com.erikschouten.cleanarchitecture.repositories.user.AuthorityTable
 import com.erikschouten.cleanarchitecture.repositories.user.UserTable
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
@@ -35,13 +36,13 @@ object DatabaseFactory {
 
         if (development) {
             transaction {
-                SchemaUtils.drop(UserTable)
+                SchemaUtils.drop(UserTable, AuthorityTable)
                 SchemaUtils.drop(Table("flyway_schema_history"))
             }
         }
 
         transaction {
-            SchemaUtils.createMissingTablesAndColumns(UserTable)
+            SchemaUtils.createMissingTablesAndColumns(UserTable, AuthorityTable)
         }
 
         Flyway.configure()

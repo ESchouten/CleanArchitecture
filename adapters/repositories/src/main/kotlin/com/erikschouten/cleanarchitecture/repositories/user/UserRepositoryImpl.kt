@@ -14,19 +14,42 @@ class UserRepositoryImpl : UserRepository, DefaultDAO<User, Int, UserEntity>(Use
     }
 
     override suspend fun create(entity: User) = query {
-        UserEntity.new {
+        val user = UserEntity.new {
             email = entity.email
-            authorities = entity.authorities
             password = entity.password
-        }.toUser()
+        }
+
+        entity.authorities.forEach {
+            AuthorityEntity.new {
+                this.user = user
+                authority = it
+            }
+        }
+
+        user.toUser()
     }
 
     override suspend fun update(entity: User) = query {
-        UserEntity[entity.id].apply {
+        val user = UserEntity[entity.id].apply {
             email = entity.email
-            authorities = entity.authorities
             password = entity.password
-        }.toUser()
+        }
+
+        val currentAuthorities = AuthorityEntity.find { AuthorityTable.user eq user.id }.toMutableList()
+
+        entity.authorities.forEach { authority ->
+            val current = currentAuthorities.find { it.authority == authority }
+            if (current == null) {
+                AuthorityEntity.new {
+                    this.user = user
+                    this.authority = authority
+                }
+            } else currentAuthorities.remove(current)
+        }
+
+        currentAuthorities.forEach { it.delete() }
+
+        user.toUser()
     }
 
     override fun UserEntity.toDomain() = this.toUser()
