@@ -115,7 +115,7 @@ fun <T : Any> SchemaBuilder.valueClassScalar(value: KClass<T>) {
 
 fun <S : Any, R : Any> scalar(scalar: KClass<S>, raw: KClass<R>): ScalarDSL<S, R>.() -> Unit {
     return {
-        deserialize = { value: R -> scalar.constructors.first().call(value) }
-        serialize = { value: S -> raw.cast(scalar.memberProperties.first().get(value)) }
+        deserialize = { value: R -> scalar.primaryConstructor!!.call(value) }
+        serialize = { value: S -> raw.cast(scalar.memberProperties.find { it.name == scalar.primaryConstructor!!.parameters.first().name }!!.get(value)) }
     }
 }
