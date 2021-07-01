@@ -8,7 +8,7 @@ import com.erikschouten.cleanarchitecture.repositories.DatabaseFactory.query
 import com.erikschouten.cleanarchitecture.repositories.DefaultDAO
 import java.util.*
 
-class UserRepositoryImpl : UserRepository, DefaultDAO<User, UUID, UserEntity>(UserEntity) {
+class UserRepositoryImpl : UserRepository, DefaultDAO<User, Int, UserEntity>(UserEntity) {
     override suspend fun findByEmail(email: Email) = query {
         UserEntity.find { UserTable.email eq email.value }.firstOrNull()?.toUser()
     }
@@ -33,9 +33,9 @@ class UserRepositoryImpl : UserRepository, DefaultDAO<User, UUID, UserEntity>(Us
 }
 
 class InMemoryUserRepository : UserRepository {
-    private val users = mutableMapOf<UUID, User>()
+    private val users = mutableMapOf<Int, User>()
 
-    override suspend fun findById(id: UUID) = users[id]
+    override suspend fun findById(id: Int) = users[id]
     override suspend fun findAll() = users.values.toList()
     override suspend fun create(entity: User): User {
         if (users.containsKey(entity.id)) throw AlreadyExistsException()
@@ -47,7 +47,7 @@ class InMemoryUserRepository : UserRepository {
         return entity
     }
 
-    override suspend fun delete(id: UUID) {
+    override suspend fun delete(id: Int) {
         users.remove(id)
     }
 

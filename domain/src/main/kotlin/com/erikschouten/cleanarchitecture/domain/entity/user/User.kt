@@ -2,16 +2,15 @@ package com.erikschouten.cleanarchitecture.domain.entity.user
 
 import com.erikschouten.cleanarchitecture.domain.EmailInvalidException
 import com.erikschouten.cleanarchitecture.domain.PasswordInvalidException
-import com.erikschouten.cleanarchitecture.domain.entity.UUIDEntity
+import com.erikschouten.cleanarchitecture.domain.entity.Entity
 import com.erikschouten.cleanarchitecture.domain.entity.ValueClass
-import java.util.*
 
 data class User(
-    override val id: UUID = UUID.randomUUID(),
+    override val id: Int = -1,
     val email: Email,
     val authorities: List<Authorities>,
     val password: PasswordHash,
-) : UUIDEntity
+) : Entity
 
 enum class Authorities {
     USER

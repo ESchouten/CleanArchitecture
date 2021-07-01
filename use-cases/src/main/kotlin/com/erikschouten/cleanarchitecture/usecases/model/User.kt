@@ -10,7 +10,7 @@ class UserModelList(
 ) : ModelList<UserModel>(items)
 
 data class UserModel(
-    val id: UUID,
+    val id: Int,
     val email: Email,
     val authorities: List<Authorities>,
 ) {
@@ -18,7 +18,7 @@ data class UserModel(
 }
 
 data class UpdateUserModel(
-    val id: UUID,
+    val id: Int,
     val email: Email,
     val authorities: List<Authorities>,
 ) {
@@ -31,7 +31,7 @@ data class ChangeOwnPasswordModel(
 )
 
 data class ChangePasswordModel(
-    val id: UUID,
+    val id: Int,
     val password: Password
 )
 

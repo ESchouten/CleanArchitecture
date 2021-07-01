@@ -19,7 +19,7 @@ class JWTAuthenticatorImpl(
         .withIssuer(issuer)
         .build()!!
 
-    override fun generate(id: UUID) = JWT
+    override fun generate(id: Int) = JWT
         .create()
         .withAudience(audience)
         .withIssuer(issuer)

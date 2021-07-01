@@ -7,7 +7,7 @@ import io.ktor.auth.*
 import java.util.*
 
 class UserPrincipal private constructor(
-    private val id: UUID,
+    private val id: Int,
     private val email: Email,
     private val authorities: List<Authorities>,
 ) : Principal {

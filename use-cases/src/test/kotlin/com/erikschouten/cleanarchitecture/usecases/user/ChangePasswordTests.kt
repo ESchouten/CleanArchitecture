@@ -100,7 +100,7 @@ class ChangePasswordTests {
             assertFailsWith<AuthorizationException> {
                 changePassword(
                     userModel.copy(authorities = emptyList()),
-                    changePasswordModel.copy(id = UUID.randomUUID())
+                    changePasswordModel.copy(id = 1)
                 )
             }
         }
@@ -110,7 +110,7 @@ class ChangePasswordTests {
     fun `User not found`() {
         runBlocking {
             assertFailsWith<UserNotFoundException> {
-                val id = UUID.randomUUID()
+                val id = -1
                 every { runBlocking { repository.findById(id) } } returns null
                 changePassword(userModel, changePasswordModel.copy(id = id))
             }

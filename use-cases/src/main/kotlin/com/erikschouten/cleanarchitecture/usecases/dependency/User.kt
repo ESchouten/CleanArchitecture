@@ -5,7 +5,7 @@ import com.erikschouten.cleanarchitecture.domain.entity.user.PasswordHash
 import java.util.*
 
 interface Authenticator {
-    fun generate(id: UUID): String
+    fun generate(id: Int): String
 }
 
 interface PasswordEncoder {

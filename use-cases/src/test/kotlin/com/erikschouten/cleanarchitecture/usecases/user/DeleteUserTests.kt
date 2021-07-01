@@ -23,7 +23,7 @@ class DeleteUserTests {
     fun `Successful deletion`() {
         runBlocking {
             every { runBlocking { repository.delete(any()) } } returns Unit
-            usecase(userModel, UUID.randomUUID())
+            usecase(userModel, -1)
         }
     }
 
@@ -31,7 +31,7 @@ class DeleteUserTests {
     fun Unauthenticated() {
         runBlocking {
             assertFailsWith<LoginException> {
-                usecase(null, UUID.randomUUID())
+                usecase(null, -1)
             }
         }
     }
@@ -40,7 +40,7 @@ class DeleteUserTests {
     fun `No User role`() {
         runBlocking {
             assertFailsWith<AuthorizationException> {
-                usecase(userModel.copy(authorities = emptyList()), UUID.randomUUID())
+                usecase(userModel.copy(authorities = emptyList()), -1)
             }
         }
     }

@@ -33,7 +33,7 @@ class UserRepositoryTests {
             val id = repository.create(user).id
             val created = repository.findById(id)
             assertNotNull(created)
-            // Database should generate own UUID
+            // Database should generate own Int
             assertNotEquals(user.id, created.id)
             // Rest should be equal
             assertEquals(user.email, created.email)

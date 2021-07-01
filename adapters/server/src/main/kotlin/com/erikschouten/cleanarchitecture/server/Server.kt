@@ -42,7 +42,7 @@ fun Application.module(testing: Boolean = false) {
             realm = authenticator.realm
             validate { credential ->
                 if (credential.payload.audience.contains(authenticator.audience)) {
-                    userRepository.findById(UUID.fromString(credential.payload.subject))?.let {
+                    userRepository.findById(credential.payload.subject.toInt())?.let {
                         UserPrincipal(UserModel(it))
                     }
                 } else {
