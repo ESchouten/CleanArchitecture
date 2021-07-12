@@ -1,5 +1,22 @@
 plugins {
+    id("com.github.johnrengelman.shadow") version "7.0.0"
     application
+}
+
+tasks {
+    jar {
+        manifest {
+            attributes(
+                mapOf(
+                    "Main-Class" to "io.ktor.server.cio.EngineMain",
+                    "ImplementationTitle" to project.name,
+                    "Implementation-Version" to project.version)
+            )
+        }
+    }
+    shadowJar {
+        manifest.inheritFrom(jar.get().manifest)
+    }
 }
 
 application {
