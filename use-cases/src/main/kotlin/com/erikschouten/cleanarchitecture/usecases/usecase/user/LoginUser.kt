@@ -17,7 +17,7 @@ class LoginUser(
     private val repository: UserRepository,
     private val authenticator: Authenticator,
     private val passwordEncoder: PasswordEncoder
-) : UsecaseA1<LoginUserModel, String>(LoginUserModel::class, typeOf<String>()) {
+) : UsecaseA1<LoginUserModel, String>(typeOf<LoginUserModel>(), typeOf<String>()) {
 
     override val authenticated = false
     override val authorities = emptyList<Authorities>()

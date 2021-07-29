@@ -16,7 +16,7 @@ import kotlin.reflect.typeOf
 class ChangePassword(
     private val repository: UserRepository,
     private val passwordEncoder: PasswordEncoder
-) : UsecaseA1<ChangePasswordModel, UserModel>(ChangePasswordModel::class, typeOf<UserModel>()) {
+) : UsecaseA1<ChangePasswordModel, UserModel>(typeOf<ChangePasswordModel>(), typeOf<UserModel>()) {
 
     override val authorities = emptyList<Authorities>()
     override val executor: suspend (UserModel?, ChangePasswordModel) -> UserModel = { authentication, a0 ->

@@ -19,19 +19,19 @@ enableFeaturePreview("VERSION_CATALOGS")
 dependencyResolutionManagement {
     versionCatalogs {
         create("libs") {
-            version("coroutines", "1.5.0")
-            version("ktor", "1.6.0")
-            version("logback", "1.2.3")
+            version("coroutines", "1.5.1")
+            version("ktor", "1.6.2")
+            version("logback", "1.2.5")
             version("koin", "3.0.2")
             version("kgraphql", "0.17.8")
-            version("exposed", "0.31.1")
-            version("jwt", "3.16.0")
+            version("exposed", "0.32.1")
+            version("jwt", "3.18.1")
             version("bcrypt", "0.9.0")
-            version("hikari", "4.0.3")
+            version("hikari", "5.0.0")
             version("mariadb", "2.7.3")
             version("h2", "1.4.200")
-            version("flyway", "7.9.1")
-            version("mockk", "1.11.0")
+            version("flyway", "7.11.4")
+            version("mockk", "1.12.0")
         }
     }
 }

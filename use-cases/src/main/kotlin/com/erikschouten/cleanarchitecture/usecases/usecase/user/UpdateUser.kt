@@ -15,7 +15,7 @@ import kotlin.reflect.typeOf
 class UpdateUser(
     private val repository: UserRepository,
     private val userExists: UserExists,
-) : UsecaseA1<UpdateUserModel, UserModel>(UpdateUserModel::class, typeOf<UserModel>()) {
+) : UsecaseA1<UpdateUserModel, UserModel>(typeOf<UpdateUserModel>(), typeOf<UserModel>()) {
 
     override val authorities = listOf(Authorities.USER)
     override val executor: suspend (UserModel?, UpdateUserModel) -> UserModel = { authentication, a0 ->

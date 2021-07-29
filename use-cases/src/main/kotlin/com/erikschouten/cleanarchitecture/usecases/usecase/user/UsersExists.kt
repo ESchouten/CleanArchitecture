@@ -10,12 +10,12 @@ import kotlin.reflect.typeOf
 
 @ExperimentalStdlibApi
 @Query
-class UserExists(
+class UsersExists(
     private val repository: UserRepository
-) : UsecaseA1<Email, Boolean>(typeOf<Email>(), typeOf<Boolean>()) {
+) : UsecaseA1<List<Email>, List<Boolean>>(typeOf<List<Email>>(), typeOf<List<Boolean>>()) {
 
     override val authorities = listOf(Authorities.USER)
-    override val executor: suspend (UserModel?, Email) -> Boolean = { _, a0 ->
-        repository.findByEmail(a0) != null
+    override val executor: suspend (UserModel?, List<Email>) -> List<Boolean> = { _, a0 ->
+        a0.map { repository.findByEmail(it) != null }
     }
 }

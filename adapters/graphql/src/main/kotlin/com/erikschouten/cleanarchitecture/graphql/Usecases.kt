@@ -6,13 +6,13 @@ import com.apurebase.kgraphql.schema.dsl.ResolverDSL
 import com.apurebase.kgraphql.schema.dsl.SchemaBuilder
 import com.apurebase.kgraphql.schema.dsl.operations.AbstractOperationDSL
 import com.apurebase.kgraphql.schema.dsl.types.ScalarDSL
-import com.apurebase.kgraphql.schema.model.InputValueDef
 import com.apurebase.kgraphql.schema.model.MutableSchemaDefinition
 import com.apurebase.kgraphql.schema.model.TypeDef
 import com.erikschouten.cleanarchitecture.domain.entity.ValueClass
 import com.erikschouten.cleanarchitecture.usecases.usecase.*
 import java.util.*
 import kotlin.reflect.KClass
+import kotlin.reflect.KType
 import kotlin.reflect.full.*
 import kotlin.reflect.jvm.jvmErasure
 
@@ -57,7 +57,13 @@ fun SchemaBuilder.usecase(usecase: UsecaseType<*>) {
             else -> throw Exception("Invalid usecase")
         }.apply {
             setReturnType(usecase.result)
-            addInputValues(usecase.args.mapIndexed { index, kClass -> InputValueDef(kClass, "a${index}") })
+            withArgs {
+                usecase.args.forEachIndexed { index, kType ->
+                    arg(kType.jvmErasure) {
+                        name = "a$index"
+                    }
+                }
+            }
         }
     }
 }
@@ -75,14 +81,17 @@ fun <R, A0, U : UsecaseA1<A0, R>> AbstractOperationDSL.usecase(usecase: U): Reso
 }
 
 fun types(usecase: UsecaseType<*>): List<KClass<*>> {
-    return usecase.args +
-            if (usecase.result.arguments.isNotEmpty()) {
-//                Generic types not supported, skipping
-                listOf()
-            } else {
-                listOf(usecase.result.jvmErasure)
-            }
+    return (usecase.args + usecase.result).mapNotNull { type(it) }
 }
+
+fun type(type: KType): KClass<*>? =
+    if (type.arguments.isEmpty()) {
+        type.jvmErasure
+    } else if (type.isCollection()) {
+        type(type.arguments.first().type!!)
+    } else {
+        null
+    }
 
 fun types(types: Set<KClass<*>>, ignore: Set<KClass<*>>): Set<KClass<*>> {
     val filteredTypes = types.filterNot { it in ignore }.toSet()

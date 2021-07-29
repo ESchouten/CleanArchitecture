@@ -17,7 +17,7 @@ class ChangeOwnPassword(
     private val repository: UserRepository,
     private val changePassword: ChangePassword,
     private val passwordEncoder: PasswordEncoder
-) : UsecaseA1<ChangeOwnPasswordModel, UserModel>(ChangeOwnPasswordModel::class, typeOf<UserModel>()) {
+) : UsecaseA1<ChangeOwnPasswordModel, UserModel>(typeOf<ChangeOwnPasswordModel>(), typeOf<UserModel>()) {
 
     override val authorities = emptyList<Authorities>()
     override val executor: suspend (UserModel?, ChangeOwnPasswordModel) -> UserModel = { authentication, a0 ->

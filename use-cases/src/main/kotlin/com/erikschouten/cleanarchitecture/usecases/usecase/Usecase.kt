@@ -4,7 +4,6 @@ import com.erikschouten.cleanarchitecture.domain.AuthorizationException
 import com.erikschouten.cleanarchitecture.domain.LoginException
 import com.erikschouten.cleanarchitecture.domain.entity.user.Authorities
 import com.erikschouten.cleanarchitecture.usecases.model.UserModel
-import kotlin.reflect.KClass
 import kotlin.reflect.KType
 
 @Target(AnnotationTarget.CLASS)
@@ -17,7 +16,7 @@ sealed class UsecaseType<R : Any>(
     val result: KType
 ) {
     abstract val authorities: List<Authorities>
-    abstract val args: List<KClass<*>>
+    abstract val args: List<KType>
     open val authenticated = true
     fun auth(authentication: UserModel?): UserModel? =
         if (authenticated) {
@@ -33,13 +32,13 @@ abstract class UsecaseA0<R : Any>(
     result: KType
 ) : UsecaseType<R>(result) {
 
-    final override val args get() = emptyList<KClass<*>>()
+    final override val args get() = emptyList<KType>()
     abstract val executor: suspend (authentication: UserModel?) -> R
     suspend operator fun invoke(authentication: UserModel?) = executor(auth(authentication))
 }
 
 abstract class UsecaseA1<A0 : Any, R : Any>(
-    private val a0: KClass<A0>,
+    private val a0: KType,
     result: KType
 ) : UsecaseType<R>(result) {
 

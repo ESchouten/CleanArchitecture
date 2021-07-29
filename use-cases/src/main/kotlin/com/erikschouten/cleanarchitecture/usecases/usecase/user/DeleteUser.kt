@@ -11,7 +11,7 @@ import kotlin.reflect.typeOf
 @Mutation
 class DeleteUser(
     private val repository: UserRepository,
-) : UsecaseA1<Int, Boolean>(Int::class, typeOf<Boolean>()) {
+) : UsecaseA1<Int, Boolean>(typeOf<Int>(), typeOf<Boolean>()) {
 
     override val authorities = listOf(Authorities.USER)
     override val executor: suspend (UserModel?, Int) -> Boolean = { _, a0 ->

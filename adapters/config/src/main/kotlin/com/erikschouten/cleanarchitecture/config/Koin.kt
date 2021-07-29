@@ -39,6 +39,7 @@ private fun userModule(config: Config) = module {
     single<LoginUser>()
     single<UpdateUser>()
     single<UserExists>()
+    single<UsersExists>()
 
     single {
         create(
