@@ -9,12 +9,14 @@ import com.erikschouten.cleanarchitecture.usecases.model.ChangePasswordModel
 import com.erikschouten.cleanarchitecture.usecases.model.UserModel
 import com.erikschouten.cleanarchitecture.usecases.usecase.Mutation
 import com.erikschouten.cleanarchitecture.usecases.usecase.UsecaseA1
+import kotlin.reflect.typeOf
 
+@ExperimentalStdlibApi
 @Mutation
 class ChangePassword(
     private val repository: UserRepository,
     private val passwordEncoder: PasswordEncoder
-) : UsecaseA1<ChangePasswordModel, UserModel>(ChangePasswordModel::class, UserModel::class) {
+) : UsecaseA1<ChangePasswordModel, UserModel>(ChangePasswordModel::class, typeOf<UserModel>()) {
 
     override val authorities = emptyList<Authorities>()
     override val executor: suspend (UserModel?, ChangePasswordModel) -> UserModel = { authentication, a0 ->

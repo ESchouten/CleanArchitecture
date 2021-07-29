@@ -5,6 +5,7 @@ import com.erikschouten.cleanarchitecture.domain.LoginException
 import com.erikschouten.cleanarchitecture.domain.entity.user.Authorities
 import com.erikschouten.cleanarchitecture.usecases.model.UserModel
 import kotlin.reflect.KClass
+import kotlin.reflect.KType
 
 @Target(AnnotationTarget.CLASS)
 annotation class Query
@@ -13,7 +14,7 @@ annotation class Query
 annotation class Mutation
 
 sealed class UsecaseType<R : Any>(
-    val result: KClass<R>
+    val result: KType
 ) {
     abstract val authorities: List<Authorities>
     abstract val args: List<KClass<*>>
@@ -29,7 +30,7 @@ sealed class UsecaseType<R : Any>(
 }
 
 abstract class UsecaseA0<R : Any>(
-    result: KClass<R>
+    result: KType
 ) : UsecaseType<R>(result) {
 
     final override val args get() = emptyList<KClass<*>>()
@@ -39,7 +40,7 @@ abstract class UsecaseA0<R : Any>(
 
 abstract class UsecaseA1<A0 : Any, R : Any>(
     private val a0: KClass<A0>,
-    result: KClass<R>
+    result: KType
 ) : UsecaseType<R>(result) {
 
     final override val args get() = listOf(a0)

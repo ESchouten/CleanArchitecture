@@ -18,10 +18,10 @@ import kotlinx.coroutines.launch
 import org.koin.core.annotation.KoinInternalApi
 import org.koin.ktor.ext.Koin
 import org.koin.ktor.ext.get
-import java.util.*
 
 fun main(args: Array<String>) = EngineMain.main(args)
 
+@ExperimentalStdlibApi
 @KoinInternalApi
 @Suppress("unused")
 fun Application.module(testing: Boolean = false) {

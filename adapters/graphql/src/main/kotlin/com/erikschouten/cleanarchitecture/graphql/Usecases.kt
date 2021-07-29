@@ -56,7 +56,7 @@ fun SchemaBuilder.usecase(usecase: UsecaseType<*>) {
             is UsecaseA1<*, *> -> usecase(usecase)
             else -> throw Exception("Invalid usecase")
         }.apply {
-            setReturnType(usecase.result.createType())
+            setReturnType(usecase.result)
             addInputValues(usecase.args.mapIndexed { index, kClass -> InputValueDef(kClass, "a${index}") })
         }
     }
@@ -75,7 +75,13 @@ fun <R, A0, U : UsecaseA1<A0, R>> AbstractOperationDSL.usecase(usecase: U): Reso
 }
 
 fun types(usecase: UsecaseType<*>): List<KClass<*>> {
-    return usecase.args + listOf(usecase.result)
+    return usecase.args +
+            if (usecase.result.arguments.isNotEmpty()) {
+//                Generic types not supported, skipping
+                listOf()
+            } else {
+                listOf(usecase.result.jvmErasure)
+            }
 }
 
 fun types(types: Set<KClass<*>>, ignore: Set<KClass<*>>): Set<KClass<*>> {
@@ -92,7 +98,9 @@ fun types(types: Set<KClass<*>>, ignore: Set<KClass<*>>): Set<KClass<*>> {
 fun <T : Any> SchemaBuilder.type(type: KClass<T>) {
     when {
         type.isSubclassOf(Enum::class) -> enum(type as KClass<Enum<*>>)
-        type.isValue || type.supertypes.any { it.jvmErasure == ValueClass::class.starProjectedType.jvmErasure } -> valueClassScalar(type)
+        type.isValue || type.supertypes.any { it.jvmErasure == ValueClass::class.starProjectedType.jvmErasure } -> valueClassScalar(
+            type
+        )
         else -> type(type) {}
     }
 }
@@ -116,6 +124,11 @@ fun <T : Any> SchemaBuilder.valueClassScalar(value: KClass<T>) {
 fun <S : Any, R : Any> scalar(scalar: KClass<S>, raw: KClass<R>): ScalarDSL<S, R>.() -> Unit {
     return {
         deserialize = { value: R -> scalar.primaryConstructor!!.call(value) }
-        serialize = { value: S -> raw.cast(scalar.memberProperties.find { it.name == scalar.primaryConstructor!!.parameters.first().name }!!.get(value)) }
+        serialize = { value: S ->
+            raw.cast(
+                scalar.memberProperties.find { it.name == scalar.primaryConstructor!!.parameters.first().name }!!
+                    .get(value)
+            )
+        }
     }
 }
