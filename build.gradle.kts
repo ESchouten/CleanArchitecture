@@ -1,5 +1,5 @@
 plugins {
-    kotlin("jvm") version "1.5.10" apply false
+    kotlin("jvm") version "1.5.21" apply false
 }
 
 allprojects {
@@ -11,6 +11,7 @@ subprojects {
     apply(plugin = "kotlin")
     repositories {
         mavenCentral()
+        maven { url = java.net.URI("https://jitpack.io") }
     }
 
     afterEvaluate {

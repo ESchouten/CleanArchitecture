@@ -37,6 +37,7 @@ private fun userModule(config: Config) = module {
     single<LoginUser>()
     single<UpdateUser>()
     single<UserExists>()
+//    single<UsersExists>()
 
     single {
         create(
@@ -47,7 +48,13 @@ private fun userModule(config: Config) = module {
         ) as UserRepository
     }
 
-    single<Authenticator> { JWTAuthenticatorImpl(config.jwt.domain, config.jwt.audience, config.jwt.realm) }
+    single<Authenticator> {
+        JWTAuthenticatorImpl(
+            issuer = config.jwt.domain,
+            realm = config.jwt.realm,
+            secret = config.jwt.secret
+        )
+    }
     singleBy<PasswordEncoder, PasswordEncoderImpl>()
 }
 

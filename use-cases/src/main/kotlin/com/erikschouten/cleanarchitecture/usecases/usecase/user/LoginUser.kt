@@ -9,13 +9,14 @@ import com.erikschouten.cleanarchitecture.usecases.model.LoginUserModel
 import com.erikschouten.cleanarchitecture.usecases.model.UserModel
 import com.erikschouten.cleanarchitecture.usecases.usecase.Query
 import com.erikschouten.cleanarchitecture.usecases.usecase.UsecaseA1
+import kotlin.reflect.typeOf
 
 @Query
 class LoginUser(
     private val repository: UserRepository,
     private val authenticator: Authenticator,
     private val passwordEncoder: PasswordEncoder
-) : UsecaseA1<LoginUserModel, String>(LoginUserModel::class, String::class) {
+) : UsecaseA1<LoginUserModel, String>(typeOf<LoginUserModel>(), typeOf<String>()) {
 
     override val authenticated = false
     override val authorities = emptyList<Authorities>()

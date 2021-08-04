@@ -3,7 +3,6 @@ package com.erikschouten.cleanarchitecture.usecases.user
 import com.erikschouten.cleanarchitecture.domain.AuthorizationException
 import com.erikschouten.cleanarchitecture.domain.LoginException
 import com.erikschouten.cleanarchitecture.domain.repository.UserRepository
-import com.erikschouten.cleanarchitecture.usecases.model.UserModelList
 import com.erikschouten.cleanarchitecture.usecases.usecase.user.ListUsers
 import io.mockk.every
 import io.mockk.mockk
@@ -22,7 +21,7 @@ class ListUsersTests {
         runBlocking {
             every { runBlocking { repository.findAll() } } returns listOf(user)
             val result = usecase(userModel)
-            assertEquals(result, UserModelList(listOf(userModel)))
+            assertEquals(result, listOf(userModel))
         }
     }
 

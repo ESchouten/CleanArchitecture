@@ -6,13 +6,13 @@ import com.apurebase.kgraphql.schema.dsl.ResolverDSL
 import com.apurebase.kgraphql.schema.dsl.SchemaBuilder
 import com.apurebase.kgraphql.schema.dsl.operations.AbstractOperationDSL
 import com.apurebase.kgraphql.schema.dsl.types.ScalarDSL
-import com.apurebase.kgraphql.schema.model.InputValueDef
 import com.apurebase.kgraphql.schema.model.MutableSchemaDefinition
 import com.apurebase.kgraphql.schema.model.TypeDef
 import com.erikschouten.cleanarchitecture.domain.entity.ValueClass
 import com.erikschouten.cleanarchitecture.usecases.usecase.*
 import java.util.*
 import kotlin.reflect.KClass
+import kotlin.reflect.KType
 import kotlin.reflect.full.*
 import kotlin.reflect.jvm.jvmErasure
 
@@ -56,8 +56,14 @@ fun SchemaBuilder.usecase(usecase: UsecaseType<*>) {
             is UsecaseA1<*, *> -> usecase(usecase)
             else -> throw Exception("Invalid usecase")
         }.apply {
-            setReturnType(usecase.result.createType())
-            addInputValues(usecase.args.mapIndexed { index, kClass -> InputValueDef(kClass, "a${index}") })
+            setReturnType(usecase.result)
+            withArgs {
+                usecase.args.forEachIndexed { index, kType ->
+                    arg(kType.jvmErasure) {
+                        name = "a$index"
+                    }
+                }
+            }
         }
     }
 }
@@ -75,8 +81,17 @@ fun <R, A0, U : UsecaseA1<A0, R>> AbstractOperationDSL.usecase(usecase: U): Reso
 }
 
 fun types(usecase: UsecaseType<*>): List<KClass<*>> {
-    return usecase.args + listOf(usecase.result)
+    return (usecase.args + usecase.result).mapNotNull { type(it) }
 }
+
+fun type(type: KType): KClass<*>? =
+    if (type.arguments.isEmpty()) {
+        type.jvmErasure
+    } else if (type.isCollection()) {
+        type(type.arguments.first().type!!)
+    } else {
+        null
+    }
 
 fun types(types: Set<KClass<*>>, ignore: Set<KClass<*>>): Set<KClass<*>> {
     val filteredTypes = types.filterNot { it in ignore }.toSet()
@@ -92,7 +107,9 @@ fun types(types: Set<KClass<*>>, ignore: Set<KClass<*>>): Set<KClass<*>> {
 fun <T : Any> SchemaBuilder.type(type: KClass<T>) {
     when {
         type.isSubclassOf(Enum::class) -> enum(type as KClass<Enum<*>>)
-        type.isValue || type.supertypes.any { it.jvmErasure == ValueClass::class.starProjectedType.jvmErasure } -> valueClassScalar(type)
+        type.isValue || type.supertypes.any { it.jvmErasure == ValueClass::class.starProjectedType.jvmErasure } -> valueClassScalar(
+            type
+        )
         else -> type(type) {}
     }
 }
@@ -116,6 +133,11 @@ fun <T : Any> SchemaBuilder.valueClassScalar(value: KClass<T>) {
 fun <S : Any, R : Any> scalar(scalar: KClass<S>, raw: KClass<R>): ScalarDSL<S, R>.() -> Unit {
     return {
         deserialize = { value: R -> scalar.primaryConstructor!!.call(value) }
-        serialize = { value: S -> raw.cast(scalar.memberProperties.find { it.name == scalar.primaryConstructor!!.parameters.first().name }!!.get(value)) }
+        serialize = { value: S ->
+            raw.cast(
+                scalar.memberProperties.find { it.name == scalar.primaryConstructor!!.parameters.first().name }!!
+                    .get(value)
+            )
+        }
     }
 }

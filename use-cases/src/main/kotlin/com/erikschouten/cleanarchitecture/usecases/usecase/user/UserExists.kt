@@ -6,11 +6,12 @@ import com.erikschouten.cleanarchitecture.domain.repository.UserRepository
 import com.erikschouten.cleanarchitecture.usecases.model.UserModel
 import com.erikschouten.cleanarchitecture.usecases.usecase.Query
 import com.erikschouten.cleanarchitecture.usecases.usecase.UsecaseA1
+import kotlin.reflect.typeOf
 
 @Query
 class UserExists(
     private val repository: UserRepository
-) : UsecaseA1<Email, Boolean>(Email::class, Boolean::class) {
+) : UsecaseA1<Email, Boolean>(typeOf<Email>(), typeOf<Boolean>()) {
 
     override val authorities = listOf(Authorities.USER)
     override val executor: suspend (UserModel?, Email) -> Boolean = { _, a0 ->
