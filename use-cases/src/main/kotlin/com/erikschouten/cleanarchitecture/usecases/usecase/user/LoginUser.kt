@@ -11,7 +11,6 @@ import com.erikschouten.cleanarchitecture.usecases.usecase.Query
 import com.erikschouten.cleanarchitecture.usecases.usecase.UsecaseA1
 import kotlin.reflect.typeOf
 
-@ExperimentalStdlibApi
 @Query
 class LoginUser(
     private val repository: UserRepository,

@@ -6,7 +6,6 @@ import com.erikschouten.cleanarchitecture.usecases.usecase.Query
 import com.erikschouten.cleanarchitecture.usecases.usecase.UsecaseA0
 import kotlin.reflect.typeOf
 
-@ExperimentalStdlibApi
 @Query
 class AuthenticatedUser : UsecaseA0<UserModel>(typeOf<UserModel>()) {
 

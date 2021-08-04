@@ -10,7 +10,6 @@ import com.erikschouten.cleanarchitecture.usecases.usecase.Mutation
 import com.erikschouten.cleanarchitecture.usecases.usecase.UsecaseA1
 import kotlin.reflect.typeOf
 
-@ExperimentalStdlibApi
 @Mutation
 class UpdateUser(
     private val repository: UserRepository,

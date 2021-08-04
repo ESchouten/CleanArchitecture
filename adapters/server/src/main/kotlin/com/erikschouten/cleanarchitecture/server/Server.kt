@@ -21,7 +21,6 @@ import org.koin.ktor.ext.get
 
 fun main(args: Array<String>) = EngineMain.main(args)
 
-@ExperimentalStdlibApi
 @KoinInternalApi
 @Suppress("unused")
 fun Application.module(testing: Boolean = false) {

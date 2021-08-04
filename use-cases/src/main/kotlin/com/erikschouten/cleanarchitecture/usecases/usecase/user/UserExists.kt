@@ -8,7 +8,6 @@ import com.erikschouten.cleanarchitecture.usecases.usecase.Query
 import com.erikschouten.cleanarchitecture.usecases.usecase.UsecaseA1
 import kotlin.reflect.typeOf
 
-@ExperimentalStdlibApi
 @Query
 class UserExists(
     private val repository: UserRepository

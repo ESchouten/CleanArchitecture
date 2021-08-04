@@ -22,12 +22,10 @@ import org.koin.experimental.builder.singleBy
 import org.koin.java.KoinJavaComponent.getKoin
 import kotlin.reflect.full.isSubclassOf
 
-@ExperimentalStdlibApi
 fun modules(config: Config): List<Module> {
     return listOf(userModule(config))
 }
 
-@ExperimentalStdlibApi
 @Suppress("USELESS_CAST")
 private fun userModule(config: Config) = module {
     single<AuthenticatedUser>()

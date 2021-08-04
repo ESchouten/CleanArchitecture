@@ -7,7 +7,6 @@ import com.erikschouten.cleanarchitecture.usecases.usecase.Mutation
 import com.erikschouten.cleanarchitecture.usecases.usecase.UsecaseA1
 import kotlin.reflect.typeOf
 
-@ExperimentalStdlibApi
 @Mutation
 class DeleteUser(
     private val repository: UserRepository,
