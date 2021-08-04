@@ -17,7 +17,7 @@ data class Config(
 
 data class JWTConfig(
     val domain: String,
-    val audience: String,
+    val secret: String,
     val realm: String,
 )
 
