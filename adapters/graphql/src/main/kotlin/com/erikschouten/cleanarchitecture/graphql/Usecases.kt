@@ -26,19 +26,18 @@ fun usecases(usecases: Collection<UsecaseType<*>>): SchemaBuilder.() -> Unit = {
 }
 
 fun SchemaBuilder.usecases(usecases: Collection<UsecaseType<*>>) {
-    val foundTypes = mutableSetOf<KClass<*>>()
-    usecases.forEach {
-        usecase(it)
-        foundTypes.addAll(types(it))
-    }
-
     val scalars: Set<KClass<*>> = this
         .privateProperty<SchemaBuilder, MutableSchemaDefinition>("model")
         .privateProperty<MutableSchemaDefinition, ArrayList<TypeDef.Scalar<*>>>("scalars")
         .map { it.kClass }
         .toSet()
 
-    types(foundTypes, scalars).forEach { types(it) }
+    val types = usecases.filter { it::class.hasAnnotation<Query>() || it::class.hasAnnotation<Mutation>() }.flatMap {
+        usecase(it)
+        types(it)
+    }.toSet()
+
+    types(types, scalars).forEach { type(it) }
 }
 
 fun SchemaBuilder.usecase(usecase: UsecaseType<*>) {
@@ -80,9 +79,7 @@ fun <R, A0, U : UsecaseA1<A0, R>> AbstractOperationDSL.usecase(usecase: U): Reso
     }
 }
 
-fun types(usecase: UsecaseType<*>): List<KClass<*>> {
-    return (usecase.args + usecase.result).flatMap { types(it) }
-}
+fun types(usecase: UsecaseType<*>) = (usecase.args + usecase.result).flatMap { types(it) }
 
 fun types(type: KType): List<KClass<*>> =
     if (type.isCollection()) {
@@ -102,7 +99,7 @@ fun types(types: Set<KClass<*>>, ignore: Set<KClass<*>>): Set<KClass<*>> {
 }
 
 @Suppress("UNCHECKED_CAST")
-fun <T : Any> SchemaBuilder.types(type: KClass<T>) {
+fun <T : Any> SchemaBuilder.type(type: KClass<T>) {
     when {
         type.isSubclassOf(Enum::class) -> enum(type as KClass<Enum<*>>)
         type.isValue || type.supertypes.any { it.jvmErasure == ValueClass::class.starProjectedType.jvmErasure } -> valueClassScalar(
