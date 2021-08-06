@@ -6,11 +6,14 @@ import com.erikschouten.cleanarchitecture.domain.entity.user.User
 import com.erikschouten.cleanarchitecture.domain.repository.UserRepository
 import com.erikschouten.cleanarchitecture.repositories.DatabaseFactory.query
 import com.erikschouten.cleanarchitecture.repositories.DefaultDAO
-import java.util.*
 
 class UserRepositoryImpl : UserRepository, DefaultDAO<User, Int, UserEntity>(UserEntity) {
     override suspend fun findByEmail(email: Email) = query {
         UserEntity.find { UserTable.email eq email.value }.firstOrNull()?.toUser()
+    }
+
+    override suspend fun findAllByEmails(emails: List<Email>) = query {
+        UserEntity.find { UserTable.email.inList(emails.map { it.value }) }.map { it.toUser() }
     }
 
     override suspend fun create(entity: User) = query {
@@ -77,4 +80,5 @@ class InMemoryUserRepository : UserRepository {
     override suspend fun count() = users.size.toLong()
 
     override suspend fun findByEmail(email: Email) = users.values.find { it.email == email }
+    override suspend fun findAllByEmails(emails: List<Email>) = users.values.filter { emails.contains(it.email) }
 }

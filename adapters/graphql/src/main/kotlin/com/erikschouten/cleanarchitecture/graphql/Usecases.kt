@@ -26,10 +26,10 @@ fun usecases(usecases: Collection<UsecaseType<*>>): SchemaBuilder.() -> Unit = {
 }
 
 fun SchemaBuilder.usecases(usecases: Collection<UsecaseType<*>>) {
-    val types = mutableSetOf<KClass<*>>()
+    val foundTypes = mutableSetOf<KClass<*>>()
     usecases.forEach {
         usecase(it)
-        types.addAll(types(it))
+        foundTypes.addAll(types(it))
     }
 
     val scalars: Set<KClass<*>> = this
@@ -38,7 +38,7 @@ fun SchemaBuilder.usecases(usecases: Collection<UsecaseType<*>>) {
         .map { it.kClass }
         .toSet()
 
-    types(types, scalars).forEach { type(it) }
+    types(foundTypes, scalars).forEach { types(it) }
 }
 
 fun SchemaBuilder.usecase(usecase: UsecaseType<*>) {
@@ -59,7 +59,7 @@ fun SchemaBuilder.usecase(usecase: UsecaseType<*>) {
             setReturnType(usecase.result)
             withArgs {
                 usecase.args.forEachIndexed { index, kType ->
-                    arg(kType.jvmErasure) {
+                    arg(kType.jvmErasure, kType) {
                         name = "a$index"
                     }
                 }
@@ -81,17 +81,15 @@ fun <R, A0, U : UsecaseA1<A0, R>> AbstractOperationDSL.usecase(usecase: U): Reso
 }
 
 fun types(usecase: UsecaseType<*>): List<KClass<*>> {
-    return (usecase.args + usecase.result).mapNotNull { type(it) }
+    return (usecase.args + usecase.result).flatMap { types(it) }
 }
 
-fun type(type: KType): KClass<*>? =
-    if (type.arguments.isEmpty()) {
-        type.jvmErasure
-    } else if (type.isCollection()) {
-        type(type.arguments.first().type!!)
+fun types(type: KType): List<KClass<*>> =
+    if (type.isCollection()) {
+        type.arguments.mapNotNull { it.type?.let { types(it) } }.flatten()
     } else {
-        null
-    }
+        emptyList()
+    } + type.jvmErasure
 
 fun types(types: Set<KClass<*>>, ignore: Set<KClass<*>>): Set<KClass<*>> {
     val filteredTypes = types.filterNot { it in ignore }.toSet()
@@ -104,7 +102,7 @@ fun types(types: Set<KClass<*>>, ignore: Set<KClass<*>>): Set<KClass<*>> {
 }
 
 @Suppress("UNCHECKED_CAST")
-fun <T : Any> SchemaBuilder.type(type: KClass<T>) {
+fun <T : Any> SchemaBuilder.types(type: KClass<T>) {
     when {
         type.isSubclassOf(Enum::class) -> enum(type as KClass<Enum<*>>)
         type.isValue || type.supertypes.any { it.jvmErasure == ValueClass::class.starProjectedType.jvmErasure } -> valueClassScalar(

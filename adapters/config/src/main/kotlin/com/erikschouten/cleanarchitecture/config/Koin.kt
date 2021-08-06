@@ -33,6 +33,7 @@ private fun userModule(config: Config) = module {
     single<ChangePassword>()
     single<CreateUser>()
     single<DeleteUser>()
+    single<FindUsers>()
     single<ListUsers>()
     single<LoginUser>()
     single<UpdateUser>()
