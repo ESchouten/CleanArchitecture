@@ -1,18 +1,19 @@
 package com.erikschouten.cleanarchitecture.usecases.user
 
 import com.erikschouten.cleanarchitecture.domain.LoginException
+import com.erikschouten.cleanarchitecture.usecases.UsecaseTests
 import com.erikschouten.cleanarchitecture.usecases.usecase.user.AuthenticatedUser
 import kotlinx.coroutines.runBlocking
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 
-class AuthenticatedUserTests {
+class AuthenticatedUserTests : UsecaseTests {
 
-    val usecase = AuthenticatedUser()
+    override val usecase = AuthenticatedUser()
 
     @Test
-    fun `Authenticated, should return UserModel`() {
+    override fun success() {
         runBlocking {
             val result = usecase(userModel)
             assertEquals(result, userModel)
@@ -20,7 +21,7 @@ class AuthenticatedUserTests {
     }
 
     @Test
-    fun Unauthenticated() {
+    override fun unauthenticated() {
         runBlocking {
             assertFailsWith<LoginException> {
                 usecase(null)

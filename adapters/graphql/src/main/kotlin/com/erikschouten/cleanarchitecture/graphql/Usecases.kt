@@ -81,12 +81,12 @@ fun <R, A0, U : UsecaseA1<A0, R>> AbstractOperationDSL.usecase(usecase: U): Reso
 
 fun types(usecase: UsecaseType<*>) = (usecase.args + usecase.result).flatMap { types(it) }
 
-fun types(type: KType): List<KClass<*>> =
-    if (type.isCollection()) {
-        type.arguments.mapNotNull { it.type?.let { types(it) } }.flatten()
-    } else {
-        emptyList()
-    } + type.jvmErasure
+fun types(type: KType): List<KClass<*>> = type.arguments.mapNotNull { it.type?.let { types(it) } }.flatten() +
+        if (type.isCollection()) {
+            emptyList()
+        } else {
+            listOf(type.jvmErasure)
+        }
 
 fun types(types: Set<KClass<*>>, ignore: Set<KClass<*>>): Set<KClass<*>> {
     val filteredTypes = types.filterNot { it in ignore }.toSet()

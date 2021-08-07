@@ -2,6 +2,7 @@ package com.erikschouten.cleanarchitecture.usecases.user
 
 import com.erikschouten.cleanarchitecture.domain.LoginException
 import com.erikschouten.cleanarchitecture.domain.repository.UserRepository
+import com.erikschouten.cleanarchitecture.usecases.UsecaseTests
 import com.erikschouten.cleanarchitecture.usecases.usecase.user.UserExists
 import io.mockk.every
 import io.mockk.mockk
@@ -10,13 +11,13 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 
-class UserExistsTests {
+class UserExistsTests : UsecaseTests {
 
     val repository = mockk<UserRepository>()
-    val usecase = UserExists(repository)
+    override val usecase = UserExists(repository)
 
     @Test
-    fun `User exists`() {
+    override fun success() {
         runBlocking {
             every { runBlocking { repository.findByEmail(email) } } returns user
             val result = usecase(userModel, email)
@@ -25,7 +26,7 @@ class UserExistsTests {
     }
 
     @Test
-    fun Unauthenticated() {
+    override fun unauthenticated() {
         runBlocking {
             assertFailsWith<LoginException> {
                 usecase(null, email)

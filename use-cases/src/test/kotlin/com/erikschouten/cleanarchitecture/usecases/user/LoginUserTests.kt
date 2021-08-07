@@ -4,6 +4,7 @@ import com.erikschouten.cleanarchitecture.domain.LoginException
 import com.erikschouten.cleanarchitecture.domain.entity.user.Password
 import com.erikschouten.cleanarchitecture.domain.entity.user.PasswordHash
 import com.erikschouten.cleanarchitecture.domain.repository.UserRepository
+import com.erikschouten.cleanarchitecture.usecases.UsecaseTests
 import com.erikschouten.cleanarchitecture.usecases.dependency.Authenticator
 import com.erikschouten.cleanarchitecture.usecases.dependency.PasswordEncoder
 import com.erikschouten.cleanarchitecture.usecases.model.LoginUserModel
@@ -15,17 +16,17 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 
-class LoginUserTests {
+class LoginUserTests : UsecaseTests {
 
     val repository = mockk<UserRepository>()
     val passwordEncoder = mockk<PasswordEncoder>()
     val authenticator = mockk<Authenticator>()
-    val usecase = LoginUser(repository, authenticator, passwordEncoder)
+    override val usecase = LoginUser(repository, authenticator, passwordEncoder)
 
     val loginUserModel = LoginUserModel(email, password)
 
     @Test
-    fun `Successful login`() {
+    override fun success() {
         runBlocking {
             every { runBlocking { repository.findByEmail(email) } } returns user
             every { passwordEncoder.matches(password, PasswordHash(password.value.reversed())) } returns true
@@ -34,6 +35,9 @@ class LoginUserTests {
             assertEquals(result, "token")
         }
     }
+
+    @Test
+    override fun unauthenticated() = success()
 
     @Test
     fun `Invalid email`() {

@@ -6,6 +6,7 @@ import com.erikschouten.cleanarchitecture.domain.UserNotFoundException
 import com.erikschouten.cleanarchitecture.domain.entity.user.Password
 import com.erikschouten.cleanarchitecture.domain.entity.user.PasswordHash
 import com.erikschouten.cleanarchitecture.domain.repository.UserRepository
+import com.erikschouten.cleanarchitecture.usecases.UsecaseTests
 import com.erikschouten.cleanarchitecture.usecases.dependency.PasswordEncoder
 import com.erikschouten.cleanarchitecture.usecases.model.ChangeOwnPasswordModel
 import com.erikschouten.cleanarchitecture.usecases.model.ChangePasswordModel
@@ -16,15 +17,14 @@ import com.erikschouten.cleanarchitecture.usecases.value
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
-import java.util.*
 import kotlin.test.Test
 import kotlin.test.assertFailsWith
 
-class ChangePasswordTests {
+class ChangePasswordTests : UsecaseTests {
 
     val repository = mockk<UserRepository>()
     val passwordEncoder = mockk<PasswordEncoder>()
-    val changePassword = ChangePassword(repository, passwordEncoder)
+    override val usecase = ChangePassword(repository, passwordEncoder)
     val changePasswordMock = mockk<ChangePassword>()
     val changeOwnPassword = ChangeOwnPassword(repository, changePasswordMock, passwordEncoder)
 
@@ -34,13 +34,22 @@ class ChangePasswordTests {
     val changeOwnPasswordModel = ChangeOwnPasswordModel(password, newPassword)
 
     @Test
-    fun `Change password`() {
+    override fun success() {
         runBlocking {
             every { runBlocking { repository.findById(userModel.id) } } returns user
             every { passwordEncoder.encode(newPassword) } returns value(PasswordHash(newPassword.value.reversed()))
             every { runBlocking { repository.update(any()) } } returns user.copy(password = newPasswordHash)
 
-            changePassword(userModel, changePasswordModel)
+            usecase(userModel, changePasswordModel)
+        }
+    }
+
+    @Test
+    override fun unauthenticated() {
+        runBlocking {
+            assertFailsWith<LoginException> {
+                usecase(null, changePasswordModel)
+            }
         }
     }
 
@@ -51,7 +60,7 @@ class ChangePasswordTests {
             every { passwordEncoder.encode(newPassword) } returns value(PasswordHash(newPassword.value.reversed()))
             every { runBlocking { repository.update(any()) } } returns user.copy(password = newPasswordHash)
 
-            changePassword(userModel.copy(authorities = emptyList()), changePasswordModel)
+            usecase(userModel.copy(authorities = emptyList()), changePasswordModel)
         }
     }
 
@@ -86,19 +95,10 @@ class ChangePasswordTests {
     }
 
     @Test
-    fun Unauthenticated() {
-        runBlocking {
-            assertFailsWith<LoginException> {
-                changePassword(null, changePasswordModel)
-            }
-        }
-    }
-
-    @Test
     fun `No User role, other user`() {
         runBlocking {
             assertFailsWith<AuthorizationException> {
-                changePassword(
+                usecase(
                     userModel.copy(authorities = emptyList()),
                     changePasswordModel.copy(id = 1)
                 )
@@ -112,7 +112,7 @@ class ChangePasswordTests {
             assertFailsWith<UserNotFoundException> {
                 val id = -1
                 every { runBlocking { repository.findById(id) } } returns null
-                changePassword(userModel, changePasswordModel.copy(id = id))
+                usecase(userModel, changePasswordModel.copy(id = id))
             }
         }
     }

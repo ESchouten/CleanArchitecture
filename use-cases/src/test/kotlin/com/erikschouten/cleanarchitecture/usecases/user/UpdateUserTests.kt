@@ -5,6 +5,7 @@ import com.erikschouten.cleanarchitecture.domain.EmailAlreadyExistsException
 import com.erikschouten.cleanarchitecture.domain.LoginException
 import com.erikschouten.cleanarchitecture.domain.entity.user.Email
 import com.erikschouten.cleanarchitecture.domain.repository.UserRepository
+import com.erikschouten.cleanarchitecture.usecases.UsecaseTests
 import com.erikschouten.cleanarchitecture.usecases.model.UpdateUserModel
 import com.erikschouten.cleanarchitecture.usecases.model.UserModel
 import com.erikschouten.cleanarchitecture.usecases.usecase.user.UpdateUser
@@ -16,17 +17,17 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 
-class UpdateUserTests {
+class UpdateUserTests : UsecaseTests {
 
     val repository = mockk<UserRepository>()
     val userExists = UserExists(repository)
-    val usecase = UpdateUser(repository, userExists)
+    override val usecase = UpdateUser(repository, userExists)
 
     val updateUserModel = UpdateUserModel(user.id, user.email, user.authorities)
     val userModel = UserModel(updateUserModel.id, updateUserModel.email, updateUserModel.authorities)
 
     @Test
-    fun `Successful update`() {
+    override fun success() {
         runBlocking {
             every { runBlocking { repository.findById(updateUserModel.id) } } returns user
             every { runBlocking { repository.update(any()) } } returns user
@@ -37,7 +38,7 @@ class UpdateUserTests {
     }
 
     @Test
-    fun Unauthenticated() {
+    override fun unauthenticated() {
         runBlocking {
             assertFailsWith<LoginException> {
                 usecase(null, updateUserModel)

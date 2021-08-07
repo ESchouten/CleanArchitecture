@@ -3,6 +3,7 @@ package com.erikschouten.cleanarchitecture.usecases.user
 import com.erikschouten.cleanarchitecture.domain.AuthorizationException
 import com.erikschouten.cleanarchitecture.domain.LoginException
 import com.erikschouten.cleanarchitecture.domain.repository.UserRepository
+import com.erikschouten.cleanarchitecture.usecases.UsecaseTests
 import com.erikschouten.cleanarchitecture.usecases.model.UserModel
 import com.erikschouten.cleanarchitecture.usecases.usecase.user.DeleteUser
 import io.mockk.every
@@ -12,15 +13,15 @@ import java.util.*
 import kotlin.test.Test
 import kotlin.test.assertFailsWith
 
-class DeleteUserTests {
+class DeleteUserTests : UsecaseTests {
 
     val repository = mockk<UserRepository>()
-    val usecase = DeleteUser(repository)
+    override val usecase = DeleteUser(repository)
 
     val userModel = UserModel(user.id, user.email, user.authorities)
 
     @Test
-    fun `Successful deletion`() {
+    override fun success() {
         runBlocking {
             every { runBlocking { repository.delete(any()) } } returns Unit
             usecase(userModel, -1)
@@ -28,7 +29,7 @@ class DeleteUserTests {
     }
 
     @Test
-    fun Unauthenticated() {
+    override fun unauthenticated() {
         runBlocking {
             assertFailsWith<LoginException> {
                 usecase(null, -1)

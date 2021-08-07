@@ -6,6 +6,7 @@ import com.erikschouten.cleanarchitecture.domain.entity.user.Email
 import com.erikschouten.cleanarchitecture.domain.entity.user.Password
 import com.erikschouten.cleanarchitecture.domain.entity.user.PasswordHash
 import com.erikschouten.cleanarchitecture.domain.repository.UserRepository
+import com.erikschouten.cleanarchitecture.usecases.UsecaseTests
 import com.erikschouten.cleanarchitecture.usecases.dependency.PasswordEncoder
 import com.erikschouten.cleanarchitecture.usecases.model.CreateUserModel
 import com.erikschouten.cleanarchitecture.usecases.usecase.user.CreateUser
@@ -18,32 +19,32 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 
-class CreateUserTests {
+class CreateUserTests : UsecaseTests {
 
     val repository = mockk<UserRepository>()
     val passwordEncoder = mockk<PasswordEncoder>()
     val userExists = UserExists(repository)
-    val createUser = CreateUser(repository, userExists, passwordEncoder)
+    override val usecase = CreateUser(repository, userExists, passwordEncoder)
 
     val createUserModel = CreateUserModel(email, listOf(Authorities.USER), password)
 
     @Test
-    fun `Successful creation`() {
+    override fun success() {
         runBlocking {
             every { runBlocking { repository.findByEmail(email) } } returns null
             every { runBlocking { repository.create(any()) } } returns user
             every { passwordEncoder.encode(password) } returns value(PasswordHash(password.value.reversed()))
-            val result = createUser(userModel, createUserModel)
+            val result = usecase(userModel, createUserModel)
 
             assertEquals(result, userModel)
         }
     }
 
     @Test
-    fun Unauthenticated() {
+    override fun unauthenticated() {
         runBlocking {
             assertFailsWith<LoginException> {
-                createUser(null, createUserModel)
+                usecase(null, createUserModel)
             }
         }
     }
@@ -52,7 +53,7 @@ class CreateUserTests {
     fun `No User role`() {
         runBlocking {
             assertFailsWith<AuthorizationException> {
-                createUser(userModel.copy(authorities = emptyList()), createUserModel)
+                usecase(userModel.copy(authorities = emptyList()), createUserModel)
             }
         }
     }
@@ -62,7 +63,7 @@ class CreateUserTests {
         runBlocking {
             assertFailsWith<EmailInvalidException> {
                 every { runBlocking { repository.findByEmail(Email("erik")) } } returns null
-                createUser(userModel, createUserModel.copy(email = Email("erik")))
+                usecase(userModel, createUserModel.copy(email = Email("erik")))
             }
         }
     }
@@ -73,7 +74,7 @@ class CreateUserTests {
             assertFailsWith<PasswordInvalidException> {
                 every { runBlocking { repository.findByEmail(email) } } returns null
                 every { passwordEncoder.encode(Password("pass")) } returns PasswordHash("pass".reversed())
-                createUser(userModel, createUserModel.copy(password = Password("pass")))
+                usecase(userModel, createUserModel.copy(password = Password("pass")))
             }
         }
     }
@@ -83,7 +84,7 @@ class CreateUserTests {
         runBlocking {
             assertFailsWith<EmailAlreadyExistsException> {
                 every { runBlocking { repository.findByEmail(email) } } returns user
-                createUser(userModel, createUserModel)
+                usecase(userModel, createUserModel)
             }
         }
     }
