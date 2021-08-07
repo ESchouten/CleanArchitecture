@@ -7,4 +7,5 @@ interface UsecaseTests {
 
     fun success()
     fun unauthenticated()
+    fun `No user roles`()
 }

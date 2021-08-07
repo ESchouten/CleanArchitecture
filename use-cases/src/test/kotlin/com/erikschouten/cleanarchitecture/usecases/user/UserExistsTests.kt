@@ -1,5 +1,6 @@
 package com.erikschouten.cleanarchitecture.usecases.user
 
+import com.erikschouten.cleanarchitecture.domain.AuthorizationException
 import com.erikschouten.cleanarchitecture.domain.LoginException
 import com.erikschouten.cleanarchitecture.domain.repository.UserRepository
 import com.erikschouten.cleanarchitecture.usecases.UsecaseTests
@@ -30,6 +31,15 @@ class UserExistsTests : UsecaseTests {
         runBlocking {
             assertFailsWith<LoginException> {
                 usecase(null, email)
+            }
+        }
+    }
+
+    @Test
+    override fun `No user roles`() {
+        runBlocking {
+            assertFailsWith<AuthorizationException> {
+                usecase(userModel.copy(authorities = emptyList()), email)
             }
         }
     }

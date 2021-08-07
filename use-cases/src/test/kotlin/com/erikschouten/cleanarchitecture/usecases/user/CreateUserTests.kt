@@ -50,7 +50,7 @@ class CreateUserTests : UsecaseTests {
     }
 
     @Test
-    fun `No User role`() {
+    override fun `No user roles`() {
         runBlocking {
             assertFailsWith<AuthorizationException> {
                 usecase(userModel.copy(authorities = emptyList()), createUserModel)

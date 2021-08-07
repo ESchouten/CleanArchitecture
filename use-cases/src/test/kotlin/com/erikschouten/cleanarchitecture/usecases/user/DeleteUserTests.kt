@@ -9,7 +9,6 @@ import com.erikschouten.cleanarchitecture.usecases.usecase.user.DeleteUser
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
-import java.util.*
 import kotlin.test.Test
 import kotlin.test.assertFailsWith
 
@@ -24,7 +23,7 @@ class DeleteUserTests : UsecaseTests {
     override fun success() {
         runBlocking {
             every { runBlocking { repository.delete(any()) } } returns Unit
-            usecase(userModel, -1)
+            usecase(userModel, id)
         }
     }
 
@@ -32,16 +31,16 @@ class DeleteUserTests : UsecaseTests {
     override fun unauthenticated() {
         runBlocking {
             assertFailsWith<LoginException> {
-                usecase(null, -1)
+                usecase(null, id)
             }
         }
     }
 
     @Test
-    fun `No User role`() {
+    override fun `No user roles`() {
         runBlocking {
             assertFailsWith<AuthorizationException> {
-                usecase(userModel.copy(authorities = emptyList()), -1)
+                usecase(userModel.copy(authorities = emptyList()), id)
             }
         }
     }

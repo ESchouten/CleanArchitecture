@@ -40,6 +40,9 @@ class LoginUserTests : UsecaseTests {
     override fun unauthenticated() = success()
 
     @Test
+    override fun `No user roles`() = success()
+
+    @Test
     fun `Invalid email`() {
         runBlocking {
             assertFailsWith<LoginException> {

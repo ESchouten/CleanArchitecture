@@ -28,4 +28,7 @@ class AuthenticatedUserTests : UsecaseTests {
             }
         }
     }
+
+    @Test
+    override fun `No user roles`() = success()
 }

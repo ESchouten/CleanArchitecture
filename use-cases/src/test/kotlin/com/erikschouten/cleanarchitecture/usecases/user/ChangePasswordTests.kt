@@ -54,6 +54,12 @@ class ChangePasswordTests : UsecaseTests {
     }
 
     @Test
+    override fun `No user roles`() {
+        `No User role, own user`()
+        `No User role, other user`()
+    }
+
+    @Test
     fun `No User role, own user`() {
         runBlocking {
             every { runBlocking { repository.findById(userModel.id) } } returns user
@@ -100,7 +106,7 @@ class ChangePasswordTests : UsecaseTests {
             assertFailsWith<AuthorizationException> {
                 usecase(
                     userModel.copy(authorities = emptyList()),
-                    changePasswordModel.copy(id = 1)
+                    changePasswordModel.copy(id = id + 1)
                 )
             }
         }
