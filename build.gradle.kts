@@ -11,7 +11,6 @@ subprojects {
     apply(plugin = "kotlin")
     repositories {
         mavenCentral()
-        maven { url = java.net.URI("https://jitpack.io") }
     }
 
     afterEvaluate {
