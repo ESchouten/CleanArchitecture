@@ -3,7 +3,7 @@ package usecases.usecase.user
 import domain.AuthorizationException
 import domain.LoginException
 import domain.UserNotFoundException
-import domain.entity.user.Password
+import domain.entity.user.NewPassword
 import domain.entity.user.PasswordHash
 import domain.repository.UserRepository
 import io.mockk.every
@@ -26,7 +26,7 @@ class ChangePasswordTests : UsecaseTests {
     val changePasswordMock = mockk<ChangePassword>()
     val changeOwnPassword = ChangeOwnPassword(repository, changePasswordMock, passwordEncoder)
 
-    val newPassword = Password(password.value + 1)
+    val newPassword = NewPassword(password.value + 1)
     val newPasswordHash = PasswordHash(newPassword.value.reversed())
     val changePasswordModel = ChangePasswordModel(user.id, newPassword)
     val changeOwnPasswordModel = ChangeOwnPasswordModel(password, newPassword)

@@ -1,8 +1,10 @@
 package domain.entity
 
 import domain.EmailInvalidException
-import domain.PasswordInvalidException
-import domain.entity.user.*
+import domain.entity.user.Authorities
+import domain.entity.user.Email
+import domain.entity.user.PasswordHash
+import domain.entity.user.User
 import kotlin.test.Test
 import kotlin.test.assertFailsWith
 
@@ -21,13 +23,6 @@ class UserTests {
     fun `Invalid Email`() {
         assertFailsWith<EmailInvalidException> {
             Email("erik")
-        }
-    }
-
-    @Test
-    fun `Invalid Password`() {
-        assertFailsWith<PasswordInvalidException> {
-            Password("pass")
         }
     }
 }
