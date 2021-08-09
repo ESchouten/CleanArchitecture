@@ -2,8 +2,8 @@ package server
 
 import domain.entity.user.Authorities
 import domain.entity.user.Email
-import usecases.model.UserModel
 import io.ktor.auth.*
+import usecases.model.UserModel
 
 class UserPrincipal private constructor(
     private val id: Int,

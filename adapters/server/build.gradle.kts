@@ -10,7 +10,8 @@ tasks {
                 mapOf(
                     "Main-Class" to "io.ktor.server.cio.EngineMain",
                     "ImplementationTitle" to project.name,
-                    "Implementation-Version" to project.version)
+                    "Implementation-Version" to project.version
+                )
             )
         }
     }

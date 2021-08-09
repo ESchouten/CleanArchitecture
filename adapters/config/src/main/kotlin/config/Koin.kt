@@ -7,9 +7,6 @@ import domain.entity.user.Email
 import domain.entity.user.Password
 import domain.entity.user.User
 import domain.repository.UserRepository
-import usecases.dependency.Authenticator
-import usecases.dependency.PasswordEncoder
-import usecases.usecase.user.*
 import org.koin.core.annotation.KoinInternalApi
 import org.koin.core.definition.Kind
 import org.koin.core.module.Module
@@ -20,6 +17,9 @@ import org.koin.experimental.builder.singleBy
 import org.koin.java.KoinJavaComponent.getKoin
 import repositories.user.InMemoryUserRepository
 import repositories.user.UserRepositoryImpl
+import usecases.dependency.Authenticator
+import usecases.dependency.PasswordEncoder
+import usecases.usecase.user.*
 import kotlin.reflect.full.isSubclassOf
 
 fun modules(config: Config): List<Module> {
