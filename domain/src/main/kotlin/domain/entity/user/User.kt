@@ -22,7 +22,9 @@ data class Email(override val value: String) : ValueClass<String> {
     }
 }
 
-data class Password(override val value: String) : ValueClass<String> {
+open class Password(override val value: String) : ValueClass<String>
+
+class NewPassword(value: String) : Password(value) {
     init {
         if (!value.matches(Regex("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@\$%^&*-]).{8,}\$")))
             throw PasswordInvalidException()

@@ -21,18 +21,18 @@ data class UpdateUserModel(
 
 data class ChangeOwnPasswordModel(
     val current: Password,
-    val password: Password
+    val password: NewPassword
 )
 
 data class ChangePasswordModel(
     val id: Int,
-    val password: Password
+    val password: NewPassword
 )
 
 data class CreateUserModel(
     val email: Email,
     val authorities: List<Authorities>,
-    val password: Password,
+    val password: NewPassword,
 ) {
     fun toUser(encoder: PasswordEncoder) =
         User(email = email, authorities = authorities, password = encoder.encode(password))

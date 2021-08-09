@@ -2,10 +2,9 @@ package graphql
 
 import kotlin.reflect.KClass
 import kotlin.reflect.KType
+import kotlin.reflect.full.allSuperclasses
 import kotlin.reflect.full.memberProperties
-import kotlin.reflect.full.starProjectedType
 import kotlin.reflect.jvm.isAccessible
-import kotlin.reflect.jvm.jvmErasure
 
 @Suppress("UNCHECKED_CAST")
 inline fun <reified T : Any, R> T.privateProperty(name: String): R =
@@ -25,5 +24,6 @@ fun properties(type: KClass<*>): List<KClass<*>> {
     }
 }
 
-fun KType.isCollection() = (this.classifier as KClass<*>).supertypes.map { superType -> superType.jvmErasure }
-    .any { kClass -> kClass == Collection::class.starProjectedType.jvmErasure || kClass == Array::class.starProjectedType.jvmErasure }
+fun KType.isCollection() = (this.classifier as KClass<*>).allSuperclasses.any { kClass ->
+    kClass == Collection::class || kClass == Array::class
+}

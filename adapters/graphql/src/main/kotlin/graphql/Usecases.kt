@@ -102,9 +102,7 @@ fun types(types: Set<KClass<*>>, ignore: Set<KClass<*>>): Set<KClass<*>> {
 fun <T : Any> SchemaBuilder.type(type: KClass<T>) {
     when {
         type.isSubclassOf(Enum::class) -> enum(type as KClass<Enum<*>>)
-        type.isValue || type.supertypes.any { it.jvmErasure == ValueClass::class.starProjectedType.jvmErasure } -> valueClassScalar(
-            type
-        )
+        type.isValue || type.allSuperclasses.any { it == ValueClass::class } -> valueClassScalar(type)
         else -> type(type) {}
     }
 }
