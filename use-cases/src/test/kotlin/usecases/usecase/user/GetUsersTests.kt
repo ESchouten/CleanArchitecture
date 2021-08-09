@@ -1,4 +1,4 @@
-package usecases.user
+package usecases.usecase.user
 
 import domain.AuthorizationException
 import domain.LoginException
@@ -7,22 +7,22 @@ import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
 import usecases.UsecaseTests
-import usecases.usecase.user.UserExists
+import usecases.model.UserModel
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 
-class UserExistsTests : UsecaseTests {
+class GetUserTest : UsecaseTests {
 
     val repository = mockk<UserRepository>()
-    override val usecase = UserExists(repository)
+    override val usecase = GetUser(repository)
 
     @Test
     override fun success() {
         runBlocking {
-            every { runBlocking { repository.findByEmail(email) } } returns user
-            val result = usecase(userModel, email)
-            assertEquals(result, true)
+            every { runBlocking { repository.findById(id) } } returns user
+            val result = usecase(userModel, id)
+            assertEquals(result, UserModel(user))
         }
     }
 
@@ -30,7 +30,7 @@ class UserExistsTests : UsecaseTests {
     override fun unauthenticated() {
         runBlocking {
             assertFailsWith<LoginException> {
-                usecase(null, email)
+                usecase(null, id)
             }
         }
     }
@@ -39,17 +39,8 @@ class UserExistsTests : UsecaseTests {
     override fun `No user roles`() {
         runBlocking {
             assertFailsWith<AuthorizationException> {
-                usecase(userModel.copy(authorities = emptyList()), email)
+                usecase(userModel.copy(authorities = emptyList()), id)
             }
-        }
-    }
-
-    @Test
-    fun `User does not exist`() {
-        runBlocking {
-            every { runBlocking { repository.findByEmail(email) } } returns null
-            val result = usecase(userModel, email)
-            assertEquals(result, false)
         }
     }
 }

@@ -2,7 +2,7 @@ package authentication
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
-import usecases.usecase.dependency.Authenticator
+import usecases.dependency.Authenticator
 
 class JWTAuthenticatorImpl(
     private val issuer: String,

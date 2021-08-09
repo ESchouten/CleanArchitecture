@@ -4,8 +4,8 @@ import domain.EmailAlreadyExistsException
 import domain.UserNotFoundException
 import domain.entity.user.Authorities
 import domain.repository.UserRepository
-import usecases.usecase.model.UpdateUserModel
-import usecases.usecase.model.UserModel
+import usecases.model.UpdateUserModel
+import usecases.model.UserModel
 import usecases.usecase.Mutation
 import usecases.usecase.UsecaseA1
 import kotlin.reflect.typeOf

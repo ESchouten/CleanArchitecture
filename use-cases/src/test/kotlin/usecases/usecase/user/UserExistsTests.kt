@@ -1,4 +1,4 @@
-package usecases.user
+package usecases.usecase.user
 
 import domain.AuthorizationException
 import domain.LoginException
@@ -7,23 +7,21 @@ import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
 import usecases.UsecaseTests
-import usecases.usecase.user.FindUsers
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 
-class FindUsersTests : UsecaseTests {
+class UserExistsTests : UsecaseTests {
 
     val repository = mockk<UserRepository>()
-    override val usecase = FindUsers(repository)
+    override val usecase = UserExists(repository)
 
     @Test
     override fun success() {
         runBlocking {
-            val emails = listOf(user.email)
-            every { runBlocking { repository.findAllByEmails(emails) } } returns listOf(user)
-            val result = usecase(userModel, emails)
-            assertEquals(result, listOf(userModel))
+            every { runBlocking { repository.findByEmail(email) } } returns user
+            val result = usecase(userModel, email)
+            assertEquals(result, true)
         }
     }
 
@@ -31,7 +29,7 @@ class FindUsersTests : UsecaseTests {
     override fun unauthenticated() {
         runBlocking {
             assertFailsWith<LoginException> {
-                usecase(null, listOf(user.email))
+                usecase(null, email)
             }
         }
     }
@@ -40,8 +38,17 @@ class FindUsersTests : UsecaseTests {
     override fun `No user roles`() {
         runBlocking {
             assertFailsWith<AuthorizationException> {
-                usecase(userModel.copy(authorities = emptyList()), listOf(user.email))
+                usecase(userModel.copy(authorities = emptyList()), email)
             }
+        }
+    }
+
+    @Test
+    fun `User does not exist`() {
+        runBlocking {
+            every { runBlocking { repository.findByEmail(email) } } returns null
+            val result = usecase(userModel, email)
+            assertEquals(result, false)
         }
     }
 }

@@ -1,4 +1,4 @@
-package usecases.user
+package usecases.usecase.user
 
 import domain.*
 import domain.entity.user.Authorities
@@ -10,10 +10,8 @@ import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
 import usecases.UsecaseTests
-import usecases.usecase.dependency.PasswordEncoder
-import usecases.usecase.model.CreateUserModel
-import usecases.usecase.user.CreateUser
-import usecases.usecase.user.UserExists
+import usecases.dependency.PasswordEncoder
+import usecases.model.CreateUserModel
 import usecases.value
 import kotlin.test.Test
 import kotlin.test.assertEquals

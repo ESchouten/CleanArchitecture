@@ -3,7 +3,7 @@ package usecases.usecase
 import domain.AuthorizationException
 import domain.LoginException
 import domain.entity.user.Authorities
-import usecases.usecase.model.UserModel
+import usecases.model.UserModel
 import kotlin.reflect.KType
 
 @Target(AnnotationTarget.CLASS)

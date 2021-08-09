@@ -1,4 +1,4 @@
-package usecases.user
+package usecases.usecase.user
 
 import domain.AuthorizationException
 import domain.LoginException
@@ -7,22 +7,22 @@ import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
 import usecases.UsecaseTests
-import usecases.usecase.user.ListUsers
+import usecases.model.UserModel
 import kotlin.test.Test
-import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 
-class ListUsersTests : UsecaseTests {
+class DeleteUserTests : UsecaseTests {
 
     val repository = mockk<UserRepository>()
-    override val usecase = ListUsers(repository)
+    override val usecase = DeleteUser(repository)
+
+    val userModel = UserModel(user.id, user.email, user.authorities)
 
     @Test
     override fun success() {
         runBlocking {
-            every { runBlocking { repository.findAll() } } returns listOf(user)
-            val result = usecase(userModel)
-            assertEquals(result, listOf(userModel))
+            every { runBlocking { repository.delete(any()) } } returns Unit
+            usecase(userModel, id)
         }
     }
 
@@ -30,7 +30,7 @@ class ListUsersTests : UsecaseTests {
     override fun unauthenticated() {
         runBlocking {
             assertFailsWith<LoginException> {
-                usecase(null)
+                usecase(null, id)
             }
         }
     }
@@ -39,7 +39,7 @@ class ListUsersTests : UsecaseTests {
     override fun `No user roles`() {
         runBlocking {
             assertFailsWith<AuthorizationException> {
-                usecase(userModel.copy(authorities = emptyList()))
+                usecase(userModel.copy(authorities = emptyList()), id)
             }
         }
     }

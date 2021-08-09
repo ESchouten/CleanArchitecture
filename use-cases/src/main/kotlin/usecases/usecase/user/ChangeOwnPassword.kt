@@ -3,10 +3,10 @@ package usecases.usecase.user
 import domain.AuthorizationException
 import domain.entity.user.Authorities
 import domain.repository.UserRepository
-import usecases.usecase.dependency.PasswordEncoder
-import usecases.usecase.model.ChangeOwnPasswordModel
-import usecases.usecase.model.ChangePasswordModel
-import usecases.usecase.model.UserModel
+import usecases.dependency.PasswordEncoder
+import usecases.model.ChangeOwnPasswordModel
+import usecases.model.ChangePasswordModel
+import usecases.model.UserModel
 import usecases.usecase.Mutation
 import usecases.usecase.UsecaseA1
 import kotlin.reflect.typeOf

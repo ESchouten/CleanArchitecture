@@ -1,7 +1,7 @@
-package usecases.usecase.model
+package usecases.model
 
 import domain.entity.user.*
-import usecases.usecase.dependency.PasswordEncoder
+import usecases.dependency.PasswordEncoder
 
 data class UserModel(
     val id: Int,

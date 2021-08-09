@@ -16,8 +16,8 @@ import kotlinx.coroutines.launch
 import org.koin.core.annotation.KoinInternalApi
 import org.koin.ktor.ext.Koin
 import org.koin.ktor.ext.get
-import usecases.usecase.dependency.Authenticator
-import usecases.usecase.model.UserModel
+import usecases.dependency.Authenticator
+import usecases.model.UserModel
 
 fun main(args: Array<String>) = EngineMain.main(args)
 

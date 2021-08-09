@@ -2,7 +2,7 @@ package usecases.usecase.user
 
 import domain.entity.user.Authorities
 import domain.repository.UserRepository
-import usecases.usecase.model.UserModel
+import usecases.model.UserModel
 import usecases.usecase.Query
 import usecases.usecase.UsecaseA0
 import kotlin.reflect.typeOf

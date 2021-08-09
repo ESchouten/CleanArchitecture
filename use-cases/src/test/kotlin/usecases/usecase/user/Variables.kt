@@ -1,7 +1,7 @@
-package usecases.user
+package usecases.usecase.user
 
 import domain.entity.user.*
-import usecases.usecase.model.UserModel
+import usecases.model.UserModel
 
 val email = Email("erik@erikschouten.com")
 val password = Password("P@ssw0rd!")

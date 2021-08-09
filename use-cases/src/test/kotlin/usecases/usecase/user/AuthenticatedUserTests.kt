@@ -1,9 +1,8 @@
-package usecases.user
+package usecases.usecase.user
 
 import domain.LoginException
 import kotlinx.coroutines.runBlocking
 import usecases.UsecaseTests
-import usecases.usecase.user.AuthenticatedUser
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith

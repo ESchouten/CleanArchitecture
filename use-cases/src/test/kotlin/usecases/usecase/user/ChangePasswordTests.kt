@@ -1,4 +1,4 @@
-package usecases.user
+package usecases.usecase.user
 
 import domain.AuthorizationException
 import domain.LoginException
@@ -10,12 +10,10 @@ import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
 import usecases.UsecaseTests
-import usecases.usecase.dependency.PasswordEncoder
-import usecases.usecase.model.ChangeOwnPasswordModel
-import usecases.usecase.model.ChangePasswordModel
-import usecases.usecase.model.UserModel
-import usecases.usecase.user.ChangeOwnPassword
-import usecases.usecase.user.ChangePassword
+import usecases.dependency.PasswordEncoder
+import usecases.model.ChangeOwnPasswordModel
+import usecases.model.ChangePasswordModel
+import usecases.model.UserModel
 import usecases.value
 import kotlin.test.Test
 import kotlin.test.assertFailsWith

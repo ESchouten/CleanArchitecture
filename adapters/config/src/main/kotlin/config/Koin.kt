@@ -7,8 +7,8 @@ import domain.entity.user.Email
 import domain.entity.user.Password
 import domain.entity.user.User
 import domain.repository.UserRepository
-import usecases.usecase.dependency.Authenticator
-import usecases.usecase.dependency.PasswordEncoder
+import usecases.dependency.Authenticator
+import usecases.dependency.PasswordEncoder
 import usecases.usecase.user.*
 import org.koin.core.annotation.KoinInternalApi
 import org.koin.core.definition.Kind

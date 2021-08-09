@@ -1,4 +1,4 @@
-package usecases.usecase.dependency
+package usecases.dependency
 
 import domain.entity.user.Password
 import domain.entity.user.PasswordHash

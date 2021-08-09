@@ -3,9 +3,9 @@ package usecases.usecase.user
 import domain.EmailAlreadyExistsException
 import domain.entity.user.Authorities
 import domain.repository.UserRepository
-import usecases.usecase.dependency.PasswordEncoder
-import usecases.usecase.model.CreateUserModel
-import usecases.usecase.model.UserModel
+import usecases.dependency.PasswordEncoder
+import usecases.model.CreateUserModel
+import usecases.model.UserModel
 import usecases.usecase.Mutation
 import usecases.usecase.UsecaseA1
 import kotlin.reflect.typeOf

@@ -1,4 +1,4 @@
-package usecases.user
+package usecases.usecase.user
 
 import domain.AuthorizationException
 import domain.EmailAlreadyExistsException
@@ -9,10 +9,8 @@ import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
 import usecases.UsecaseTests
-import usecases.usecase.model.UpdateUserModel
-import usecases.usecase.model.UserModel
-import usecases.usecase.user.UpdateUser
-import usecases.usecase.user.UserExists
+import usecases.model.UpdateUserModel
+import usecases.model.UserModel
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith

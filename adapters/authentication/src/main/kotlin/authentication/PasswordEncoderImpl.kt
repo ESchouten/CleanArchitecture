@@ -3,7 +3,7 @@ package authentication
 import at.favre.lib.crypto.bcrypt.BCrypt
 import domain.entity.user.Password
 import domain.entity.user.PasswordHash
-import usecases.usecase.dependency.PasswordEncoder
+import usecases.dependency.PasswordEncoder
 
 class PasswordEncoderImpl : PasswordEncoder {
     override fun encode(password: Password) =
