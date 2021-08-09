@@ -29,7 +29,7 @@ class LoginUserTests : UsecaseTests {
         runBlocking {
             every { runBlocking { repository.findByEmail(email) } } returns user
             every { passwordEncoder.matches(password, PasswordHash(password.value.reversed())) } returns true
-            every { authenticator.generate(user.id) } returns "token"
+            every { authenticator.generate(user.id, user.authorities) } returns "token"
             val result = usecase(null, loginUserModel)
             assertEquals(result, "token")
         }

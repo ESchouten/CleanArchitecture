@@ -2,6 +2,7 @@ package authentication
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
+import domain.entity.user.Authorities
 import usecases.dependency.Authenticator
 
 class JWTAuthenticatorImpl(
@@ -19,10 +20,11 @@ class JWTAuthenticatorImpl(
         .withIssuer(issuer)
         .build()!!
 
-    override fun generate(id: Int) = JWT
+    override fun generate(id: Int, authorities: List<Authorities>) = JWT
         .create()
         .withAudience(audience)
         .withIssuer(issuer)
         .withSubject(id.toString())
+        .withArrayClaim("authorities", authorities.map { it.name }.toTypedArray())
         .sign(algorithm)!!
 }

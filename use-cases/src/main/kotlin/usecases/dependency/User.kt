@@ -1,10 +1,11 @@
 package usecases.dependency
 
+import domain.entity.user.Authorities
 import domain.entity.user.Password
 import domain.entity.user.PasswordHash
 
 interface Authenticator {
-    fun generate(id: Int): String
+    fun generate(id: Int, authorities: List<Authorities>): String
 }
 
 interface PasswordEncoder {
