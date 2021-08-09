@@ -30,7 +30,7 @@ dependencyResolutionManagement {
             version("hikari", "5.0.0")
             version("mariadb", "2.7.3")
             version("h2", "1.4.200")
-            version("flyway", "7.11.4")
+            version("flyway", "7.12.1")
             version("mockk", "1.12.0")
         }
     }
