@@ -9,11 +9,11 @@ import domain.repository.UserRepository
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
-import usecases.UsecaseTests
 import usecases.dependency.PasswordEncoder
 import usecases.model.ChangeOwnPasswordModel
 import usecases.model.ChangePasswordModel
 import usecases.model.UserModel
+import usecases.usecase.UsecaseTests
 import usecases.value
 import kotlin.test.Test
 import kotlin.test.assertFailsWith

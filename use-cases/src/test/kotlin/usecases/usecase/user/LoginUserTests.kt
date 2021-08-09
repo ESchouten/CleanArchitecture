@@ -7,10 +7,10 @@ import domain.repository.UserRepository
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
-import usecases.UsecaseTests
 import usecases.dependency.Authenticator
 import usecases.dependency.PasswordEncoder
 import usecases.model.LoginUserModel
+import usecases.usecase.UsecaseTests
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith

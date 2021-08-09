@@ -1,6 +1,4 @@
-package usecases
-
-import usecases.usecase.UsecaseType
+package usecases.usecase
 
 interface UsecaseTests {
     val usecase: UsecaseType<*>
