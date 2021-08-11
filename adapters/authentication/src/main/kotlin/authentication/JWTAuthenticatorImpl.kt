@@ -2,8 +2,8 @@ package authentication
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
-import domain.entity.user.Authorities
 import usecases.dependency.Authenticator
+import usecases.model.UserModel
 
 class JWTAuthenticatorImpl(
     private val issuer: String,
@@ -20,11 +20,12 @@ class JWTAuthenticatorImpl(
         .withIssuer(issuer)
         .build()!!
 
-    override fun generate(id: Int, authorities: List<Authorities>) = JWT
+    override fun generate(user: UserModel) = JWT
         .create()
         .withAudience(audience)
         .withIssuer(issuer)
-        .withSubject(id.toString())
-        .withArrayClaim("authorities", authorities.map { it.name }.toTypedArray())
+        .withSubject(user.id.toString())
+        .withClaim("email", user.email.value)
+        .withArrayClaim("authorities", user.authorities.map { it.name }.toTypedArray())
         .sign(algorithm)!!
 }
