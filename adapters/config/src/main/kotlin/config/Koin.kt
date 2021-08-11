@@ -11,6 +11,8 @@ import org.koin.core.annotation.KoinInternalApi
 import org.koin.core.definition.Kind
 import org.koin.core.module.Module
 import org.koin.dsl.module
+import org.koin.experimental.builder.create
+import org.koin.experimental.builder.single
 import org.koin.experimental.builder.singleBy
 import org.koin.java.KoinJavaComponent.getKoin
 import repositories.user.InMemoryUserRepository
