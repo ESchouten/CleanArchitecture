@@ -7,10 +7,11 @@ data class Config(
     val development: Boolean,
     val database: DatabaseType,
     val jdbc: JDBC?,
+    val dropDB: Boolean
 ) {
     init {
         if (database === DatabaseType.JDBC) {
-            DatabaseFactory.init(jdbc!!.driver, jdbc.url, jdbc.schema, jdbc.username, jdbc.password, development)
+            DatabaseFactory.init(jdbc!!.driver, jdbc.url, jdbc.schema, jdbc.username, jdbc.password, dropDB)
         }
     }
 }

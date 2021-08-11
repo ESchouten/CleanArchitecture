@@ -67,9 +67,7 @@ fun Application.module(testing: Boolean = false) {
         schema(usecases(getAll()))
     }
 
-    if (config.development) {
-        launch {
-            setup(get(), get())
-        }
+    launch {
+        setup(get(), get())
     }
 }

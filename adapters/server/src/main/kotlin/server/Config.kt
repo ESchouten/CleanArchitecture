@@ -16,6 +16,7 @@ fun Application.config() = environment.config.run {
         ),
         development = property("ktor.development").getString().toBoolean(),
         database = databaseType,
+        dropDB = property("database.drop").getString().toBoolean(),
         jdbc = when (databaseType) {
             DatabaseType.JDBC -> JDBC(
                 driver = property("database.jdbc.driver").getString(),

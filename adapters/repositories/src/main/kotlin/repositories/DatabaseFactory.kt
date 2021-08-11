@@ -18,7 +18,7 @@ object DatabaseFactory {
         schema: String,
         username: String = "",
         password: String = "",
-        development: Boolean = false
+        drop: Boolean = false
     ) {
         val config = HikariConfig().apply {
             driverClassName = driver
@@ -34,7 +34,7 @@ object DatabaseFactory {
         val ds = HikariDataSource(config)
         Database.connect(ds)
 
-        if (development) {
+        if (drop) {
             transaction {
                 SchemaUtils.drop(UserTable, AuthorityTable)
                 SchemaUtils.drop(Table("flyway_schema_history"))
