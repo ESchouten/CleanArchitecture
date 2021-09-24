@@ -10,7 +10,7 @@ import kotlin.reflect.typeOf
 class AuthenticatedUser : UsecaseA0<UserModel>(typeOf<UserModel>()) {
 
     override val authorities = emptyList<Authorities>()
-    override val executor: suspend (UserModel?) -> UserModel = { authentication ->
-        authentication!!
+    override suspend fun executor(authentication: UserModel?): UserModel {
+        return authentication!!
     }
 }

@@ -13,7 +13,7 @@ class GetUser(
 ) : UsecaseA1<Int, UserModel>(typeOf<Int>(), typeOf<UserModel>()) {
 
     override val authorities = listOf(Authorities.USER)
-    override val executor: suspend (UserModel?, Int) -> UserModel = { _, a0 ->
-        repository.findById(a0)?.let { UserModel(it) }!!
+    override suspend fun executor(authentication: UserModel?, a0: Int): UserModel {
+        return repository.findById(a0)?.let { UserModel(it) }!!
     }
 }

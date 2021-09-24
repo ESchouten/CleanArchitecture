@@ -19,9 +19,9 @@ class ChangeOwnPassword(
 ) : UsecaseA1<ChangeOwnPasswordModel, UserModel>(typeOf<ChangeOwnPasswordModel>(), typeOf<UserModel>()) {
 
     override val authorities = emptyList<Authorities>()
-    override val executor: suspend (UserModel?, ChangeOwnPasswordModel) -> UserModel = { authentication, a0 ->
+    override suspend fun executor(authentication: UserModel?, a0: ChangeOwnPasswordModel): UserModel {
         val user = repository.findById(authentication!!.id) ?: throw AuthorizationException()
         if (!passwordEncoder.matches(a0.current, user.password)) throw AuthorizationException()
-        changePassword(authentication, ChangePasswordModel(authentication.id, a0.password))
+        return changePassword(authentication, ChangePasswordModel(authentication.id, a0.password))
     }
 }

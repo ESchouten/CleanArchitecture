@@ -13,7 +13,7 @@ class ListUsers(
 ) : UsecaseA0<List<UserModel>>(typeOf<List<UserModel>>()) {
 
     override val authorities = listOf(Authorities.USER)
-    override val executor: suspend (UserModel?) -> List<UserModel> = { _ ->
-        repository.findAll().map { UserModel(it) }
+    override suspend fun executor(authentication: UserModel?): List<UserModel> {
+        return repository.findAll().map { UserModel(it) }
     }
 }

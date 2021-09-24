@@ -14,7 +14,7 @@ class FindUsers(
 ) : UsecaseA1<List<Email>, List<UserModel>>(typeOf<List<Email>>(), typeOf<List<UserModel>>()) {
 
     override val authorities = listOf(Authorities.USER)
-    override val executor: suspend (UserModel?, List<Email>) -> List<UserModel> = { _, emails ->
-        repository.findAllByEmails(emails).map { UserModel(it) }
+    override suspend fun executor(authentication: UserModel?, a0: List<Email>): List<UserModel> {
+        return repository.findAllByEmails(a0).map { UserModel(it) }
     }
 }

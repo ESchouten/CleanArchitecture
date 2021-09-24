@@ -18,8 +18,8 @@ class CreateUser(
 ) : UsecaseA1<CreateUserModel, UserModel>(typeOf<CreateUserModel>(), typeOf<UserModel>()) {
 
     override val authorities = listOf(Authorities.USER)
-    override val executor: suspend (UserModel?, CreateUserModel) -> UserModel = { authentication, a0 ->
+    override suspend fun executor(authentication: UserModel?, a0: CreateUserModel): UserModel {
         if (userExists(authentication, a0.email)) throw EmailAlreadyExistsException()
-        UserModel(repository.create(a0.toUser(passwordEncoder)))
+        return UserModel(repository.create(a0.toUser(passwordEncoder)))
     }
 }

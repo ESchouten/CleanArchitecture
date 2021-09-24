@@ -30,19 +30,19 @@ sealed class UsecaseType<R : Any>(
 
 abstract class UsecaseA0<R : Any>(
     result: KType
-) : UsecaseType<R>(result) {
+) : UsecaseType<R>(result), suspend (UserModel?) -> R {
 
     final override val args get() = emptyList<KType>()
-    abstract val executor: suspend (authentication: UserModel?) -> R
-    suspend operator fun invoke(authentication: UserModel?) = executor(auth(authentication))
+    protected abstract suspend fun executor(authentication: UserModel?): R
+    override suspend fun invoke(authentication: UserModel?) = executor(auth(authentication))
 }
 
 abstract class UsecaseA1<A0 : Any, R : Any>(
     private val a0: KType,
     result: KType
-) : UsecaseType<R>(result) {
+) : UsecaseType<R>(result), suspend (UserModel?, A0) -> R {
 
     final override val args get() = listOf(a0)
-    abstract val executor: suspend (authentication: UserModel?, a0: A0) -> R
-    suspend operator fun invoke(authentication: UserModel?, a0: A0) = executor(auth(authentication), a0)
+    protected abstract suspend fun executor(authentication: UserModel?, a0: A0): R
+    override suspend fun invoke(authentication: UserModel?, a0: A0) = executor(auth(authentication), a0)
 }
