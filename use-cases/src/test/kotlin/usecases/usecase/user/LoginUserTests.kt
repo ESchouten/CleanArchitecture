@@ -10,6 +10,7 @@ import kotlinx.coroutines.runBlocking
 import usecases.dependency.Authenticator
 import usecases.dependency.PasswordEncoder
 import usecases.model.LoginUserModel
+import usecases.model.UserModel
 import usecases.usecase.UsecaseTests
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -29,7 +30,7 @@ class LoginUserTests : UsecaseTests {
         runBlocking {
             every { runBlocking { repository.findByEmail(email) } } returns user
             every { passwordEncoder.matches(password, PasswordHash(password.value.reversed())) } returns true
-            every { authenticator.generate(user.id, user.authorities) } returns "token"
+            every { authenticator.generate(UserModel(user)) } returns "token"
             val result = usecase(null, loginUserModel)
             assertEquals(result, "token")
         }
