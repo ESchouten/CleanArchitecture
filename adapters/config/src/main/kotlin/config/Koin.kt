@@ -9,11 +9,11 @@ import domain.entity.user.User
 import domain.repository.UserRepository
 import org.koin.core.annotation.KoinInternalApi
 import org.koin.core.definition.Kind
+import org.koin.core.instance.newInstance
 import org.koin.core.module.Module
+import org.koin.dsl.bind
 import org.koin.dsl.module
-import org.koin.experimental.builder.create
-import org.koin.experimental.builder.single
-import org.koin.experimental.builder.singleBy
+import org.koin.dsl.single
 import org.koin.java.KoinJavaComponent.getKoin
 import repositories.user.InMemoryUserRepository
 import repositories.user.UserRepositoryImpl
@@ -40,13 +40,13 @@ private fun userModule(config: Config) = module {
     single<UpdateUser>()
     single<UserExists>()
 
-    single {
-        create(
+    single { params ->
+        newInstance(
             when (config.database) {
                 DatabaseType.LOCAL -> InMemoryUserRepository::class
                 DatabaseType.JDBC -> UserRepositoryImpl::class
-            }
-        ) as UserRepository
+            }, params
+        )
     }
 
     single<Authenticator> {
@@ -56,7 +56,7 @@ private fun userModule(config: Config) = module {
             secret = config.jwt.secret
         )
     }
-    singleBy<PasswordEncoder, PasswordEncoderImpl>()
+    single<PasswordEncoderImpl>().bind<PasswordEncoder>()
 }
 
 suspend fun setup(userRepository: UserRepository, passwordEncoder: PasswordEncoder) {
@@ -74,8 +74,8 @@ suspend fun setup(userRepository: UserRepository, passwordEncoder: PasswordEncod
 @KoinInternalApi
 inline fun <reified T : Any> getAll(): Collection<T> =
     getKoin().let { koin ->
-        koin.getRootScope()._scopeDefinition.definitions.toList()
-            .filter { it.kind == Kind.Single }
+        koin.instanceRegistry.instances.values.map { it.beanDefinition }
+            .filter { it.kind == Kind.Singleton }
             .filter { it.primaryType.isSubclassOf(T::class) }
             .map { koin.get(clazz = it.primaryType, qualifier = null, parameters = null) }
     }
