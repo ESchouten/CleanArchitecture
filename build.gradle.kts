@@ -1,5 +1,6 @@
+@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
-    kotlin("jvm") version "1.6.0-M1" apply false
+    kotlin("jvm") version libs.versions.kotlin apply false
 }
 
 allprojects {
