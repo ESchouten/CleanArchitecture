@@ -1,6 +1,7 @@
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     kotlin("jvm") version libs.versions.kotlin apply false
+    id("com.github.ben-manes.versions") version libs.versions.updateversions
 }
 
 allprojects {
