@@ -38,14 +38,9 @@ fun Application.module(testing: Boolean = false) {
             val authenticator = get<Authenticator>() as JWTAuthenticatorImpl
             val userRepository = get<UserRepository>()
             verifier(authenticator.verifier)
-            realm = authenticator.realm
             validate { credential ->
-                if (credential.payload.audience.contains(authenticator.audience)) {
-                    userRepository.findById(credential.payload.subject.toInt())?.let {
-                        UserPrincipal(UserModel(it))
-                    }
-                } else {
-                    null
+                userRepository.findById(credential.payload.subject.toInt())?.let {
+                    UserPrincipal(UserModel(it))
                 }
             }
         }

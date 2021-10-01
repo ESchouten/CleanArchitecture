@@ -52,7 +52,6 @@ private fun userModule(config: Config) = module {
     single<Authenticator> {
         JWTAuthenticatorImpl(
             issuer = config.jwt.domain,
-            realm = config.jwt.realm,
             secret = config.jwt.secret
         )
     }

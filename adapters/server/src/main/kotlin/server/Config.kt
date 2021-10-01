@@ -10,7 +10,6 @@ fun Application.config() = environment.config.run {
     val databaseType = DatabaseType.valueOf(property("database.type").getString())
     Config(
         jwt = JWTConfig(
-            realm = property("jwt.realm").getString(),
             domain = property("jwt.domain").getString(),
             secret = property("jwt.secret").getString()
         ),

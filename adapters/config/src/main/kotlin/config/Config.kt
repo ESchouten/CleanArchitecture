@@ -19,7 +19,6 @@ data class Config(
 data class JWTConfig(
     val domain: String,
     val secret: String,
-    val realm: String,
 )
 
 data class JDBC(
