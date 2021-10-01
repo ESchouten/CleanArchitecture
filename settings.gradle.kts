@@ -22,7 +22,7 @@ dependencyResolutionManagement {
             version("kotlin", "1.6.0-M1")
             version("shadowjar", "7.0.0")
             version("coroutines", "1.5.2")
-            version("ktor", "1.6.3")
+            version("ktor", "1.6.4")
             version("logback", "1.2.6")
             version("koin", "3.1.2")
             version("kgraphql", "0.17.14")
