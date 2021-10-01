@@ -13,7 +13,6 @@ import io.ktor.auth.jwt.*
 import io.ktor.features.*
 import io.ktor.server.cio.*
 import kotlinx.coroutines.launch
-import org.koin.core.annotation.KoinInternalApi
 import org.koin.ktor.ext.Koin
 import org.koin.ktor.ext.get
 import usecases.dependency.Authenticator
@@ -21,7 +20,6 @@ import usecases.model.UserModel
 
 fun main(args: Array<String>) = EngineMain.main(args)
 
-@KoinInternalApi
 @Suppress("unused")
 fun Application.module(testing: Boolean = false) {
     install(DefaultHeaders)

@@ -70,7 +70,7 @@ suspend fun setup(userRepository: UserRepository, passwordEncoder: PasswordEncod
     }
 }
 
-@KoinInternalApi
+@OptIn(KoinInternalApi::class)
 inline fun <reified T : Any> getAll(): Collection<T> =
     getKoin().let { koin ->
         koin.instanceRegistry.instances.values.map { it.beanDefinition }
