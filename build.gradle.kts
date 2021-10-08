@@ -17,7 +17,7 @@ subprojects {
 
     afterEvaluate {
         dependencies {
-            "testImplementation"(kotlin("test"))
+            "testImplementation"(kotlin("test", libs.versions.kotlin.get()))
             "testImplementation"("io.mockk", "mockk", libs.versions.mockk.get())
         }
     }

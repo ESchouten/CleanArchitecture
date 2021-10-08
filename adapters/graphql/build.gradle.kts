@@ -4,5 +4,5 @@ dependencies {
 
     implementation("com.apurebase", "kgraphql", libs.versions.kgraphql.get())
 
-    implementation(kotlin("reflect"))
+    implementation(kotlin("reflect", libs.versions.kotlin.get()))
 }

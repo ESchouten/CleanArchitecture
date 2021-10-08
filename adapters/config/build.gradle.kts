@@ -5,5 +5,5 @@ dependencies {
     implementation(projects.adapters.repositories)
 
     api("io.insert-koin", "koin-core", libs.versions.koin.get())
-    implementation(kotlin("reflect"))
+    implementation(kotlin("reflect", libs.versions.kotlin.get()))
 }
