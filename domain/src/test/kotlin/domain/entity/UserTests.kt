@@ -11,7 +11,7 @@ import kotlin.test.assertFailsWith
 class UserTests {
 
     @Test
-    fun Valid() {
+    fun `Valid`() {
         User(
             email = Email("erik@erikschouten.com"),
             authorities = listOf(Authorities.USER),
