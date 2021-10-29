@@ -24,7 +24,7 @@ dependencyResolutionManagement {
             version("coroutines", "1.5.2")
             version("ktor", "1.6.4")
             version("logback", "1.3.0-alpha10")
-            version("koin", "3.1.2")
+            version("koin", "3.1.3")
             version("kgraphql", "0.17.14")
             version("exposed", "0.36.1")
             version("jwt", "3.18.2")
