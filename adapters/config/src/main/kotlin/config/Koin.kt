@@ -7,7 +7,6 @@ import domain.entity.user.Email
 import domain.entity.user.Password
 import domain.entity.user.User
 import domain.repository.UserRepository
-import org.koin.core.annotation.KoinInternalApi
 import org.koin.core.definition.Kind
 import org.koin.core.instance.newInstance
 import org.koin.core.module.Module
@@ -70,7 +69,6 @@ suspend fun setup(userRepository: UserRepository, passwordEncoder: PasswordEncod
     }
 }
 
-@OptIn(KoinInternalApi::class)
 inline fun <reified T : Any> getAll(): Collection<T> =
     getKoin().let { koin ->
         koin.instanceRegistry.instances.values.map { it.beanDefinition }
