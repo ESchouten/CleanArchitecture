@@ -1,4 +1,4 @@
-package server
+package infrastructure
 
 import authentication.JWTAuthenticatorImpl
 import com.apurebase.kgraphql.GraphQL

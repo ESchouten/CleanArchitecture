@@ -10,7 +10,7 @@ The application is separated into three modules: Domain, Usecases and Adapters
 The domain and usecases modules do not have any external dependencies.
 
 - Adapter layer: each adapter is implemented as a standalone module, lowering dependence on specific frameworks and
-  libraries and making them interchangable. The server module consumes all adapters (e.g. databases, (graphql)
+  libraries and making them interchangable. The infrastructure module consumes all adapters (e.g. databases, (graphql)
   endpoints, authentication logic)
 
 GraphQL endpoints are auto-generated from the Usecases

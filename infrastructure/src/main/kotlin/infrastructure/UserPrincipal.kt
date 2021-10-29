@@ -1,4 +1,4 @@
-package server
+package infrastructure
 
 import domain.entity.user.Authorities
 import domain.entity.user.Email

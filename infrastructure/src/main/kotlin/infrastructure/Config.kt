@@ -1,4 +1,4 @@
-package server
+package infrastructure
 
 import config.Config
 import config.DatabaseType

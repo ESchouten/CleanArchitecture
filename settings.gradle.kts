@@ -8,11 +8,11 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 include(
     ":domain",
     ":use-cases",
+    ":infrastructure",
     ":adapters:authentication",
     ":adapters:config",
     ":adapters:graphql",
-    ":adapters:repositories",
-    ":adapters:server"
+    ":adapters:repositories"
 )
 
 enableFeaturePreview("VERSION_CATALOGS")
