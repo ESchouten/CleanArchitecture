@@ -1,4 +1,4 @@
-package infrastructure
+package ktor
 
 import config.Config
 import config.DatabaseType

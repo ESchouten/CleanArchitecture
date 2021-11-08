@@ -1,4 +1,4 @@
-package infrastructure
+package ktor
 
 import domain.entity.user.Authorities
 import domain.entity.user.Email
