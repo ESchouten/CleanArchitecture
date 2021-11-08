@@ -10,7 +10,11 @@ data class User(
     val email: Email,
     val authorities: List<Authorities>,
     val password: PasswordHash,
-) : Entity
+) : Entity {
+    override fun toString(): String {
+        return "User(id=$id, email=$email, authorities=$authorities)"
+    }
+}
 
 enum class Authorities {
     USER
@@ -22,13 +26,25 @@ data class Email(override val value: String) : ValueClass<String> {
     }
 }
 
-open class Password(override val value: String) : ValueClass<String>
+open class Password(override val value: String) : ValueClass<String> {
+    override fun toString(): String {
+        return "Password()"
+    }
+}
 
 class NewPassword(value: String) : Password(value) {
     init {
         if (!value.matches(Regex("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@\$%^&*-]).{8,}\$")))
             throw PasswordInvalidException()
     }
+
+    override fun toString(): String {
+        return "NewPassword()"
+    }
 }
 
-data class PasswordHash(override val value: String) : ValueClass<String>
+data class PasswordHash(override val value: String) : ValueClass<String> {
+    override fun toString(): String {
+        return "PasswordHash()"
+    }
+}
