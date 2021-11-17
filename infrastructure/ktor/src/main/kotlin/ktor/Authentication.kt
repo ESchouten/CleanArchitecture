@@ -31,7 +31,7 @@ class UserPrincipal private constructor(
     fun toUserModel() = UserModel(id, email, authorities)
 }
 
-fun Application.loginModule() {
+fun Application.loginModule(config: Config) {
 
     install(ForwardedHeaderSupport)
     install(Authentication) {
@@ -56,7 +56,6 @@ fun Application.loginModule() {
             try {
                 val login = call.receive<Map<String, String>>()
                     .let { LoginUserModel(Email(it["email"]!!), Password(it["password"]!!)) }
-                val config = this@routing.get<Config>()
                 val loginUser = this@routing.get<LoginUser>()
                 call.response.cookies.append(
                     Cookie(

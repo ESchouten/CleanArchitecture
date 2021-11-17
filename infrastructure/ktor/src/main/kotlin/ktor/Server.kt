@@ -33,7 +33,7 @@ fun Application.module(testing: Boolean = false) {
         modules(modules(config))
     }
 
-    loginModule()
+    loginModule(config)
 
     install(GraphQL) {
         this.playground = config.development
