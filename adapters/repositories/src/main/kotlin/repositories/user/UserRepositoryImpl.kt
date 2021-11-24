@@ -3,17 +3,26 @@ package repositories.user
 import domain.AlreadyExistsException
 import domain.entity.user.Email
 import domain.entity.user.User
+import domain.repository.Pagination
+import domain.repository.PaginationResult
 import domain.repository.UserRepository
 import repositories.DatabaseFactory.query
 import repositories.DefaultDAO
 
 class UserRepositoryImpl : UserRepository, DefaultDAO<User, Int, UserEntity>(UserEntity) {
-    override suspend fun findByEmail(email: Email) = query {
-        UserEntity.find { UserTable.email eq email.value }.firstOrNull()?.toUser()
+
+    override suspend fun findAll(pagination: Pagination) = query {
+        val query = pagination.search?.let {
+            UserEntity.find { UserTable.email like "%$it%" }
+        } ?: UserEntity.all()
+        PaginationResult(
+            query.copy().limit(pagination.itemsPerPage, pagination.offset()).map { it.toDomain() },
+            query.copy().count()
+        )
     }
 
-    override suspend fun findAllByEmails(emails: List<Email>) = query {
-        UserEntity.find { UserTable.email.inList(emails.map { it.value }) }.map { it.toUser() }
+    override suspend fun findByEmail(email: Email) = query {
+        UserEntity.find { UserTable.email eq email.value }.firstOrNull()?.toUser()
     }
 
     override suspend fun create(entity: User) = query {
@@ -80,5 +89,13 @@ class InMemoryUserRepository : UserRepository {
     override suspend fun count() = users.size.toLong()
 
     override suspend fun findByEmail(email: Email) = users.values.find { it.email == email }
-    override suspend fun findAllByEmails(emails: List<Email>) = users.values.filter { emails.contains(it.email) }
+    override suspend fun findAll(pagination: Pagination): PaginationResult<User> {
+        val users = pagination.search?.let { search ->
+            users.values.filter { it.email.value.contains(search) }
+        } ?: users.values.toList()
+        return PaginationResult(
+            users.slice(pagination.offset().toInt()..pagination.offset().toInt() + pagination.itemsPerPage),
+            users.size.toLong()
+        )
+    }
 }
