@@ -15,9 +15,9 @@ internal object UserTable : IntIdTable() {
 }
 
 class UserEntity(id: EntityID<Int>) : IntEntity(id) {
-    var email by UserTable.email.transform({ email -> email.value }, { email -> Email(email) })
+    var email by UserTable.email.transform({ it.value }, { Email(it) })
     val authorities by AuthorityEntity referrersOn AuthorityTable.user
-    var password by UserTable.password.transform({ password -> password.value }, { password -> PasswordHash(password) })
+    var password by UserTable.password.transform({ it.value }, { PasswordHash(it) })
 
     companion object : IntEntityClass<UserEntity>(UserTable)
 
@@ -31,9 +31,7 @@ internal object AuthorityTable : IntIdTable() {
 
 class AuthorityEntity(id: EntityID<Int>) : IntEntity(id) {
     var user by UserEntity referencedOn AuthorityTable.user
-    var authority by AuthorityTable.authority.transform(
-        { authority -> authority.name },
-        { authority -> Authorities.valueOf(authority) })
+    var authority by AuthorityTable.authority.transform({ it.name }, { Authorities.valueOf(it) })
 
     companion object : IntEntityClass<AuthorityEntity>(AuthorityTable)
 }
