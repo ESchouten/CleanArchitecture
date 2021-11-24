@@ -32,7 +32,6 @@ private fun userModule(config: Config) = module {
     single<ChangePassword>()
     single<CreateUser>()
     single<DeleteUser>()
-    single<FindUsers>()
     single<GetUser>()
     single<ListUsers>()
     single<LoginUser>()
@@ -63,6 +62,13 @@ suspend fun setup(userRepository: UserRepository, passwordEncoder: PasswordEncod
             User(
                 email = Email("erik@erikschouten.com"),
                 authorities = listOf(Authorities.USER),
+                password = passwordEncoder.encode(Password("P@ssw0rd!"))
+            )
+        )
+        userRepository.create(
+            User(
+                email = Email("schouten@erikschouten.com"),
+                authorities = emptyList(),
                 password = passwordEncoder.encode(Password("P@ssw0rd!"))
             )
         )

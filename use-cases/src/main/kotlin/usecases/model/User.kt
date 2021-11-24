@@ -1,6 +1,7 @@
 package usecases.model
 
 import domain.entity.user.*
+import domain.repository.PaginationResult
 import usecases.dependency.PasswordEncoder
 
 data class UserModel(
@@ -42,3 +43,6 @@ data class LoginUserModel(
     val email: Email,
     val password: Password,
 )
+
+class UserPaginationResult(pagination: PaginationResult<User>) :
+    PaginationResult<UserModel>(pagination.transform { UserModel(it) })

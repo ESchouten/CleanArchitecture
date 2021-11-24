@@ -1,11 +1,13 @@
 package repositories
 
+import domain.repository.Pagination
+import domain.repository.PaginationResult
 import domain.repository.Repository
 import org.jetbrains.exposed.dao.Entity
 import org.jetbrains.exposed.dao.EntityClass
 import repositories.DatabaseFactory.query
 
-abstract class DefaultDAO<Domain, ID : Comparable<ID>, E : Entity<ID>>(
+abstract class DefaultDAO<Domain : Any, ID : Comparable<ID>, E : Entity<ID>>(
     private val dao: EntityClass<ID, E>
 ) : Repository<Domain, ID> {
     abstract fun E.toDomain(): Domain
@@ -16,6 +18,13 @@ abstract class DefaultDAO<Domain, ID : Comparable<ID>, E : Entity<ID>>(
 
     override suspend fun findAll() = query {
         dao.all().map { it.toDomain() }
+    }
+
+    override suspend fun findAll(pagination: Pagination) = query {
+        PaginationResult(
+            dao.all().limit(pagination.itemsPerPage, pagination.offset()).map { it.toDomain() },
+            count()
+        )
     }
 
     override suspend fun delete(id: ID) = query {
