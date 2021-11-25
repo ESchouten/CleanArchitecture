@@ -40,15 +40,14 @@ object DatabaseFactory {
             }
         }
 
-        transaction {
-            SchemaUtils.createMissingTablesAndColumns(UserTable, AuthorityTable)
-        }
-
         Flyway.configure()
-            .baselineOnMigrate(true)
             .locations("classpath:repositories/db/migration")
             .dataSource(ds)
             .load()
             .migrate()
+
+        transaction {
+            SchemaUtils.createMissingTablesAndColumns(UserTable, AuthorityTable)
+        }
     }
 }
