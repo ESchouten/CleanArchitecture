@@ -6,6 +6,7 @@ import domain.entity.user.User
 import domain.repository.Pagination
 import domain.repository.PaginationResult
 import domain.repository.UserRepository
+import repositories.DatabaseFactory.orderOrDefault
 import repositories.DatabaseFactory.query
 import repositories.DefaultDAO
 
@@ -16,7 +17,10 @@ class UserRepositoryImpl : UserRepository, DefaultDAO<User, Int, UserEntity>(Use
             UserEntity.find { UserTable.email like "%$it%" }
         } ?: UserEntity.all()
         PaginationResult(
-            query.copy().limit(pagination.itemsPerPage, pagination.offset()).map { it.toDomain() },
+            query.copy()
+                .limit(pagination.itemsPerPage, pagination.offset())
+                .orderBy(UserTable.email to pagination.sort?.order.orderOrDefault())
+                .map { it.toDomain() },
             query.copy().count()
         )
     }

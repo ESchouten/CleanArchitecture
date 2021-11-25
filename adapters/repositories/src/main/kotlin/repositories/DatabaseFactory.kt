@@ -2,9 +2,11 @@ package repositories
 
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
+import domain.repository.Order
 import org.flywaydb.core.Flyway
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
+import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -57,4 +59,10 @@ object DatabaseFactory {
     suspend fun <T> query(
         block: suspend () -> T
     ): T = newSuspendedTransaction { block() }
+
+    fun Order?.orderOrDefault() = (this ?: Order.ASC).order()
+    fun Order.order() = when (this) {
+        Order.ASC -> SortOrder.ASC
+        Order.DESC -> SortOrder.DESC
+    }
 }
