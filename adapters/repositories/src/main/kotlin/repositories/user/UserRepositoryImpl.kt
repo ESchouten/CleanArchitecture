@@ -6,9 +6,9 @@ import domain.entity.user.User
 import domain.repository.Pagination
 import domain.repository.PaginationResult
 import domain.repository.UserRepository
-import repositories.DatabaseFactory.orderOrDefault
-import repositories.DatabaseFactory.query
 import repositories.DefaultDAO
+import repositories.order
+import repositories.query
 
 class UserRepositoryImpl : UserRepository, DefaultDAO<User, Int, UserEntity>(UserEntity) {
 
@@ -19,7 +19,7 @@ class UserRepositoryImpl : UserRepository, DefaultDAO<User, Int, UserEntity>(Use
         PaginationResult(
             query.copy()
                 .limit(pagination.itemsPerPage, pagination.offset())
-                .orderBy(UserTable.email to pagination.sort?.order.orderOrDefault())
+                .order(listOf(UserTable.email), pagination)
                 .map { it.toDomain() },
             query.copy().count()
         )
