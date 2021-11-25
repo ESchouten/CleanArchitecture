@@ -14,12 +14,22 @@ fun Order?.order() = when (this ?: Order.ASC) {
     Order.DESC -> SortOrder.DESC
 }
 
-fun <T> SizedIterable<T>.order(table: Table, columns: List<Column<*>>, pagination: Pagination, default: Column<*>) =
+fun <T> SizedIterable<T>.order(
+    table: Table,
+    columns: List<Column<*>>,
+    pagination: Pagination,
+    default: Pair<Column<*>, Order>
+) =
     order(table.columns + columns, pagination, default)
 
-fun <T> SizedIterable<T>.order(columns: List<Column<*>>, pagination: Pagination, default: Column<*>): SizedIterable<T> {
-    val column = pagination.sort?.by?.let { by -> columns.find { it.name == by } } ?: default
-    return orderBy(column to pagination.sort?.order.order())
+fun <T> SizedIterable<T>.order(
+    columns: List<Column<*>>,
+    pagination: Pagination,
+    default: Pair<Column<*>, Order>
+): SizedIterable<T> {
+    val column = pagination.sort?.by?.let { by -> columns.find { it.name == by } } ?: default.first
+    val order = (pagination.sort?.order ?: default.second).order()
+    return orderBy(column to order)
 }
 
 fun SqlExpressionBuilder.search(

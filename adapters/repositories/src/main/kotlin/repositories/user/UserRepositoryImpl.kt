@@ -3,6 +3,7 @@ package repositories.user
 import domain.AlreadyExistsException
 import domain.entity.user.Email
 import domain.entity.user.User
+import domain.repository.Order
 import domain.repository.Pagination
 import domain.repository.PaginationResult
 import domain.repository.UserRepository
@@ -19,7 +20,7 @@ class UserRepositoryImpl : UserRepository, DefaultDAO<User, Int, UserEntity>(Use
         PaginationResult(
             query.copy()
                 .limit(pagination.itemsPerPage, pagination.offset())
-                .order(listOf(UserTable.id, UserTable.email), pagination, UserTable.email)
+                .order(listOf(UserTable.id, UserTable.email), pagination, UserTable.email to Order.ASC)
                 .map { it.toDomain() },
             query.copy().count()
         )
