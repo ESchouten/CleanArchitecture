@@ -9,17 +9,17 @@ import domain.repository.UserRepository
 import repositories.DefaultDAO
 import repositories.order
 import repositories.query
+import repositories.search
 
 class UserRepositoryImpl : UserRepository, DefaultDAO<User, Int, UserEntity>(UserEntity) {
 
     override suspend fun findAll(pagination: Pagination) = query {
-        val query = pagination.search?.let {
-            UserEntity.find { UserTable.email like "%$it%" }
-        } ?: UserEntity.all()
+        val userColumns = listOf(UserTable.email, UserTable.id)
+        val query = UserEntity.find { search(UserTable to userColumns, pagination) }
         PaginationResult(
             query.copy()
                 .limit(pagination.itemsPerPage, pagination.offset())
-                .order(listOf(UserTable.email), pagination)
+                .order(listOf(UserTable.id, UserTable.email), pagination, UserTable.email)
                 .map { it.toDomain() },
             query.copy().count()
         )

@@ -2,10 +2,7 @@ package repositories
 
 import domain.repository.Order
 import domain.repository.Pagination
-import org.jetbrains.exposed.sql.Column
-import org.jetbrains.exposed.sql.SizedIterable
-import org.jetbrains.exposed.sql.SortOrder
-import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 
 suspend fun <T> query(
@@ -17,11 +14,42 @@ fun Order?.order() = when (this ?: Order.ASC) {
     Order.DESC -> SortOrder.DESC
 }
 
-fun <T> SizedIterable<T>.order(table: Table, pagination: Pagination) = order(table.columns, pagination)
-fun <T> SizedIterable<T>.order(columns: List<Column<*>>, pagination: Pagination): SizedIterable<T> {
-    return pagination.sort?.let { sort ->
-        columns.find { it.name == sort.by }?.let { column ->
-            orderBy(column to sort.order.order())
-        }
-    } ?: this
+fun <T> SizedIterable<T>.order(table: Table, columns: List<Column<*>>, pagination: Pagination, default: Column<*>) =
+    order(table.columns + columns, pagination, default)
+
+fun <T> SizedIterable<T>.order(columns: List<Column<*>>, pagination: Pagination, default: Column<*>): SizedIterable<T> {
+    val column = pagination.sort?.by?.let { by -> columns.find { it.name == by } } ?: default
+    return orderBy(column to pagination.sort?.order.order())
 }
+
+fun SqlExpressionBuilder.search(
+    tables: List<Table>,
+    tablesColumns: Map<Table, List<Column<*>>?>,
+    pagination: Pagination
+) = search(tables.associateWith { null } + tablesColumns, pagination)
+
+fun SqlExpressionBuilder.search(table: Table, pagination: Pagination) = search(table to null, pagination)
+fun SqlExpressionBuilder.search(tables: List<Table>, pagination: Pagination) =
+    search(tables.associateWith { null }, pagination)
+
+fun SqlExpressionBuilder.search(table: Pair<Table, List<Column<*>>?>, pagination: Pagination) =
+    search(mapOf(table), pagination)
+
+fun SqlExpressionBuilder.search(tables: Map<Table, List<Column<*>>?>, pagination: Pagination) =
+    pagination.search?.let { search ->
+        var buffer: Op<Boolean>? = null
+        tables.flatMap { doSearch(it.toPair(), search) }.forEach {
+            buffer = buffer?.or(it) ?: it
+        }
+        buffer
+    } ?: Op.TRUE
+
+private fun SqlExpressionBuilder.doSearch(table: Pair<Table, List<Column<*>>?>, search: String) =
+    doSearch(table.first, table.second ?: table.first.columns, search)
+
+private fun SqlExpressionBuilder.doSearch(table: Table, columns: List<Column<*>>, search: String) = columns
+    .filter { it.columnType is VarCharColumnType || it.columnType is TextColumnType }
+    .filterIsInstance<Column<String>>()
+    .map { (if (table is Alias<*>) table[it] else it) like "%${search}%" }
+
+
