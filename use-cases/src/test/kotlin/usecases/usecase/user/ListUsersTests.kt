@@ -2,6 +2,8 @@ package usecases.usecase.user
 
 import domain.AuthorizationException
 import domain.LoginException
+import domain.repository.Pagination
+import domain.repository.PaginationResult
 import domain.repository.UserRepository
 import io.mockk.every
 import io.mockk.mockk
@@ -15,12 +17,13 @@ class ListUsersTests : UsecaseTests {
 
     val repository = mockk<UserRepository>()
     override val usecase = ListUsers(repository)
+    val pagination = Pagination(10, 1)
 
     @Test
     override fun success() {
         runBlocking {
-            every { runBlocking { repository.findAll() } } returns listOf(user)
-            val result = usecase(userModel)
+            every { runBlocking { repository.findAll(any()) } } returns PaginationResult(listOf(user), 1)
+            val result = usecase(userModel, pagination).items
             assertEquals(result, listOf(userModel))
         }
     }
@@ -29,7 +32,7 @@ class ListUsersTests : UsecaseTests {
     override fun unauthenticated() {
         runBlocking {
             assertFailsWith<LoginException> {
-                usecase(null)
+                usecase(null, pagination)
             }
         }
     }
@@ -38,7 +41,7 @@ class ListUsersTests : UsecaseTests {
     override fun `No user roles`() {
         runBlocking {
             assertFailsWith<AuthorizationException> {
-                usecase(userModel.copy(authorities = emptyList()))
+                usecase(userModel.copy(authorities = emptyList()), pagination)
             }
         }
     }
