@@ -14,6 +14,9 @@ fun Order?.order() = when (this ?: Order.ASC) {
     Order.DESC -> SortOrder.DESC
 }
 
+fun <T> SizedIterable<T>.order(table: Table, pagination: Pagination, default: Pair<Column<*>, Order>) =
+    order(table.columns, pagination, default)
+
 fun <T> SizedIterable<T>.order(
     table: Table,
     columns: List<Column<*>>,
