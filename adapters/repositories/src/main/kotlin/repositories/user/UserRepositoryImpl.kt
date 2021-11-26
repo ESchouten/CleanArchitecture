@@ -91,7 +91,10 @@ class InMemoryUserRepository : UserRepository {
         users.remove(id)
     }
 
-    override suspend fun count() = users.size.toLong()
+    override suspend fun count(pagination: Pagination?) =
+        (pagination?.search?.let { search ->
+            users.values.filter { it.email.value.contains(search) }
+        } ?: users.values.toList()).size.toLong()
 
     override suspend fun findByEmail(email: Email) = users.values.find { it.email == email }
     override suspend fun findAll(pagination: Pagination): PaginationResult<User> {
