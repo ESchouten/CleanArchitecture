@@ -33,21 +33,33 @@ object DatabaseFactory {
         val ds = HikariDataSource(config)
         Database.connect(ds)
 
+        val tables = arrayOf(UserTable, AuthorityTable)
+
         if (drop) {
             transaction {
-                SchemaUtils.drop(UserTable, AuthorityTable)
+                SchemaUtils.drop(*tables)
                 SchemaUtils.drop(Table("flyway_schema_history"))
             }
         }
 
-        Flyway.configure()
+        val flyway = Flyway.configure()
+            .baselineOnMigrate(true)
             .locations("classpath:repositories/db/migration")
             .dataSource(ds)
             .load()
-            .migrate()
+
+        // If database is empty, first create missing tables and columns, then baseline
+        // Else apply migrations before renamed tables and columns are created as new instead of being renamed
+        if (flyway.info().current() != null) {
+            flyway.migrate()
+        }
 
         transaction {
-            SchemaUtils.createMissingTablesAndColumns(UserTable, AuthorityTable)
+            SchemaUtils.createMissingTablesAndColumns(*tables)
+        }
+
+        if (flyway.info().current() == null) {
+            flyway.migrate()
         }
     }
 }
