@@ -17,7 +17,8 @@ object DatabaseFactory {
         schema: String,
         username: String = "",
         password: String = "",
-        drop: Boolean = false
+        drop: Boolean = false,
+        test: Boolean = false
     ) {
         val config = HikariConfig().apply {
             driverClassName = driver
@@ -42,15 +43,17 @@ object DatabaseFactory {
             }
         }
 
-        val flyway = Flyway.configure()
-            .baselineOnMigrate(true)
-            .locations("classpath:repositories/db/migration")
-            .dataSource(ds)
-            .load()
+        val flyway = if (!test) {
+            Flyway.configure()
+                .baselineOnMigrate(true)
+                .locations("classpath:repositories/db/migration")
+                .dataSource(ds)
+                .load()
+        } else null
 
         // If database is empty, first create missing tables and columns, then baseline
         // Else apply migrations before renamed tables and columns are created as new instead of being renamed
-        if (flyway.info().current() != null) {
+        if (flyway?.info()?.current() != null) {
             flyway.migrate()
         }
 
@@ -58,8 +61,8 @@ object DatabaseFactory {
             SchemaUtils.createMissingTablesAndColumns(*tables)
         }
 
-        if (flyway.info().current() == null) {
-            flyway.migrate()
+        if (flyway?.info()?.current() == null) {
+            flyway?.migrate()
         }
     }
 }
