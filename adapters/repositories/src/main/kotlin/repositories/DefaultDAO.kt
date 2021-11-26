@@ -1,5 +1,6 @@
 package repositories
 
+import domain.repository.Order
 import domain.repository.Pagination
 import domain.repository.PaginationResult
 import domain.repository.Repository
@@ -21,7 +22,10 @@ abstract class DefaultDAO<Domain : Any, ID : Comparable<ID>, E : Entity<ID>>(
 
     override suspend fun findAll(pagination: Pagination) = query {
         PaginationResult(
-            dao.all().limit(pagination.itemsPerPage, pagination.offset()).map { it.toDomain() },
+            dao
+                .find { search(dao.table, pagination) }
+                .order(dao.table, pagination, dao.table.id to Order.ASC)
+                .limit(pagination.itemsPerPage, pagination.offset()).map { it.toDomain() },
             count()
         )
     }
