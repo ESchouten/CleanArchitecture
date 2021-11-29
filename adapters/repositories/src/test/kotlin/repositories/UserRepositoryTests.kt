@@ -42,7 +42,7 @@ class UserRepositoryTests {
             assertEquals(user.password, created.password)
             // Get created user
             assertEquals(created, repository.findByEmail(email))
-            assertEquals(created, repository.findAll(Pagination(10, 1, user.email.value)).items.first())
+            assertEquals(created, repository.findAll(Pagination(10, 0, user.email.value)).items.first())
             // Get all created users
             assertEquals(1, repository.count())
             assertEquals(created, repository.findAll().first())

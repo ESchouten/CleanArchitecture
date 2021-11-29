@@ -6,7 +6,7 @@ data class Pagination(
     val search: String? = null,
     val sort: Sort? = null
 ) {
-    fun offset() = (page - 1) * itemsPerPage.toLong()
+    fun offset() = page * itemsPerPage.toLong()
 }
 
 data class Sort(

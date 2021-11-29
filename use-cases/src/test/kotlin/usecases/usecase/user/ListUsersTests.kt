@@ -17,7 +17,7 @@ class ListUsersTests : UsecaseTests {
 
     val repository = mockk<UserRepository>()
     override val usecase = ListUsers(repository)
-    val pagination = Pagination(10, 1)
+    val pagination = Pagination(10, 0)
 
     @Test
     override fun success() {
