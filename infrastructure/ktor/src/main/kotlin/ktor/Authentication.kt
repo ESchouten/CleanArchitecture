@@ -72,5 +72,10 @@ fun Application.loginModule(config: Config) {
                 call.respond(HttpStatusCode.Unauthorized)
             }
         }
+
+        post("/logout") {
+            call.response.cookies.appendExpired(AUTH_COOKIE)
+            call.respond(HttpStatusCode.OK)
+        }
     }
 }
