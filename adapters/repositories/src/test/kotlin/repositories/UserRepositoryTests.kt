@@ -1,6 +1,7 @@
 package repositories
 
 import domain.entity.user.*
+import domain.repository.Pagination
 import kotlinx.coroutines.runBlocking
 import repositories.user.UserRepositoryImpl
 import kotlin.test.*
@@ -41,7 +42,7 @@ class UserRepositoryTests {
             assertEquals(user.password, created.password)
             // Get created user
             assertEquals(created, repository.findByEmail(email))
-            assertEquals(created, repository.findAllByEmails(listOf(user.email)).first())
+            assertEquals(created, repository.findAll(Pagination(10, 0, user.email.value)).items.first())
             // Get all created users
             assertEquals(1, repository.count())
             assertEquals(created, repository.findAll().first())

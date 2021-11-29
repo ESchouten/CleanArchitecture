@@ -10,7 +10,7 @@ import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.IntIdTable
 
 internal object UserTable : IntIdTable() {
-    val email = varchar("name", 50).index(isUnique = true)
+    val email = varchar("email", 50).index(isUnique = true)
     val password = varchar("password", 200)
 }
 

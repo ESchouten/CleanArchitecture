@@ -3,20 +3,25 @@ package repositories.user
 import domain.AlreadyExistsException
 import domain.entity.user.Email
 import domain.entity.user.User
+import domain.repository.Order
 import domain.repository.Pagination
 import domain.repository.PaginationResult
 import domain.repository.UserRepository
-import repositories.DatabaseFactory.query
 import repositories.DefaultDAO
+import repositories.order
+import repositories.query
+import repositories.search
 
 class UserRepositoryImpl : UserRepository, DefaultDAO<User, Int, UserEntity>(UserEntity) {
 
     override suspend fun findAll(pagination: Pagination) = query {
-        val query = pagination.search?.let {
-            UserEntity.find { UserTable.email like "%$it%" }
-        } ?: UserEntity.all()
+        val userColumns = listOf(UserTable.email, UserTable.id)
+        val query = UserEntity.find { search(UserTable to userColumns, pagination) }
         PaginationResult(
-            query.copy().limit(pagination.itemsPerPage, pagination.offset()).map { it.toDomain() },
+            query.copy()
+                .limit(pagination.itemsPerPage, pagination.offset())
+                .order(listOf(UserTable.id, UserTable.email), pagination, UserTable.email to Order.ASC)
+                .map { it.toDomain() },
             query.copy().count()
         )
     }
@@ -86,7 +91,10 @@ class InMemoryUserRepository : UserRepository {
         users.remove(id)
     }
 
-    override suspend fun count() = users.size.toLong()
+    override suspend fun count(pagination: Pagination?) =
+        (pagination?.search?.let { search ->
+            users.values.filter { it.email.value.contains(search) }
+        } ?: users.values.toList()).size.toLong()
 
     override suspend fun findByEmail(email: Email) = users.values.find { it.email == email }
     override suspend fun findAll(pagination: Pagination): PaginationResult<User> {

@@ -6,7 +6,6 @@ import org.flywaydb.core.Flyway
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.Table
-import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import org.jetbrains.exposed.sql.transactions.transaction
 import repositories.user.AuthorityTable
 import repositories.user.UserTable
@@ -18,7 +17,8 @@ object DatabaseFactory {
         schema: String,
         username: String = "",
         password: String = "",
-        drop: Boolean = false
+        drop: Boolean = false,
+        test: Boolean = false
     ) {
         val config = HikariConfig().apply {
             driverClassName = driver
@@ -34,27 +34,35 @@ object DatabaseFactory {
         val ds = HikariDataSource(config)
         Database.connect(ds)
 
+        val tables = arrayOf(UserTable, AuthorityTable)
+
         if (drop) {
             transaction {
-                SchemaUtils.drop(UserTable, AuthorityTable)
+                SchemaUtils.drop(*tables)
                 SchemaUtils.drop(Table("flyway_schema_history"))
             }
         }
 
-        transaction {
-            SchemaUtils.createMissingTablesAndColumns(UserTable, AuthorityTable)
+        val flyway = if (!test) {
+            Flyway.configure()
+                .baselineOnMigrate(true)
+                .locations("classpath:repositories/db/migration")
+                .dataSource(ds)
+                .load()
+        } else null
+
+        // If database is empty, first create missing tables and columns, then baseline
+        // Else apply migrations before renamed tables and columns are created as new instead of being renamed
+        if (flyway?.info()?.current() != null) {
+            flyway.migrate()
         }
 
-        Flyway.configure()
-            .baselineOnMigrate(true)
-            .locations("classpath:repositories/db/migration")
-            .dataSource(ds)
-            .load()
-            .migrate()
+        transaction {
+            SchemaUtils.createMissingTablesAndColumns(*tables)
+        }
+
+        if (flyway?.info()?.current() == null) {
+            flyway?.migrate()
+        }
     }
-
-
-    suspend fun <T> query(
-        block: suspend () -> T
-    ): T = newSuspendedTransaction { block() }
 }
