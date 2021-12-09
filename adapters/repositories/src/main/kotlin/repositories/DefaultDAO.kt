@@ -21,11 +21,12 @@ abstract class DefaultDAO<Domain : Any, ID : Comparable<ID>, E : Entity<ID>>(
     }
 
     override suspend fun findAll(pagination: Pagination) = query {
-        val query = dao.find { search(dao.table, pagination) }
+        val query = dao.query(pagination)
         PaginationResult(
             query.copy()
-                .order(dao.table, pagination, dao.table.id to Order.ASC)
-                .limit(pagination.itemsPerPage, pagination.offset()).map { it.toDomain() },
+                .limit(pagination)
+                .order(dao.table, pagination.sort, dao.table.id to Order.ASC)
+                .map { it.toDomain() },
             query.copy().count()
         )
     }
@@ -35,8 +36,6 @@ abstract class DefaultDAO<Domain : Any, ID : Comparable<ID>, E : Entity<ID>>(
     }
 
     override suspend fun count(pagination: Pagination?) = query {
-        (pagination?.let {
-            dao.find { search(dao.table, it) }
-        } ?: dao.all()).count()
+        dao.query(pagination).count()
     }
 }
