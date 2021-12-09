@@ -6,6 +6,9 @@ import domain.repository.PaginationResult
 import domain.repository.Repository
 import org.jetbrains.exposed.dao.Entity
 import org.jetbrains.exposed.dao.EntityClass
+import repositories.utils.limit
+import repositories.utils.order
+import repositories.utils.query
 
 abstract class DefaultDAO<Domain : Any, ID : Comparable<ID>, E : Entity<ID>>(
     private val dao: EntityClass<ID, E>

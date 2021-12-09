@@ -9,9 +9,10 @@ import domain.repository.PaginationResult
 import domain.repository.UserRepository
 import org.jetbrains.exposed.sql.SqlExpressionBuilder
 import repositories.DefaultDAO
-import repositories.order
-import repositories.query
-import repositories.search
+import repositories.utils.limit
+import repositories.utils.order
+import repositories.utils.query
+import repositories.utils.search
 
 class UserRepositoryImpl : UserRepository, DefaultDAO<User, Int, UserEntity>(UserEntity) {
 
@@ -24,7 +25,7 @@ class UserRepositoryImpl : UserRepository, DefaultDAO<User, Int, UserEntity>(Use
         } ?: UserEntity.all()
         PaginationResult(
             query.copy()
-                .limit(pagination.itemsPerPage, pagination.offset())
+                .limit(pagination)
                 .order(listOf(UserTable.id, UserTable.email), pagination.sort, UserTable.email to Order.ASC)
                 .map { it.toDomain() },
             query.copy().count()
