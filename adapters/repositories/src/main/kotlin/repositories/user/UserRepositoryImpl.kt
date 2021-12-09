@@ -9,17 +9,14 @@ import domain.repository.PaginationResult
 import domain.repository.UserRepository
 import org.jetbrains.exposed.sql.SqlExpressionBuilder
 import repositories.DefaultDAO
-import repositories.utils.limit
-import repositories.utils.order
-import repositories.utils.query
-import repositories.utils.search
+import repositories.utils.*
 
 class UserRepositoryImpl : UserRepository, DefaultDAO<User, Int, UserEntity>(UserEntity) {
 
     override suspend fun findAll(pagination: Pagination) = query {
         val userColumns = listOf(UserTable.email, UserTable.id)
         val query = pagination.search?.let {
-            SqlExpressionBuilder.search(UserTable to userColumns, it)?.let {
+            SqlExpressionBuilder.search(listOf(SearchFields(UserTable, userColumns)), it)?.let {
                 UserEntity.find { it }
             }
         } ?: UserEntity.all()

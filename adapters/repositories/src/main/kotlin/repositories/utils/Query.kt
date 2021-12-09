@@ -11,12 +11,11 @@ import org.jetbrains.exposed.sql.and
 fun <ID : Comparable<ID>, E : Entity<ID>> EntityClass<ID, E>.query(pagination: Pagination?) =
     (filters(pagination)?.let { find(it) } ?: all()).limit(pagination)
 
-fun <ID : Comparable<ID>, E : Entity<ID>> EntityClass<ID, E>.filters(pagination: Pagination?): Op<Boolean>? {
-    val filters = listOfNotNull(
-        pagination?.search?.let {
-            SqlExpressionBuilder.search(table, it)
-        }
-    ).toMutableList()
+fun <ID : Comparable<ID>, E : Entity<ID>> EntityClass<ID, E>.filters(
+    pagination: Pagination?,
+    fields: List<SearchFields> = SearchFields.of(table)
+): Op<Boolean>? {
+    val filters = listOfNotNull(pagination?.search?.let { SqlExpressionBuilder.search(fields, it) }).toMutableList()
     return if (filters.isNotEmpty()) {
         var statement = filters.removeFirstOrNull()
         filters.forEach {
