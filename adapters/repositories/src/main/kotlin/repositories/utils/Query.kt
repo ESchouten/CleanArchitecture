@@ -18,9 +18,9 @@ fun <ID : Comparable<ID>, E : Entity<ID>> EntityClass<ID, E>.filters(pagination:
         }
     ).toMutableList()
     return if (filters.isNotEmpty()) {
-        var statement = filters.removeFirst()
+        var statement = filters.removeFirstOrNull()
         filters.forEach {
-            statement = statement.and(it)
+            statement = statement?.and(it)
         }
         return statement
     } else null
