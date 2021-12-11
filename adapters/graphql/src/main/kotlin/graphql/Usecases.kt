@@ -21,6 +21,10 @@ fun usecases(usecases: Collection<UsecaseType<*>>): SchemaBuilder.() -> Unit = {
         deserialize = { id: String -> UUID.fromString(id) }
         serialize = UUID::toString
     }
+    longScalar<Date> {
+        deserialize = { date: Long -> Date(date) }
+        serialize = Date::getTime
+    }
 
     usecases(usecases)
 }
