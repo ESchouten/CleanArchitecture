@@ -20,7 +20,7 @@ sealed class UsecaseType<R : Any>(
     open val authenticated = true
     fun auth(authentication: UserModel?): UserModel? =
         if (authenticated) {
-            if (authentication == null) authentication ?: throw LoginException()
+            if (authentication == null) throw LoginException()
             if (authorities.isNotEmpty() && !authorities.any { it in authentication.authorities }) {
                 throw AuthorizationException()
             }
