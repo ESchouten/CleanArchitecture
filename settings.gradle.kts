@@ -31,8 +31,8 @@ dependencyResolutionManagement {
             version("bcrypt", "0.9.0")
             version("hikari", "5.0.1")
             version("mariadb", "3.0.3")
-            version("h2", "1.4.200")
-            version("flyway", "8.1.0")
+            version("h2", "2.1.210")
+            version("flyway", "8.5.1")
             version("mockk", "1.12.2")
             version("updateversions", "0.42.0")
         }
