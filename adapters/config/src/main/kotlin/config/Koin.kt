@@ -8,7 +8,6 @@ import domain.entity.user.Password
 import domain.entity.user.User
 import domain.repository.UserRepository
 import org.koin.core.definition.Kind
-import org.koin.core.instance.newInstance
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
@@ -37,14 +36,12 @@ private fun userModule(config: Config) = module {
     singleOf(::UpdateUser)
     singleOf(::UserExists)
 
-    single {
-        newInstance(
-            when (config.database) {
-                DatabaseType.LOCAL -> InMemoryUserRepository::class
-                DatabaseType.JDBC -> UserRepositoryImpl::class
-            }, it
-        )
-    }
+    singleOf(
+        when (config.database) {
+            DatabaseType.LOCAL -> ::InMemoryUserRepository
+            DatabaseType.JDBC -> ::UserRepositoryImpl
+        }
+    )
 
     single<Authenticator> {
         JWTAuthenticatorImpl(
