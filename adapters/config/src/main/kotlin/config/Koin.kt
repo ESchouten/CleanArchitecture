@@ -10,9 +10,9 @@ import domain.repository.UserRepository
 import org.koin.core.definition.Kind
 import org.koin.core.instance.newInstance
 import org.koin.core.module.Module
+import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
-import org.koin.dsl.single
 import org.koin.java.KoinJavaComponent.getKoin
 import repositories.user.InMemoryUserRepository
 import repositories.user.UserRepositoryImpl
@@ -25,25 +25,24 @@ fun modules(config: Config): List<Module> {
     return listOf(userModule(config))
 }
 
-@Suppress("USELESS_CAST")
 private fun userModule(config: Config) = module {
-    single<AuthenticatedUser>()
-    single<ChangeOwnPassword>()
-    single<ChangePassword>()
-    single<CreateUser>()
-    single<DeleteUser>()
-    single<GetUser>()
-    single<ListUsers>()
-    single<LoginUser>()
-    single<UpdateUser>()
-    single<UserExists>()
+    singleOf(::AuthenticatedUser)
+    singleOf(::ChangeOwnPassword)
+    singleOf(::ChangePassword)
+    singleOf(::CreateUser)
+    singleOf(::DeleteUser)
+    singleOf(::GetUser)
+    singleOf(::ListUsers)
+    singleOf(::LoginUser)
+    singleOf(::UpdateUser)
+    singleOf(::UserExists)
 
-    single { params ->
+    single {
         newInstance(
             when (config.database) {
                 DatabaseType.LOCAL -> InMemoryUserRepository::class
                 DatabaseType.JDBC -> UserRepositoryImpl::class
-            }, params
+            }, it
         )
     }
 
@@ -53,7 +52,7 @@ private fun userModule(config: Config) = module {
             secret = config.jwt.secret
         )
     }
-    single<PasswordEncoderImpl>().bind<PasswordEncoder>()
+    singleOf(::PasswordEncoderImpl).bind<PasswordEncoder>()
 }
 
 suspend fun setup(userRepository: UserRepository, passwordEncoder: PasswordEncoder) {
