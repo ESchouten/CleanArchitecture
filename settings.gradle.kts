@@ -15,7 +15,6 @@ include(
     ":adapters:repositories"
 )
 
-enableFeaturePreview("VERSION_CATALOGS")
 dependencyResolutionManagement {
     versionCatalogs {
         create("libs") {
@@ -32,8 +31,8 @@ dependencyResolutionManagement {
             version("hikari", "5.0.1")
             version("mariadb", "3.0.3")
             version("h2", "2.1.210")
-            version("flyway", "8.5.1")
-            version("mockk", "1.12.2")
+            version("flyway", "8.5.2")
+            version("mockk", "1.12.3")
             version("updateversions", "0.42.0")
         }
     }
