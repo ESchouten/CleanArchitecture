@@ -21,7 +21,7 @@ dependencyResolutionManagement {
             version("kotlin", "1.6.20-RC")
             version("shadowjar", "7.1.2")
             version("coroutines", "1.6.0")
-            version("ktor", "1.6.7")
+            version("ktor", "1.6.8")
             version("logback", "1.3.0-alpha14")
             version("koin", "3.2.0-beta-1")
             version("kgraphql", "0.17.14")
@@ -31,7 +31,7 @@ dependencyResolutionManagement {
             version("hikari", "5.0.1")
             version("mariadb", "3.0.3")
             version("h2", "2.1.210")
-            version("flyway", "8.5.2")
+            version("flyway", "8.5.4")
             version("mockk", "1.12.3")
             version("updateversions", "0.42.0")
         }
