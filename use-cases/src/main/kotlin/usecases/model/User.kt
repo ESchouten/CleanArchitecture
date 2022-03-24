@@ -8,16 +8,18 @@ data class UserModel(
     val id: Int,
     val email: Email,
     val authorities: List<Authorities>,
+    val locked: Boolean
 ) {
-    constructor(user: User) : this(user.id, user.email, user.authorities)
+    constructor(user: User) : this(user.id, user.email, user.authorities, user.locked)
 }
 
 data class UpdateUserModel(
     val id: Int,
     val email: Email,
     val authorities: List<Authorities>,
+    val locked: Boolean
 ) {
-    fun toUser(hash: PasswordHash) = User(email = email, authorities = authorities, password = hash)
+    fun toUser(hash: PasswordHash) = User(email = email, authorities = authorities, password = hash, locked = locked)
 }
 
 data class ChangeOwnPasswordModel(
@@ -34,9 +36,10 @@ data class CreateUserModel(
     val email: Email,
     val authorities: List<Authorities>,
     val password: NewPassword,
+    val locked: Boolean
 ) {
     fun toUser(encoder: PasswordEncoder) =
-        User(email = email, authorities = authorities, password = encoder.encode(password))
+        User(email = email, authorities = authorities, password = encoder.encode(password), locked = locked)
 }
 
 data class LoginUserModel(

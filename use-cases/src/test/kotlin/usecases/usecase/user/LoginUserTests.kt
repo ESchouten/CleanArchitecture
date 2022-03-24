@@ -28,6 +28,7 @@ class LoginUserTests : UsecaseTests {
     @Test
     override fun success() {
         runBlocking {
+            val user = user.copy(authorities = emptyList(), locked = false)
             every { runBlocking { repository.findByEmail(email) } } returns user
             every { passwordEncoder.matches(password, PasswordHash(password.value.reversed())) } returns true
             every { authenticator.generate(UserModel(user)) } returns "token"
@@ -60,6 +61,17 @@ class LoginUserTests : UsecaseTests {
                 every { runBlocking { repository.findByEmail(email) } } returns user
                 every { passwordEncoder.matches(pass, PasswordHash(password.value.reversed())) } returns false
                 usecase(null, loginUserModel.copy(password = pass))
+            }
+        }
+    }
+
+    @Test
+    fun locked() {
+        runBlocking {
+            assertFailsWith<LoginException> {
+                val user = user.copy(locked = true)
+                every { runBlocking { repository.findByEmail(email) } } returns user
+                usecase(null, loginUserModel)
             }
         }
     }

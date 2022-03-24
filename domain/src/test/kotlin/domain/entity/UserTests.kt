@@ -15,7 +15,8 @@ class UserTests {
         User(
             email = Email("erik@erikschouten.com"),
             authorities = listOf(Authorities.USER),
-            password = PasswordHash("P@ssw0rd!".reversed())
+            password = PasswordHash("P@ssw0rd!".reversed()),
+            locked = true
         )
     }
 

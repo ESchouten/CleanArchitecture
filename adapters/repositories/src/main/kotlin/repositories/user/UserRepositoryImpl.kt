@@ -37,6 +37,7 @@ class UserRepositoryImpl : UserRepository, DefaultDAO<User, Int, UserEntity>(Use
         val user = UserEntity.new {
             email = entity.email
             password = entity.password
+            locked = entity.locked
         }
 
         entity.authorities.forEach {
@@ -53,6 +54,7 @@ class UserRepositoryImpl : UserRepository, DefaultDAO<User, Int, UserEntity>(Use
         val user = UserEntity[entity.id].apply {
             email = entity.email
             password = entity.password
+            locked = entity.locked
         }
 
         val currentAuthorities = AuthorityEntity.find { AuthorityTable.user eq user.id }.toMutableList()

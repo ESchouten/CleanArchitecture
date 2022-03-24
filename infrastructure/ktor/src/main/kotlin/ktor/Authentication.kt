@@ -28,7 +28,7 @@ class UserPrincipal private constructor(
 ) : Principal {
     constructor(user: UserModel) : this(user.id, user.email, user.authorities)
 
-    fun toUserModel() = UserModel(id, email, authorities)
+    fun toUserModel() = UserModel(id, email, authorities, false)
 }
 
 fun Application.loginModule(config: Config) {

@@ -21,7 +21,7 @@ class CreateUserTests : UsecaseTests {
     val userExists = UserExists(repository)
     override val usecase = CreateUser(repository, userExists, passwordEncoder)
 
-    val createUserModel = CreateUserModel(email, listOf(Authorities.USER), NewPassword(password.value))
+    val createUserModel = CreateUserModel(email, listOf(Authorities.USER), NewPassword(password.value), true)
 
     @Test
     override fun success() {

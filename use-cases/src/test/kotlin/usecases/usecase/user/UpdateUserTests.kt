@@ -21,8 +21,9 @@ class UpdateUserTests : UsecaseTests {
     val userExists = UserExists(repository)
     override val usecase = UpdateUser(repository, userExists)
 
-    val updateUserModel = UpdateUserModel(user.id, user.email, user.authorities)
-    val userModel = UserModel(updateUserModel.id, updateUserModel.email, updateUserModel.authorities)
+    val updateUserModel = UpdateUserModel(user.id, user.email, user.authorities, user.locked)
+    val userModel =
+        UserModel(updateUserModel.id, updateUserModel.email, updateUserModel.authorities, updateUserModel.locked)
 
     @Test
     override fun success() {

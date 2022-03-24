@@ -10,6 +10,7 @@ data class User(
     val email: Email,
     val authorities: List<Authorities>,
     val password: PasswordHash,
+    val locked: Boolean
 ) : Entity {
     override fun toString(): String {
         return "User(id=$id, email=$email, authorities=$authorities)"

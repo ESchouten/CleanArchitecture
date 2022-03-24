@@ -11,7 +11,9 @@ class UserRepositoryTests {
     private val email = Email("erik@erikschouten.com")
     private val password = Password("P@ssw0rd!")
     private val passwordHash = PasswordHash(password.value.reversed())
-    private val user = User(email = email, authorities = listOf(Authorities.USER), password = passwordHash)
+    private val locked = true
+    private val user =
+        User(email = email, authorities = listOf(Authorities.USER), password = passwordHash, locked = locked)
 
     private val newEmail = Email("calvin@cargoledger.nl")
     private val newPassword = Password("P@ssw0rd!123")

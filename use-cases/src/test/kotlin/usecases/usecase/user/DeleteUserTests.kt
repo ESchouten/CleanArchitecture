@@ -16,7 +16,7 @@ class DeleteUserTests : UsecaseTests {
     val repository = mockk<UserRepository>()
     override val usecase = DeleteUser(repository)
 
-    val userModel = UserModel(user.id, user.email, user.authorities)
+    val userModel = UserModel(user)
 
     @Test
     override fun success() {
