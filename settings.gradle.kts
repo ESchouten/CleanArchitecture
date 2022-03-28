@@ -29,7 +29,7 @@ dependencyResolutionManagement {
             version("jwt", "3.18.3")
             version("bcrypt", "0.9.0")
             version("hikari", "5.0.1")
-            version("mariadb", "3.0.3")
+            version("mariadb", "3.0.4")
             version("h2", "2.1.210")
             version("flyway", "8.5.4")
             version("mockk", "1.12.3")
