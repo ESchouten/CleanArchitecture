@@ -21,6 +21,8 @@ import usecases.model.LoginUserModel
 import usecases.model.UserModel
 import usecases.usecase.user.LoginUser
 
+private const val AUTH_COOKIE = "JWT"
+
 class UserPrincipal private constructor(
     val id: Int,
     val email: Email,

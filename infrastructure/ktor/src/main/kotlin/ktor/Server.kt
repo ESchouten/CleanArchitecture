@@ -16,8 +16,6 @@ import ktor.plugins.get
 
 fun main(args: Array<String>) = EngineMain.main(args)
 
-internal const val AUTH_COOKIE = "JWT"
-
 @Suppress("unused")
 fun Application.module(testing: Boolean = false) {
     install(DefaultHeaders)
