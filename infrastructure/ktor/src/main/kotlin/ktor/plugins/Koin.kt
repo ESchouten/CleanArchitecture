@@ -1,4 +1,4 @@
-package ktor
+package ktor.plugins
 
 import io.ktor.events.EventDefinition
 import io.ktor.server.application.*
@@ -17,12 +17,12 @@ val KApplicationStopPreparing = EventDefinition<KoinApplication>()
 val KApplicationStopped = EventDefinition<KoinApplication>()
 
 // Custom Koin plugin since Koin has no Ktor 2.0 support yet
-internal class KoinPlugin(internal val koinApplication: KoinApplication) {
-    companion object Plugin : ApplicationPlugin<ApplicationCallPipeline, KoinApplication, KoinPlugin> {
-        override val key = AttributeKey<KoinPlugin>("CustomKoinPlugin")
+internal class Koin(internal val koinApplication: KoinApplication) {
+    companion object Plugin : ApplicationPlugin<ApplicationCallPipeline, KoinApplication, ktor.plugins.Koin> {
+        override val key = AttributeKey<ktor.plugins.Koin>("CustomKoinPlugin")
         override fun install(
             pipeline: ApplicationCallPipeline, configure: KoinApplication.() -> Unit
-        ): KoinPlugin {
+        ): ktor.plugins.Koin {
             val monitor = pipeline.environment?.monitor
             val koinApplication = startKoin(appDeclaration = configure)
             if (monitor != null) {
@@ -33,7 +33,7 @@ internal class KoinPlugin(internal val koinApplication: KoinApplication) {
                     monitor.raise(KApplicationStopped, koinApplication)
                 }
             }
-            return KoinPlugin(koinApplication)
+            return Koin(koinApplication)
         }
     }
 }

@@ -15,7 +15,7 @@ import io.ktor.server.plugins.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import org.koin.ktor.ext.get
+import ktor.plugins.get
 import usecases.dependency.Authenticator
 import usecases.model.LoginUserModel
 import usecases.model.UserModel

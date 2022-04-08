@@ -42,6 +42,8 @@ dependencies {
     implementation("io.ktor", "ktor-server-default-headers", libs.versions.ktor.get())
     implementation("ch.qos.logback", "logback-classic", libs.versions.logback.get())
     implementation("io.insert-koin", "koin-ktor", libs.versions.koin.get())
+    implementation("com.apurebase", "kgraphql-ktor", libs.versions.kgraphql.get())
+
     // Custom KGraphql build for Ktor 2.0 support
-    implementation("com.github.ESchouten.KGraphQL", "kgraphql-ktor", libs.versions.kgraphql.get())
+    implementation("io.ktor", "ktor-serialization-kotlinx-json", libs.versions.ktor.get())
 }

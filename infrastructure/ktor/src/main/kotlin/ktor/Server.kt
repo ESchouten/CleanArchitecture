@@ -1,6 +1,5 @@
 package ktor
 
-import com.apurebase.kgraphql.GraphQL
 import config.getAll
 import config.modules
 import config.setup
@@ -11,6 +10,9 @@ import io.ktor.server.auth.*
 import io.ktor.server.cio.*
 import io.ktor.server.plugins.*
 import kotlinx.coroutines.launch
+import ktor.plugins.GraphQL
+import ktor.plugins.Koin
+import ktor.plugins.get
 
 fun main(args: Array<String>) = EngineMain.main(args)
 
@@ -27,7 +29,7 @@ fun Application.module(testing: Boolean = false) {
 
     val config = config()
 
-    install(KoinPlugin) {
+    install(Koin) {
         modules(modules(config))
     }
 

@@ -24,7 +24,7 @@ dependencyResolutionManagement {
             version("ktor", "2.0.0-beta-1")
             version("logback", "1.3.0-alpha14")
             version("koin", "3.2.0-beta-1")
-            version("kgraphql", "3bb8858eaa")
+            version("kgraphql", "0.17.14")
             version("exposed", "0.37.3")
             version("jwt", "3.18.3")
             version("bcrypt", "0.9.0")
