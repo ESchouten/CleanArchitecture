@@ -4,7 +4,7 @@ import config.Config
 import config.DatabaseType
 import config.JDBC
 import config.JWTConfig
-import io.ktor.application.*
+import io.ktor.server.application.*
 
 fun Application.config() = environment.config.run {
     val databaseType = DatabaseType.valueOf(property("database.type").getString())

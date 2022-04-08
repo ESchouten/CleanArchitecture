@@ -6,20 +6,22 @@ import domain.entity.user.Authorities
 import domain.entity.user.Email
 import domain.entity.user.Password
 import domain.repository.UserRepository
-import io.ktor.application.*
-import io.ktor.auth.*
-import io.ktor.auth.jwt.*
-import io.ktor.features.*
 import io.ktor.http.*
 import io.ktor.http.auth.*
-import io.ktor.request.*
-import io.ktor.response.*
-import io.ktor.routing.*
-import org.koin.ktor.ext.get
+import io.ktor.server.application.*
+import io.ktor.server.auth.*
+import io.ktor.server.auth.jwt.*
+import io.ktor.server.plugins.*
+import io.ktor.server.request.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
+import ktor.plugins.get
 import usecases.dependency.Authenticator
 import usecases.model.LoginUserModel
 import usecases.model.UserModel
 import usecases.usecase.user.LoginUser
+
+private const val AUTH_COOKIE = "JWT"
 
 class UserPrincipal private constructor(
     val id: Int,

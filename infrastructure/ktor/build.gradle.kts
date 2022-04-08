@@ -33,10 +33,17 @@ dependencies {
 
     implementation("io.ktor", "ktor-server-core", libs.versions.ktor.get())
     implementation("io.ktor", "ktor-server-cio", libs.versions.ktor.get())
-    implementation("io.ktor", "ktor-gson", libs.versions.ktor.get())
-    implementation("io.ktor", "ktor-auth", libs.versions.ktor.get())
-    implementation("io.ktor", "ktor-auth-jwt", libs.versions.ktor.get())
+    implementation("io.ktor", "ktor-server-auth", libs.versions.ktor.get())
+    implementation("io.ktor", "ktor-server-auth-jwt", libs.versions.ktor.get())
+    implementation("io.ktor", "ktor-server-forwarded-header", libs.versions.ktor.get())
+    implementation("io.ktor", "ktor-server-content-negotiation", libs.versions.ktor.get())
+    implementation("io.ktor", "ktor-serialization-gson", libs.versions.ktor.get())
+    implementation("io.ktor", "ktor-server-call-logging", libs.versions.ktor.get())
+    implementation("io.ktor", "ktor-server-default-headers", libs.versions.ktor.get())
     implementation("ch.qos.logback", "logback-classic", libs.versions.logback.get())
     implementation("io.insert-koin", "koin-ktor", libs.versions.koin.get())
     implementation("com.apurebase", "kgraphql-ktor", libs.versions.kgraphql.get())
+
+    // Custom KGraphql build for Ktor 2.0 support
+    implementation("io.ktor", "ktor-serialization-kotlinx-json", libs.versions.ktor.get())
 }

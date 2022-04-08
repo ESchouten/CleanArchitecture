@@ -1,22 +1,20 @@
 package ktor
 
-import com.apurebase.kgraphql.GraphQL
 import config.getAll
 import config.modules
 import config.setup
 import graphql.usecases
-import io.ktor.application.*
-import io.ktor.auth.*
-import io.ktor.features.*
-import io.ktor.gson.*
+import io.ktor.serialization.gson.*
+import io.ktor.server.application.*
+import io.ktor.server.auth.*
 import io.ktor.server.cio.*
+import io.ktor.server.plugins.*
 import kotlinx.coroutines.launch
-import org.koin.ktor.ext.Koin
-import org.koin.ktor.ext.get
+import ktor.plugins.GraphQL
+import ktor.plugins.Koin
+import ktor.plugins.get
 
 fun main(args: Array<String>) = EngineMain.main(args)
-
-internal const val AUTH_COOKIE = "JWT"
 
 @Suppress("unused")
 fun Application.module(testing: Boolean = false) {
