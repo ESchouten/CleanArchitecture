@@ -8,7 +8,6 @@ import domain.repository.UserRepository
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
-import usecases.model.UpdateUserModel
 import usecases.model.UserModel
 import usecases.usecase.UsecaseTests
 import kotlin.test.Test
@@ -21,16 +20,14 @@ class UpdateUserTests : UsecaseTests {
     val userExists = UserExists(repository)
     override val usecase = UpdateUser(repository, userExists)
 
-    val updateUserModel = UpdateUserModel(user.id, user.email, user.authorities, user.locked)
-    val userModel =
-        UserModel(updateUserModel.id, updateUserModel.email, updateUserModel.authorities, updateUserModel.locked)
+    val userModel = UserModel(user.id, user.email, user.authorities, user.locked)
 
     @Test
     override fun success() {
         runBlocking {
-            every { runBlocking { repository.findById(updateUserModel.id) } } returns user
+            every { runBlocking { repository.findById(userModel.id) } } returns user
             every { runBlocking { repository.update(any()) } } returns user
-            val result = usecase(userModel, updateUserModel)
+            val result = usecase(userModel, userModel)
 
             assertEquals(userModel, result)
         }
@@ -40,7 +37,7 @@ class UpdateUserTests : UsecaseTests {
     override fun unauthenticated() {
         runBlocking {
             assertFailsWith<LoginException> {
-                usecase(null, updateUserModel)
+                usecase(null, userModel)
             }
         }
     }
@@ -49,7 +46,7 @@ class UpdateUserTests : UsecaseTests {
     override fun `No user roles`() {
         runBlocking {
             assertFailsWith<AuthorizationException> {
-                usecase(userModel.copy(authorities = emptyList()), updateUserModel)
+                usecase(userModel.copy(authorities = emptyList()), userModel)
             }
         }
     }
@@ -59,10 +56,10 @@ class UpdateUserTests : UsecaseTests {
         runBlocking {
             assertFailsWith<EmailAlreadyExistsException> {
                 val newEmail = Email("calvin@cargoledger.nl")
-                every { runBlocking { repository.findById(updateUserModel.id) } } returns user
+                every { runBlocking { repository.findById(userModel.id) } } returns user
                 every { runBlocking { repository.findByEmail(newEmail) } } returns user.copy(email = newEmail)
                 every { runBlocking { repository.update(any()) } } returns user
-                val result = usecase(userModel, updateUserModel.copy(email = newEmail))
+                val result = usecase(userModel, userModel.copy(email = newEmail))
 
                 assertEquals(result, userModel.copy(email = newEmail))
             }
