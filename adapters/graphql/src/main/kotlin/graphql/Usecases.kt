@@ -36,12 +36,19 @@ fun SchemaBuilder.usecases(usecases: Collection<UsecaseType<*>>) {
         .map { it.kClass }
         .toSet()
 
-    val types = usecases.filter { it::class.hasAnnotation<Query>() || it::class.hasAnnotation<Mutation>() }.flatMap {
-        usecase(it)
-        types(it)
-    }.toSet()
+    val input = mutableSetOf<KClass<*>>()
+    val output = mutableSetOf<KClass<*>>()
 
-    types(types, scalars).forEach { type(it) }
+    usecases.filter { it::class.hasAnnotation<Query>() || it::class.hasAnnotation<Mutation>() }.map {
+        usecase(it)
+        input.addAll(inputTypes(it))
+        output.addAll(outputTypes(it))
+    }
+
+    val allInput = types(input, scalars)
+    val allOutput = types(output, scalars)
+
+    (allInput + allOutput).forEach { type(it, allInput.contains(it), allOutput.contains(it)) }
 }
 
 fun SchemaBuilder.usecase(usecase: UsecaseType<*>) {
@@ -83,7 +90,8 @@ fun <R, A0, U : UsecaseA1<A0, R>> AbstractOperationDSL.usecase(usecase: U): Reso
     }
 }
 
-fun types(usecase: UsecaseType<*>) = (usecase.args + usecase.result).flatMap { types(it) }
+fun inputTypes(usecase: UsecaseType<*>) = usecase.args.flatMap { types(it) }
+fun outputTypes(usecase: UsecaseType<*>) = types(usecase.result)
 
 fun types(type: KType): List<KClass<*>> = type.arguments.mapNotNull { it.type?.let { types(it) } }.flatten() +
         if (type.isCollection()) {
@@ -103,11 +111,20 @@ fun types(types: Set<KClass<*>>, ignore: Set<KClass<*>>): Set<KClass<*>> {
 }
 
 @Suppress("UNCHECKED_CAST")
-fun <T : Any> SchemaBuilder.type(type: KClass<T>) {
+fun <T : Any> SchemaBuilder.type(type: KClass<T>, input: Boolean, output: Boolean) {
     when {
         type.java.isEnum -> enum(type as KClass<out Enum<*>>)
         type.isValue || type.allSuperclasses.any { it == ValueClass::class } -> valueClassScalar(type)
-        else -> type(type) {}
+        else -> {
+            if (input) {
+                type(type) {
+                    this.name = type.simpleName + "Input"
+                }
+            }
+            if (output) {
+                type(type) {}
+            }
+        }
     }
 }
 

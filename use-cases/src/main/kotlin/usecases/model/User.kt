@@ -11,14 +11,7 @@ data class UserModel(
     val locked: Boolean
 ) {
     constructor(user: User) : this(user.id, user.email, user.authorities, user.locked)
-}
 
-data class UpdateUserModel(
-    val id: Int,
-    val email: Email,
-    val authorities: List<Authorities>,
-    val locked: Boolean
-) {
     fun toUser(hash: PasswordHash) =
         User(id = id, email = email, authorities = authorities, password = hash, locked = locked)
 }
