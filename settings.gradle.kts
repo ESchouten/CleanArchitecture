@@ -26,7 +26,7 @@ dependencyResolutionManagement {
             version("koin", "3.2.0-beta-1")
             version("kgraphql", "0.17.14")
             version("exposed", "0.37.3")
-            version("jwt", "3.18.3")
+            version("jwt", "3.19.1")
             version("bcrypt", "0.9.0")
             version("hikari", "5.0.1")
             version("mariadb", "3.0.4")
