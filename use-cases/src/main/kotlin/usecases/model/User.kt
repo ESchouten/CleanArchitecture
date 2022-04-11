@@ -19,7 +19,8 @@ data class UpdateUserModel(
     val authorities: List<Authorities>,
     val locked: Boolean
 ) {
-    fun toUser(hash: PasswordHash) = User(email = email, authorities = authorities, password = hash, locked = locked)
+    fun toUser(hash: PasswordHash) =
+        User(id = id, email = email, authorities = authorities, password = hash, locked = locked)
 }
 
 data class ChangeOwnPasswordModel(
