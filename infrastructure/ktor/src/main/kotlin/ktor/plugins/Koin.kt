@@ -18,7 +18,7 @@ val KApplicationStopped = EventDefinition<KoinApplication>()
 
 // Custom Koin plugin since Koin has no Ktor 2.0 support yet
 internal class Koin(internal val koinApplication: KoinApplication) {
-    companion object Plugin : ApplicationPlugin<ApplicationCallPipeline, KoinApplication, ktor.plugins.Koin> {
+    companion object Plugin : BaseApplicationPlugin<ApplicationCallPipeline, KoinApplication, ktor.plugins.Koin> {
         override val key = AttributeKey<ktor.plugins.Koin>("CustomKoinPlugin")
         override fun install(
             pipeline: ApplicationCallPipeline, configure: KoinApplication.() -> Unit

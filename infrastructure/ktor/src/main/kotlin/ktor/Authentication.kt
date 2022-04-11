@@ -11,7 +11,7 @@ import io.ktor.http.auth.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*
-import io.ktor.server.plugins.*
+import io.ktor.server.plugins.forwardedheaders.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
@@ -35,15 +35,15 @@ class UserPrincipal private constructor(
 
 fun Application.loginModule(config: Config) {
 
-    install(ForwardedHeaderSupport)
+    install(ForwardedHeaders)
     install(Authentication) {
         jwt {
             authHeader {
                 it.request.cookies[AUTH_COOKIE]?.let { parseAuthorizationHeader(it) }
                     ?: it.request.parseAuthorizationHeader()
             }
-            val authenticator = get<Authenticator>() as JWTAuthenticatorImpl
-            val userRepository = get<UserRepository>()
+            val authenticator = this@loginModule.get<Authenticator>() as JWTAuthenticatorImpl
+            val userRepository = this@loginModule.get<UserRepository>()
             verifier(authenticator.verifier)
             validate { credential ->
                 userRepository.findById(credential.payload.subject.toInt())?.let {

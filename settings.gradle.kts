@@ -18,10 +18,10 @@ include(
 dependencyResolutionManagement {
     versionCatalogs {
         create("libs") {
-            version("kotlin", "1.6.20-RC2")
+            version("kotlin", "1.6.20")
             version("shadowjar", "7.1.2")
-            version("coroutines", "1.6.0")
-            version("ktor", "2.0.0-beta-1")
+            version("coroutines", "1.6.1")
+            version("ktor", "2.0.0")
             version("logback", "1.3.0-alpha14")
             version("koin", "3.2.0-beta-1")
             version("kgraphql", "0.17.14")
@@ -30,8 +30,8 @@ dependencyResolutionManagement {
             version("bcrypt", "0.9.0")
             version("hikari", "5.0.1")
             version("mariadb", "3.0.4")
-            version("h2", "2.1.210")
-            version("flyway", "8.5.4")
+            version("h2", "2.1.212")
+            version("flyway", "8.5.7")
             version("mockk", "1.12.3")
             version("updateversions", "0.42.0")
         }
