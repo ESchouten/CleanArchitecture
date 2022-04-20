@@ -2,7 +2,6 @@ package ktor
 
 import authentication.JWTAuthenticatorImpl
 import config.Config
-import domain.entity.user.Authorities
 import domain.entity.user.Email
 import domain.entity.user.Password
 import domain.repository.UserRepository
@@ -23,15 +22,9 @@ import usecases.usecase.user.LoginUser
 
 private const val AUTH_COOKIE = "JWT"
 
-class UserPrincipal private constructor(
-    val id: Int,
-    val email: Email,
-    val authorities: List<Authorities>,
-) : Principal {
-    constructor(user: UserModel) : this(user.id, user.email, user.authorities)
-
-    fun toUserModel() = UserModel(id, email, authorities, false)
-}
+class UserPrincipal(
+    val user: UserModel
+) : Principal
 
 fun Application.loginModule(config: Config) {
 

@@ -44,7 +44,7 @@ fun Application.module(testing: Boolean = false) {
 
         context { call ->
             call.authentication.principal<UserPrincipal>()?.let {
-                +it.toUserModel()
+                +it.user
             }
         }
 
