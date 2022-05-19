@@ -14,8 +14,10 @@ class SearchFields(
 
 fun SqlExpressionBuilder.search(fields: List<SearchFields>, search: String): Op<Boolean>? {
     var buffer: Op<Boolean>? = null
-    fields.flatMap { doSearch(it, search) }.forEach {
-        buffer = buffer?.or(it) ?: it
+    if (search.isNotEmpty()) {
+        fields.flatMap { doSearch(it, search) }.forEach {
+            buffer = buffer?.or(it) ?: it
+        }
     }
     return buffer
 }
