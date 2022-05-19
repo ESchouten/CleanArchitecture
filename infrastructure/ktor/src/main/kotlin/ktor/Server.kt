@@ -13,8 +13,8 @@ import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.plugins.defaultheaders.*
 import kotlinx.coroutines.launch
 import ktor.plugins.GraphQL
-import ktor.plugins.Koin
 import ktor.plugins.get
+import org.koin.ktor.plugin.Koin
 
 fun main(args: Array<String>) = EngineMain.main(args)
 

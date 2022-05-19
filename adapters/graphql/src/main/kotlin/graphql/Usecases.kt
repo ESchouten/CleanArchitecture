@@ -107,7 +107,6 @@ fun <T : Any> SchemaBuilder.type(type: KClass<T>) {
     when {
         type.java.isEnum -> enum(type as KClass<out Enum<*>>)
         type.isValue || type.allSuperclasses.any { it == ValueClass::class } -> valueClassScalar(type)
-        else -> type(type) {}
     }
 }
 
