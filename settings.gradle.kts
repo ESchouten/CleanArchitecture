@@ -14,6 +14,7 @@ include(
     ":adapters:authentication",
     ":adapters:config",
     ":adapters:graphql",
+    ":adapters:logging",
     ":adapters:repositories"
 )
 
@@ -24,6 +25,7 @@ dependencyResolutionManagement {
             version("shadowjar", "7.1.2")
             version("coroutines", "1.6.2")
             version("ktor", "2.0.1")
+            version("slf4j", "1.7.32")
             version("logback", "1.3.0-alpha16")
             version("koin", "3.2.0")
             version("kgraphql", "0.17.14")

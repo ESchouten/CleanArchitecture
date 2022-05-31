@@ -4,6 +4,7 @@ import domain.AuthorizationException
 import domain.UserNotFoundException
 import domain.entity.user.Authorities
 import domain.repository.UserRepository
+import usecases.dependency.Logger
 import usecases.dependency.PasswordEncoder
 import usecases.model.ChangePasswordModel
 import usecases.model.UserModel
@@ -13,9 +14,10 @@ import kotlin.reflect.typeOf
 
 @Mutation
 class ChangePassword(
+    logger: Logger,
     private val repository: UserRepository,
     private val passwordEncoder: PasswordEncoder
-) : UsecaseA1<ChangePasswordModel, UserModel>(typeOf<ChangePasswordModel>(), typeOf<UserModel>()) {
+) : UsecaseA1<ChangePasswordModel, UserModel>(typeOf<ChangePasswordModel>(), typeOf<UserModel>(), logger) {
 
     override val authorities = emptyList<Authorities>()
     override suspend fun executor(authentication: UserModel?, a0: ChangePasswordModel): UserModel {
