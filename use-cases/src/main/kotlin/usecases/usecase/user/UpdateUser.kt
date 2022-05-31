@@ -4,6 +4,7 @@ import domain.EmailAlreadyExistsException
 import domain.UserNotFoundException
 import domain.entity.user.Authorities
 import domain.repository.UserRepository
+import usecases.dependency.Logger
 import usecases.model.UpdateUserModel
 import usecases.model.UserModel
 import usecases.usecase.Mutation
@@ -12,9 +13,10 @@ import kotlin.reflect.typeOf
 
 @Mutation
 class UpdateUser(
+    logger: Logger,
     private val repository: UserRepository,
     private val userExists: UserExists,
-) : UsecaseA1<UpdateUserModel, UserModel>(typeOf<UpdateUserModel>(), typeOf<UserModel>()) {
+) : UsecaseA1<UpdateUserModel, UserModel>(typeOf<UpdateUserModel>(), typeOf<UserModel>(), logger) {
 
     override val authorities = listOf(Authorities.USER)
     override suspend fun executor(authentication: UserModel?, a0: UpdateUserModel): UserModel {

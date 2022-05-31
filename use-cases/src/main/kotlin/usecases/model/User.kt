@@ -26,12 +26,20 @@ data class UpdateUserModel(
 data class ChangeOwnPasswordModel(
     val current: Password,
     val password: NewPassword
-)
+) {
+    override fun toString(): String {
+        return "ChangeOwnPasswordModel()"
+    }
+}
 
 data class ChangePasswordModel(
     val id: Int,
     val password: NewPassword
-)
+) {
+    override fun toString(): String {
+        return "ChangePasswordModel(id=$id)"
+    }
+}
 
 data class CreateUserModel(
     val email: Email,
@@ -41,12 +49,20 @@ data class CreateUserModel(
 ) {
     fun toUser(encoder: PasswordEncoder) =
         User(email = email, authorities = authorities, password = encoder.encode(password), locked = locked)
+
+    override fun toString(): String {
+        return "CreateUserModel(email=$email, authorities=$authorities, locked=$locked)"
+    }
 }
 
 data class LoginUserModel(
     val email: Email,
-    val password: Password,
-)
+    val password: Password
+) {
+    override fun toString(): String {
+        return "LoginUserModel(email=$email)"
+    }
+}
 
 class UserPaginationResult(pagination: PaginationResult<User>) :
     PaginationResult<UserModel>(pagination.transform { UserModel(it) })
