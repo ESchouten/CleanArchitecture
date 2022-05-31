@@ -14,7 +14,7 @@ class JWTAuthenticatorImpl(
 
     val verifier = JWT
         .require(algorithm)
-        .withIssuer(*arrayOf(issuer))
+        .withIssuer(issuer)
         .build()!!
 
     override fun generate(user: UserModel) = JWT
