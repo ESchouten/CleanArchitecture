@@ -21,7 +21,7 @@ include(
 dependencyResolutionManagement {
     versionCatalogs {
         create("libs") {
-            version("kotlin", "1.7.0-RC")
+            version("kotlin", "1.7.0")
             version("shadowjar", "7.1.2")
             version("coroutines", "1.6.2")
             version("ktor", "2.0.1")
@@ -34,7 +34,7 @@ dependencyResolutionManagement {
             version("bcrypt", "0.9.0")
             version("hikari", "5.0.1")
             version("mariadb", "3.0.5")
-            version("h2", "2.1.212")
+            version("h2", "2.1.214")
             version("flyway", "8.5.12")
             version("mockk", "1.12.4")
             version("updateversions", "0.42.0")

@@ -10,6 +10,7 @@ import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
 import usecases.dependency.PasswordEncoder
+import usecases.logger
 import usecases.model.ChangeOwnPasswordModel
 import usecases.model.ChangePasswordModel
 import usecases.model.UserModel
@@ -22,9 +23,9 @@ class ChangePasswordTests : UsecaseTests {
 
     val repository = mockk<UserRepository>()
     val passwordEncoder = mockk<PasswordEncoder>()
-    override val usecase = ChangePassword(repository, passwordEncoder)
+    override val usecase = ChangePassword(logger, repository, passwordEncoder)
     val changePasswordMock = mockk<ChangePassword>()
-    val changeOwnPassword = ChangeOwnPassword(repository, changePasswordMock, passwordEncoder)
+    val changeOwnPassword = ChangeOwnPassword(logger, repository, changePasswordMock, passwordEncoder)
 
     val newPassword = NewPassword(password.value + 1)
     val newPasswordHash = PasswordHash(newPassword.value.reversed())

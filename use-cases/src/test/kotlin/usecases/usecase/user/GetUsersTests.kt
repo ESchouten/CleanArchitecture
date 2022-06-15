@@ -6,6 +6,7 @@ import domain.repository.UserRepository
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
+import usecases.logger
 import usecases.model.UserModel
 import usecases.usecase.UsecaseTests
 import kotlin.test.Test
@@ -15,7 +16,7 @@ import kotlin.test.assertFailsWith
 class GetUserTest : UsecaseTests {
 
     val repository = mockk<UserRepository>()
-    override val usecase = GetUser(repository)
+    override val usecase = GetUser(logger, repository)
 
     @Test
     override fun success() {

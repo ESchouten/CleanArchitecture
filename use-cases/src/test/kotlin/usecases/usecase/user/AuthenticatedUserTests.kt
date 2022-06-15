@@ -2,6 +2,7 @@ package usecases.usecase.user
 
 import domain.LoginException
 import kotlinx.coroutines.runBlocking
+import usecases.logger
 import usecases.usecase.UsecaseTests
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -9,7 +10,7 @@ import kotlin.test.assertFailsWith
 
 class AuthenticatedUserTests : UsecaseTests {
 
-    override val usecase = AuthenticatedUser()
+    override val usecase = AuthenticatedUser(logger)
 
     @Test
     override fun success() {

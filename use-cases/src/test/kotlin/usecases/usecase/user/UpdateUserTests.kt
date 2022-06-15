@@ -8,6 +8,7 @@ import domain.repository.UserRepository
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
+import usecases.logger
 import usecases.model.UpdateUserModel
 import usecases.model.UserModel
 import usecases.usecase.UsecaseTests
@@ -18,8 +19,8 @@ import kotlin.test.assertFailsWith
 class UpdateUserTests : UsecaseTests {
 
     val repository = mockk<UserRepository>()
-    val userExists = UserExists(repository)
-    override val usecase = UpdateUser(repository, userExists)
+    val userExists = UserExists(logger, repository)
+    override val usecase = UpdateUser(logger, repository, userExists)
 
     val updateUserModel = UpdateUserModel(user.id, user.email, user.authorities, user.locked)
     val userModel =

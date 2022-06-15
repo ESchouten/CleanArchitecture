@@ -7,6 +7,7 @@ import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
 import usecases.dependency.PasswordEncoder
+import usecases.logger
 import usecases.model.CreateUserModel
 import usecases.usecase.UsecaseTests
 import usecases.value
@@ -18,8 +19,8 @@ class CreateUserTests : UsecaseTests {
 
     val repository = mockk<UserRepository>()
     val passwordEncoder = mockk<PasswordEncoder>()
-    val userExists = UserExists(repository)
-    override val usecase = CreateUser(repository, userExists, passwordEncoder)
+    val userExists = UserExists(logger, repository)
+    override val usecase = CreateUser(logger, repository, userExists, passwordEncoder)
 
     val createUserModel = CreateUserModel(email, listOf(Authorities.USER), NewPassword(password.value), true)
 

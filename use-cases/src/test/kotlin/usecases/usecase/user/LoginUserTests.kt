@@ -9,6 +9,7 @@ import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
 import usecases.dependency.Authenticator
 import usecases.dependency.PasswordEncoder
+import usecases.logger
 import usecases.model.LoginUserModel
 import usecases.model.UserModel
 import usecases.usecase.UsecaseTests
@@ -21,7 +22,7 @@ class LoginUserTests : UsecaseTests {
     val repository = mockk<UserRepository>()
     val passwordEncoder = mockk<PasswordEncoder>()
     val authenticator = mockk<Authenticator>()
-    override val usecase = LoginUser(repository, authenticator, passwordEncoder)
+    override val usecase = LoginUser(logger, repository, authenticator, passwordEncoder)
 
     val loginUserModel = LoginUserModel(email, password)
 

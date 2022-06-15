@@ -6,6 +6,7 @@ import domain.repository.UserRepository
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
+import usecases.logger
 import usecases.model.UserModel
 import usecases.usecase.UsecaseTests
 import kotlin.test.Test
@@ -14,7 +15,7 @@ import kotlin.test.assertFailsWith
 class DeleteUserTests : UsecaseTests {
 
     val repository = mockk<UserRepository>()
-    override val usecase = DeleteUser(repository)
+    override val usecase = DeleteUser(logger, repository)
 
     val userModel = UserModel(user)
 

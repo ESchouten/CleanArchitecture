@@ -6,6 +6,7 @@ import domain.repository.UserRepository
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
+import usecases.logger
 import usecases.usecase.UsecaseTests
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -14,7 +15,7 @@ import kotlin.test.assertFailsWith
 class UserExistsTests : UsecaseTests {
 
     val repository = mockk<UserRepository>()
-    override val usecase = UserExists(repository)
+    override val usecase = UserExists(logger, repository)
 
     @Test
     override fun success() {
