@@ -30,14 +30,11 @@ private fun commonModule() = module {
 }
 
 private fun userModule(config: Config) = module {
-    usecases("user")
-
-    singleOf(
-        when (config.database) {
-            DatabaseType.LOCAL -> ::InMemoryUserRepository
-            DatabaseType.JDBC -> ::UserRepositoryImpl
-        }
-    )
+    val excludeRepo = when (config.database) {
+        DatabaseType.LOCAL -> UserRepositoryImpl::class
+        DatabaseType.JDBC -> InMemoryUserRepository::class
+    }
+    domain("user", excludeRepositories = listOf(excludeRepo))
 
     single<Authenticator> {
         JWTAuthenticatorImpl(
