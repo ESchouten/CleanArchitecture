@@ -6,9 +6,14 @@ dependencies {
     implementation(projects.adapters.repositories)
 
     api("io.insert-koin", "koin-core", libs.versions.koin.get())
+    implementation("org.reflections", "reflections", "0.10.2")
     implementation(kotlin("reflect", libs.versions.kotlin.get()))
 
     tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
-        kotlinOptions.freeCompilerArgs += "-Xopt-in=org.koin.core.annotation.KoinInternalApi"
+        kotlinOptions.freeCompilerArgs +=
+            listOf(
+                "-Xopt-in=org.koin.core.annotation.KoinInternalApi",
+                "-Xopt-in=org.koin.core.annotation.KoinReflectAPI"
+            )
     }
 }

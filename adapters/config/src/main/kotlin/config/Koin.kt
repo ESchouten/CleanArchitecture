@@ -8,19 +8,15 @@ import domain.entity.user.Password
 import domain.entity.user.User
 import domain.repository.UserRepository
 import logging.LoggerImpl
-import org.koin.core.definition.Kind
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
-import org.koin.java.KoinJavaComponent.getKoin
 import repositories.user.InMemoryUserRepository
 import repositories.user.UserRepositoryImpl
 import usecases.dependency.Authenticator
 import usecases.dependency.Logger
 import usecases.dependency.PasswordEncoder
-import usecases.usecase.user.*
-import kotlin.reflect.full.isSubclassOf
 
 fun modules(config: Config): List<Module> {
     return listOf(
@@ -34,16 +30,7 @@ private fun commonModule() = module {
 }
 
 private fun userModule(config: Config) = module {
-    singleOf(::AuthenticatedUser)
-    singleOf(::ChangeOwnPassword)
-    singleOf(::ChangePassword)
-    singleOf(::CreateUser)
-    singleOf(::DeleteUser)
-    singleOf(::GetUser)
-    singleOf(::ListUsers)
-    singleOf(::LoginUser)
-    singleOf(::UpdateUser)
-    singleOf(::UserExists)
+    usecases("user")
 
     singleOf(
         when (config.database) {
@@ -81,11 +68,3 @@ suspend fun setup(userRepository: UserRepository, passwordEncoder: PasswordEncod
         )
     }
 }
-
-inline fun <reified T : Any> getAll(): Collection<T> =
-    getKoin().let { koin ->
-        koin.instanceRegistry.instances.values.map { it.beanDefinition }
-            .filter { it.kind == Kind.Singleton }
-            .filter { it.primaryType.isSubclassOf(T::class) }
-            .map { koin.get(clazz = it.primaryType, qualifier = null, parameters = null) }
-    }
