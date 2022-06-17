@@ -37,6 +37,7 @@ dependencyResolutionManagement {
             version("h2", "2.1.214")
             version("flyway", "8.5.12")
             version("mockk", "1.12.4")
+            version("reflections", "0.10.2")
             version("updateversions", "0.42.0")
         }
     }

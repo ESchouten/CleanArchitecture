@@ -6,7 +6,7 @@ dependencies {
     implementation(projects.adapters.repositories)
 
     api("io.insert-koin", "koin-core", libs.versions.koin.get())
-    implementation("org.reflections", "reflections", "0.10.2")
+    implementation("org.reflections", "reflections", libs.versions.reflections.get())
     implementation(kotlin("reflect", libs.versions.kotlin.get()))
 
     tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
