@@ -34,7 +34,7 @@ private fun userModule(config: Config) = module {
         DatabaseType.LOCAL -> UserRepositoryImpl::class
         DatabaseType.JDBC -> InMemoryUserRepository::class
     }
-    domain("user", excludeRepositories = listOf(excludeRepo))
+    usecasesAndRepositories("user", excludeRepositories = listOf(excludeRepo))
 
     single<Authenticator> {
         JWTAuthenticatorImpl(

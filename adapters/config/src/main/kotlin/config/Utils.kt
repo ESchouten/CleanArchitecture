@@ -27,7 +27,7 @@ inline fun <reified T : Any> getAll(): Collection<T> = getKoin().let { koin ->
         .map { koin.get(clazz = it.primaryType, qualifier = null, parameters = null) }
 }
 
-fun Module.domain(
+fun Module.usecasesAndRepositories(
     domain: String,
     excludeUsecases: List<KClass<UsecaseType<*>>> = emptyList(),
     excludeRepositories: List<KClass<out Repository<*, *>>> = emptyList()
@@ -47,10 +47,8 @@ fun Module.usecases(domain: String, exclude: List<KClass<UsecaseType<*>>> = empt
 }
 
 fun Module.repositories(domain: String, exclude: List<KClass<out Repository<*, *>>> = emptyList()) {
-    val pkg = "repositories.$domain"
-    Reflections(pkg).getSubTypesOf(Repository::class.java).map { it.kotlin }
-        .filter { it.supertypes.any { it.jvmErasure.qualifiedName!!.startsWith("domain.") } && !exclude.contains(it) }
-        .forEach { uc ->
+    Reflections("repositories.$domain").getSubTypesOf(Repository::class.java).map { it.kotlin }
+        .filter { !exclude.contains(it) }.forEach { uc ->
             repository(uc)
         }
 }
