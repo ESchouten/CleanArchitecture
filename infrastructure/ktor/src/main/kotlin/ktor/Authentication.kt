@@ -32,7 +32,7 @@ fun Application.loginModule(config: Config) {
     install(Authentication) {
         jwt {
             authHeader {
-                it.request.cookies[AUTH_COOKIE]?.let { parseAuthorizationHeader(it) }
+                it.request.cookies[AUTH_COOKIE]?.let { parseAuthorizationHeader(decodeCookieValue(it, CookieEncoding.URI_ENCODING)) }
                     ?: it.request.parseAuthorizationHeader()
             }
             val authenticator = this@loginModule.get<Authenticator>() as JWTAuthenticatorImpl
