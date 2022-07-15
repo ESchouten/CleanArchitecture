@@ -21,6 +21,11 @@ import kotlin.reflect.full.isSubtypeOf
 import kotlin.reflect.jvm.jvmErasure
 import kotlin.reflect.typeOf
 
+private const val usecasePackage = "usecases.usecase"
+private const val repositoryPackage = "repositories"
+private val usecases get() = Reflections(usecasePackage).getSubTypesOf(UsecaseType::class.java)
+private val repositories get() = Reflections(repositoryPackage).getSubTypesOf(Repository::class.java)
+
 inline fun <reified T : Any> getAll(): Collection<T> = getKoin().let { koin ->
     koin.instanceRegistry.instances.values.map { it.beanDefinition }.filter { it.kind == Kind.Singleton }
         .filter { it.primaryType.isSubclassOf(T::class) }
@@ -37,20 +42,16 @@ fun Module.usecasesAndRepositories(
 }
 
 fun Module.usecases(domain: String, exclude: List<KClass<UsecaseType<*>>> = emptyList()) {
-    val pkg = "usecases.usecase.$domain"
-    Reflections(pkg).getSubTypesOf(UsecaseType::class.java).map { it.kotlin }
-        .filter { it.qualifiedName!!.startsWith(pkg) && !exclude.contains(it) }.forEach { uc ->
-            usecase(uc)
-        }
+    usecases.map { it.kotlin }.filter { it.qualifiedName!!.startsWith("$usecasePackage.$domain") && !exclude.contains(it) }.forEach { uc ->
+        usecase(uc)
+    }
     single {}
-
 }
 
 fun Module.repositories(domain: String, exclude: List<KClass<out Repository<*, *>>> = emptyList()) {
-    Reflections("repositories.$domain").getSubTypesOf(Repository::class.java).map { it.kotlin }
-        .filter { !exclude.contains(it) }.forEach { uc ->
-            repository(uc)
-        }
+    repositories.map { it.kotlin }.filter { it.qualifiedName!!.startsWith("$repositoryPackage.$domain") && !exclude.contains(it) }.forEach { uc ->
+        repository(uc)
+    }
 }
 
 fun Module.usecase(usecase: KClass<out UsecaseType<*>>): Pair<Module, SingleInstanceFactory<UsecaseType<*>>> {
