@@ -7,9 +7,11 @@ import domain.entity.user.Password
 import domain.repository.UserRepository
 import io.ktor.http.*
 import io.ktor.http.auth.*
+import io.ktor.serialization.gson.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*
+import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.plugins.forwardedheaders.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
@@ -47,6 +49,11 @@ fun Application.loginModule(config: Config) {
     }
 
     routing {
+
+        install(ContentNegotiation) {
+            gson()
+        }
+
         post("/login") {
             try {
                 val login = call.receive<Map<String, String>>()
@@ -55,7 +62,7 @@ fun Application.loginModule(config: Config) {
                 call.response.cookies.append(
                     Cookie(
                         AUTH_COOKIE,
-                        "Bearer " + loginUser(null, login),
+                        loginUser(null, login),
                         httpOnly = true,
                         secure = !config.development,
                         extensions = mapOf("SameSite" to "lax")

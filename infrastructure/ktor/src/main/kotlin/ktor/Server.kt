@@ -23,10 +23,6 @@ fun Application.module(testing: Boolean = false) {
     install(DefaultHeaders)
     install(CallLogging)
 
-    install(ContentNegotiation) {
-        gson()
-    }
-
     val config = config()
 
     install(Koin) {
