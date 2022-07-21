@@ -22,9 +22,13 @@ class LoginUser(
 
     override val authenticated = false
     override val authorities = emptyList<Authorities>()
-    override suspend fun executor(authentication: UserModel?, a0: LoginUserModel): String {
-        val user = repository.findByEmail(a0.email)
-        if (user == null || user.locked || !passwordEncoder.matches(a0.password, user.password)) throw LoginException()
+    override suspend fun executor(authentication: UserModel?, login: LoginUserModel): String {
+        val user = repository.findByEmail(login.email)
+        if (user == null || user.locked || !passwordEncoder.matches(
+                login.password,
+                user.password
+            )
+        ) throw LoginException()
         return "Bearer " + authenticator.generate(UserModel(user))
     }
 }

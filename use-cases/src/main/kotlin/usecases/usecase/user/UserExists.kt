@@ -16,7 +16,7 @@ class UserExists(
 ) : UsecaseA1<Email, Boolean>(typeOf<Email>(), typeOf<Boolean>(), logger) {
 
     override val authorities = listOf(Authorities.USER)
-    override suspend fun executor(authentication: UserModel?, a0: Email): Boolean {
-        return repository.findByEmail(a0) != null
+    override suspend fun executor(authentication: UserModel?, email: Email): Boolean {
+        return repository.findByEmail(email) != null
     }
 }

@@ -64,6 +64,11 @@ fun SchemaBuilder.usecase(usecase: UsecaseType<*>) {
                 usecase.args.forEachIndexed { index, kType ->
                     arg(kType.jvmErasure, kType) {
                         name = "a$index"
+                        val description = usecase::class.declaredMemberFunctions.find { it.name == "executor" }
+                            ?.parameters?.getOrNull(index + 2)?.name
+                        if (name != description) {
+                            this.description = description
+                        }
                     }
                 }
             }
