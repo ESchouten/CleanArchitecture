@@ -14,6 +14,7 @@ import java.time.LocalDate
 import kotlin.reflect.KClass
 import kotlin.reflect.KFunction
 import kotlin.reflect.KType
+import kotlin.reflect.full.declaredMemberFunctions
 
 
 class Hooks: SchemaGeneratorHooks {
@@ -68,7 +69,7 @@ class Hooks: SchemaGeneratorHooks {
         function: KFunction<*>,
         fieldDefinition: GraphQLFieldDefinition
     ): GraphQLFieldDefinition {
-        val newFieldDefinition = reworkArguments(fieldDefinition)
+        val newFieldDefinition = reworkArguments(kClass, fieldDefinition)
         return super.didGenerateQueryField(kClass, function, newFieldDefinition)
     }
 
@@ -80,15 +81,32 @@ class Hooks: SchemaGeneratorHooks {
         function: KFunction<*>,
         fieldDefinition: GraphQLFieldDefinition
     ): GraphQLFieldDefinition {
-        val newFieldDefinition = reworkArguments(fieldDefinition)
+        val newFieldDefinition = reworkArguments(kClass, fieldDefinition)
         return super.didGenerateMutationField(kClass, function, newFieldDefinition)
     }
 
-    private fun reworkArguments(fieldDefinition: GraphQLFieldDefinition): GraphQLFieldDefinition {
+    private fun reworkArguments(kClass: KClass<*>, fieldDefinition: GraphQLFieldDefinition): GraphQLFieldDefinition {
         val newArguments = fieldDefinition.arguments.toMutableList()
         newArguments.removeAt(0)
 
-        return fieldDefinition.transform{ it.replaceArguments(newArguments) }
+        // replace arguments name and add to map
+        newArguments.forEachIndexed { index, it ->
+            val newName = kClass.declaredMemberFunctions.find { it.name == "executor" }
+                ?.parameters?.getOrNull(index + 2)?.name
+
+            if (newName != null &&  it.name !== newName) {
+                val newArg = it.transform { it.name(newName) }
+                newArguments[index] = newArg
+
+                if (paramMap[kClass] == null) {
+                    paramMap[kClass] = mutableMapOf()
+                }
+
+                paramMap[kClass]!![it.name] = newName
+            }
+        }
+
+        return fieldDefinition.transform { it.replaceArguments(newArguments) }
     }
 
     /**
