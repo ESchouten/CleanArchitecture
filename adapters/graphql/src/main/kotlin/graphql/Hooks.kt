@@ -4,11 +4,13 @@ import com.expediagroup.graphql.generator.hooks.SchemaGeneratorHooks
 import domain.entity.user.Email
 import domain.entity.user.NewPassword
 import domain.entity.user.Password
+import graphql.customScalars.EmailScalar
+import graphql.customScalars.NewPasswordScalar
+import graphql.customScalars.PasswordScalar
 import graphql.scalars.datetime.DateScalar
+import graphql.scalars.java.JavaPrimitives
 import graphql.schema.*
-import mutationNames
-import queryNames
-import java.util.*
+import java.time.LocalDate
 import kotlin.reflect.KClass
 import kotlin.reflect.KFunction
 import kotlin.reflect.KType
@@ -66,10 +68,7 @@ class Hooks: SchemaGeneratorHooks {
         function: KFunction<*>,
         fieldDefinition: GraphQLFieldDefinition
     ): GraphQLFieldDefinition {
-        val newArguments = fieldDefinition.arguments.toMutableList()
-        newArguments.removeAt(0)
-        val newFieldDefinition = fieldDefinition.transform { it.replaceArguments(newArguments) }
-
+        val newFieldDefinition = reworkArguments(fieldDefinition)
         return super.didGenerateQueryField(kClass, function, newFieldDefinition)
     }
 
@@ -81,11 +80,15 @@ class Hooks: SchemaGeneratorHooks {
         function: KFunction<*>,
         fieldDefinition: GraphQLFieldDefinition
     ): GraphQLFieldDefinition {
+        val newFieldDefinition = reworkArguments(fieldDefinition)
+        return super.didGenerateMutationField(kClass, function, newFieldDefinition)
+    }
+
+    private fun reworkArguments(fieldDefinition: GraphQLFieldDefinition): GraphQLFieldDefinition {
         val newArguments = fieldDefinition.arguments.toMutableList()
         newArguments.removeAt(0)
-        val newFieldDefinition = fieldDefinition.transform { it.replaceArguments(newArguments) }
 
-        return super.didGenerateMutationField(kClass, function, newFieldDefinition)
+        return fieldDefinition.transform{ it.replaceArguments(newArguments) }
     }
 
     /**
@@ -96,8 +99,8 @@ class Hooks: SchemaGeneratorHooks {
             Email::class -> EmailScalar.INSTANCE
             Password::class -> PasswordScalar.INSTANCE
             NewPassword::class -> NewPasswordScalar.INSTANCE
-            Date::class -> DateScalar.INSTANCE
-            Long::class -> Scalars.GraphQLInt
+            LocalDate::class -> DateScalar.INSTANCE
+            Long::class -> JavaPrimitives.GraphQLLong
             else -> null
         }
     }

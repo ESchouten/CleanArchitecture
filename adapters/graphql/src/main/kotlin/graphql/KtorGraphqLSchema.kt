@@ -1,10 +1,9 @@
+package graphql
+
 import com.expediagroup.graphql.generator.SchemaGeneratorConfig
 import com.expediagroup.graphql.generator.TopLevelObject
 import com.expediagroup.graphql.generator.toSchema
-import graphql.CustomDataFetcherFactory
-import graphql.CustomValueUnboxer
-import graphql.GraphQL
-import graphql.Hooks
+import graphql.customScalars.CustomValueUnboxer
 import graphql.schema.GraphQLSchema
 import usecases.usecase.Mutation
 import usecases.usecase.Query

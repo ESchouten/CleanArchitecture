@@ -3,7 +3,7 @@ package ktor.plugins.graphql
 import com.expediagroup.graphql.server.execution.GraphQLRequestHandler
 import com.expediagroup.graphql.server.execution.GraphQLServer
 import com.fasterxml.jackson.databind.ObjectMapper
-import getGraphQLObject
+import graphql.getGraphQLObject
 import graphql.schema.GraphQLSchema
 import io.ktor.server.request.*
 
