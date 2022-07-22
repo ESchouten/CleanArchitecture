@@ -1,8 +1,8 @@
 package ktor.plugins.graphql
 
-import buildSchema
 import com.expediagroup.graphql.generator.extensions.print
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import graphql.buildSchema
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.response.*

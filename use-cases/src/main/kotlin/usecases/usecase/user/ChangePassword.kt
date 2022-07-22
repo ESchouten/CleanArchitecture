@@ -20,9 +20,9 @@ class ChangePassword(
 ) : UsecaseA1<ChangePasswordModel, UserModel>(typeOf<ChangePasswordModel>(), typeOf<UserModel>(), logger) {
 
     override val authorities = emptyList<Authorities>()
-    override suspend fun executor(authentication: UserModel?, a0: ChangePasswordModel): UserModel {
-        if (authentication!!.id != a0.id && !authentication.authorities.contains(Authorities.USER)) throw AuthorizationException()
-        val user = repository.findById(a0.id) ?: throw UserNotFoundException()
-        return UserModel(repository.update(user.copy(password = passwordEncoder.encode(a0.password))))
+    override suspend fun executor(authentication: UserModel?, password: ChangePasswordModel): UserModel {
+        if (authentication!!.id != password.id && !authentication.authorities.contains(Authorities.USER)) throw AuthorizationException()
+        val user = repository.findById(password.id) ?: throw UserNotFoundException()
+        return UserModel(repository.update(user.copy(password = passwordEncoder.encode(password.password))))
     }
 }

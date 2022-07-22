@@ -1,4 +1,4 @@
-package graphql
+package graphql.customScalars
 
 import com.expediagroup.graphql.generator.scalars.IDValueUnboxer
 import domain.entity.ValueClass
@@ -26,37 +26,37 @@ class CustomValueUnboxer : IDValueUnboxer() {
  * Scalars for value classes
  * I think there's a better way to handle value classes scalars...
  */
-object EmailScalar {
-        private val coercing: Coercing<Email, String?> = object : Coercing<Email, String?> {
-            override fun serialize(dataFetcherResult: Any): String {
-                return dataFetcherResult.toString()
-            }
+abstract class ValueClassCoercing<V : ValueClass<String>>(name: String) : Coercing<V, String?> {
+    final override fun serialize(dataFetcherResult: Any): String {
+        return dataFetcherResult.toString()
+    }
 
-            override fun parseValue(input: Any): Email {
-                if (input is String)
-                    return Email(input)
-                throw CoercingParseValueException()
-            }
-
-            override fun parseLiteral(input: Any): Email {
-                if (input is StringValue)
-                    return Email(input.value)
-                throw CoercingParseLiteralException()
-            }
-        }
-
-    var INSTANCE: GraphQLScalarType? = GraphQLScalarType.newScalar()
-        .name("Email")
-        .coercing(coercing)
+    val INSTANCE: GraphQLScalarType? = GraphQLScalarType.newScalar()
+        .name(name)
+        .coercing(this)
         .build()
 }
 
-object PasswordScalar {
-    private val coercing: Coercing<Password, String?> = object : Coercing<Password, String?> {
-        override fun serialize(dataFetcherResult: Any): String {
-            return dataFetcherResult.toString()
+object EmailScalar {
+    private val coercing: ValueClassCoercing<Email> = object : ValueClassCoercing<Email>("Email") {
+        override fun parseValue(input: Any): Email {
+            if (input is String)
+                return Email(input)
+            throw CoercingParseValueException()
         }
 
+        override fun parseLiteral(input: Any): Email {
+            if (input is StringValue)
+                return Email(input.value)
+            throw CoercingParseLiteralException()
+        }
+    }
+
+    val INSTANCE: GraphQLScalarType? = coercing.INSTANCE
+}
+
+object PasswordScalar {
+    private val coercing: ValueClassCoercing<Password> = object : ValueClassCoercing<Password>("Password") {
         override fun parseValue(input: Any): Password {
             if (input is String)
                 return Password(input)
@@ -70,18 +70,11 @@ object PasswordScalar {
         }
     }
 
-    var INSTANCE: GraphQLScalarType? = GraphQLScalarType.newScalar()
-        .name("Password")
-        .coercing(coercing)
-        .build()
+    val INSTANCE: GraphQLScalarType? = coercing.INSTANCE
 }
 
 object NewPasswordScalar {
-    private val coercing: Coercing<NewPassword, String?> = object : Coercing<NewPassword, String?> {
-        override fun serialize(dataFetcherResult: Any): String {
-            return dataFetcherResult.toString()
-        }
-
+    private val coercing: ValueClassCoercing<NewPassword> = object : ValueClassCoercing<NewPassword>("NewPassword") {
         override fun parseValue(input: Any): NewPassword {
             if (input is String)
                 return NewPassword(input)
@@ -95,8 +88,5 @@ object NewPasswordScalar {
         }
     }
 
-    var INSTANCE: GraphQLScalarType? = GraphQLScalarType.newScalar()
-        .name("NewPassword")
-        .coercing(coercing)
-        .build()
+    val INSTANCE: GraphQLScalarType? = coercing.INSTANCE
 }

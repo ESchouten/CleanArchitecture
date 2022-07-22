@@ -15,8 +15,8 @@ class DeleteUser(
 ) : UsecaseA1<Int, Boolean>(typeOf<Int>(), typeOf<Boolean>(), logger) {
 
     override val authorities = listOf(Authorities.USER)
-    override suspend fun executor(authentication: UserModel?, a0: Int): Boolean {
-        repository.delete(a0)
+    override suspend fun executor(authentication: UserModel?, id: Int): Boolean {
+        repository.delete(id)
         return true
     }
 }
