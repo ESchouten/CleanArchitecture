@@ -17,7 +17,7 @@ class ListUsers(
 ) : UsecaseA1<Pagination, UserPaginationResult>(typeOf<Pagination>(), typeOf<UserPaginationResult>(), logger) {
 
     override val authorities = listOf(Authorities.USER)
-    override suspend fun executor(authentication: UserModel?, a0: Pagination): UserPaginationResult {
-        return UserPaginationResult(repository.findAll(a0))
+    override suspend fun executor(authentication: UserModel?, pagination: Pagination): UserPaginationResult {
+        return UserPaginationResult(repository.findAll(pagination))
     }
 }

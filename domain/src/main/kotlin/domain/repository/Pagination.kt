@@ -1,6 +1,6 @@
 package domain.repository
 
-import java.util.*
+import java.time.LocalDate
 
 data class Pagination(
     val itemsPerPage: Int,
@@ -22,8 +22,8 @@ enum class Order {
 }
 
 data class Period(
-    val from: Date,
-    val to: Date
+    val from: LocalDate,
+    val to: LocalDate
 )
 
 open class PaginationResult<T : Any>(
