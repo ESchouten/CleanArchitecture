@@ -17,11 +17,11 @@ import kotlin.reflect.full.*
 import kotlin.reflect.jvm.jvmErasure
 
 fun usecases(usecases: Collection<UsecaseType<*>>): SchemaBuilder.() -> Unit = {
-    stringScalar<UUID> {
+    stringScalar {
         deserialize = { id: String -> UUID.fromString(id) }
         serialize = UUID::toString
     }
-    longScalar<Date> {
+    longScalar {
         deserialize = { date: Long -> Date(date) }
         serialize = Date::getTime
     }

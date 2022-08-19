@@ -48,5 +48,6 @@ data class LoginUserModel(
     val password: Password
 )
 
-class UserPaginationResult(pagination: PaginationResult<User>) :
-    PaginationResult<UserModel>(pagination.transform { UserModel(it) })
+class UserPaginationResult(items: List<UserModel>, total: Long) : PaginationResult<UserModel>(items, total) {
+    constructor(pagination: PaginationResult<User>) : this(pagination.items.map { UserModel(it) }, pagination.total)
+}

@@ -27,12 +27,6 @@ data class Email(override val value: String) : ValueClass<String> {
     }
 }
 
-open class Password(override val value: String) : ValueClass<String> {
-    override fun toString(): String {
-        return "Password()"
-    }
-}
-
 class NewPassword(value: String) : Password(value) {
     init {
         if (!value.matches(Regex("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@\$%^&*-]).{8,}\$")))
@@ -41,6 +35,12 @@ class NewPassword(value: String) : Password(value) {
 
     override fun toString(): String {
         return "NewPassword()"
+    }
+}
+
+open class Password(override val value: String) : ValueClass<String> {
+    override fun toString(): String {
+        return "Password()"
     }
 }
 
