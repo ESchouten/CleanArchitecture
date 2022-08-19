@@ -1,8 +1,8 @@
 package authentication
 
 import at.favre.lib.crypto.bcrypt.BCrypt
-import domain.entity.Password
-import domain.entity.PasswordHash
+import domain.entity.user.Password
+import domain.entity.user.PasswordHash
 import usecases.dependency.PasswordEncoder
 
 class PasswordEncoderImpl : PasswordEncoder {

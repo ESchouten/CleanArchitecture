@@ -1,11 +1,6 @@
 package usecases.model
 
-import domain.entity.Email
-import domain.entity.NewPassword
-import domain.entity.Password
-import domain.entity.PasswordHash
-import domain.entity.user.Authorities
-import domain.entity.user.User
+import domain.entity.user.*
 import domain.repository.PaginationResult
 import usecases.dependency.PasswordEncoder
 

@@ -1,8 +1,8 @@
 package repositories.user
 
-import domain.entity.Email
-import domain.entity.PasswordHash
 import domain.entity.user.Authorities
+import domain.entity.user.Email
+import domain.entity.user.PasswordHash
 import domain.entity.user.User
 import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass

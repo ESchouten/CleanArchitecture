@@ -2,9 +2,9 @@ package config
 
 import authentication.JWTAuthenticatorImpl
 import authentication.PasswordEncoderImpl
-import domain.entity.Email
-import domain.entity.Password
 import domain.entity.user.Authorities
+import domain.entity.user.Email
+import domain.entity.user.Password
 import domain.entity.user.User
 import domain.repository.UserRepository
 import logging.LoggerImpl

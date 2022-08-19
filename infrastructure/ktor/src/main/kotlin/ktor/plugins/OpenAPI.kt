@@ -2,7 +2,6 @@ package ktor.plugins
 
 import com.google.gson.*
 import com.google.gson.reflect.TypeToken
-import domain.entity.ValueClass
 import io.bkbn.kompendium.core.metadata.PostInfo
 import io.bkbn.kompendium.core.plugin.NotarizedRoute
 import io.bkbn.kompendium.core.routes.redoc
@@ -89,9 +88,6 @@ data class RestA1<A0>(
 )
 
 val gson = GsonBuilder().apply {
-//    ValueClass::class.sealedSubclasses.forEach {
-//        registerTypeAdapter(it.java, ValueClassAdapter())
-//    }
     registerTypeAdapter(Instant::class.java, InstantAdapter())
     registerTypeAdapter(BigDecimal::class.java, BigDecimalAdapter())
 }.create()!!
@@ -102,14 +98,6 @@ class InstantAdapter : JsonSerializer<Instant>, JsonDeserializer<Instant> {
 
     override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext) =
         Instant.parse((json as JsonPrimitive).asString)
-}
-
-class ValueClassAdapter : JsonSerializer<ValueClass<*>> {
-    override fun serialize(src: ValueClass<*>, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
-        return JsonObject().apply {
-            add("value", JsonPrimitive(src.value.toString()))
-        }
-    }
 }
 
 class BigDecimalAdapter : JsonSerializer<BigDecimal> {

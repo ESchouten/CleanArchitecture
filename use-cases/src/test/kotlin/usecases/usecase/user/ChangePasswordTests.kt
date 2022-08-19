@@ -3,8 +3,8 @@ package usecases.usecase.user
 import domain.AuthorizationException
 import domain.LoginException
 import domain.UserNotFoundException
-import domain.entity.NewPassword
-import domain.entity.PasswordHash
+import domain.entity.user.NewPassword
+import domain.entity.user.PasswordHash
 import domain.repository.UserRepository
 import io.mockk.every
 import io.mockk.mockk

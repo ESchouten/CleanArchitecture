@@ -2,6 +2,8 @@ package domain.entity
 
 import domain.EmailInvalidException
 import domain.entity.user.Authorities
+import domain.entity.user.Email
+import domain.entity.user.PasswordHash
 import domain.entity.user.User
 import kotlin.test.Test
 import kotlin.test.assertFailsWith
