@@ -3,7 +3,7 @@ package usecases.usecase.user
 import domain.AuthorizationException
 import domain.EmailAlreadyExistsException
 import domain.LoginException
-import domain.entity.user.Email
+import domain.entity.Email
 import domain.repository.UserRepository
 import io.mockk.every
 import io.mockk.mockk

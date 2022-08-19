@@ -1,7 +1,11 @@
 package usecases.usecase.user
 
 import domain.*
-import domain.entity.user.*
+import domain.entity.Email
+import domain.entity.NewPassword
+import domain.entity.Password
+import domain.entity.PasswordHash
+import domain.entity.user.Authorities
 import domain.repository.UserRepository
 import io.mockk.every
 import io.mockk.mockk

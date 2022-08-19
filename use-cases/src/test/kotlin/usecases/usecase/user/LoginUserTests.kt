@@ -1,8 +1,8 @@
 package usecases.usecase.user
 
 import domain.LoginException
-import domain.entity.user.Password
-import domain.entity.user.PasswordHash
+import domain.entity.Password
+import domain.entity.PasswordHash
 import domain.repository.UserRepository
 import io.mockk.every
 import io.mockk.mockk

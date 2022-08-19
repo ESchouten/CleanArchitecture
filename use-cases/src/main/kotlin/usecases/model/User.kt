@@ -1,6 +1,11 @@
 package usecases.model
 
-import domain.entity.user.*
+import domain.entity.Email
+import domain.entity.NewPassword
+import domain.entity.Password
+import domain.entity.PasswordHash
+import domain.entity.user.Authorities
+import domain.entity.user.User
 import domain.repository.PaginationResult
 import usecases.dependency.PasswordEncoder
 
@@ -48,5 +53,6 @@ data class LoginUserModel(
     val password: Password
 )
 
-class UserPaginationResult(pagination: PaginationResult<User>) :
-    PaginationResult<UserModel>(pagination.transform { UserModel(it) })
+class UserPaginationResult(items: List<UserModel>, total: Long) : PaginationResult<UserModel>(items, total) {
+    constructor(pagination: PaginationResult<User>) : this(pagination.items.map { UserModel(it) }, pagination.total)
+}

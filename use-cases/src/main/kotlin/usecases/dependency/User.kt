@@ -1,7 +1,7 @@
 package usecases.dependency
 
-import domain.entity.user.Password
-import domain.entity.user.PasswordHash
+import domain.entity.Password
+import domain.entity.PasswordHash
 import usecases.model.UserModel
 
 interface Authenticator {

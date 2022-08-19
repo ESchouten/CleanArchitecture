@@ -2,8 +2,8 @@ package ktor
 
 import authentication.JWTAuthenticatorImpl
 import config.Config
-import domain.entity.user.Email
-import domain.entity.user.Password
+import domain.entity.Email
+import domain.entity.Password
 import domain.repository.UserRepository
 import io.ktor.http.*
 import io.ktor.http.auth.*

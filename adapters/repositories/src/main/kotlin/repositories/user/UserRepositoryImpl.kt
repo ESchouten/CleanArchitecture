@@ -1,7 +1,7 @@
 package repositories.user
 
 import domain.AlreadyExistsException
-import domain.entity.user.Email
+import domain.entity.Email
 import domain.entity.user.User
 import domain.repository.Order
 import domain.repository.Pagination

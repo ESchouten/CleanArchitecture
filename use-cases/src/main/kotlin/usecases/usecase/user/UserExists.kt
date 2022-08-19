@@ -1,7 +1,7 @@
 package usecases.usecase.user
 
+import domain.entity.Email
 import domain.entity.user.Authorities
-import domain.entity.user.Email
 import domain.repository.UserRepository
 import usecases.dependency.Logger
 import usecases.model.UserModel

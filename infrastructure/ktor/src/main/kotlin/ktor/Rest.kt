@@ -1,0 +1,122 @@
+package ktor
+
+import com.google.gson.*
+import com.google.gson.reflect.TypeToken
+import domain.entity.ValueClass
+import io.bkbn.kompendium.core.metadata.PostInfo
+import io.bkbn.kompendium.core.plugin.NotarizedRoute
+import io.bkbn.kompendium.core.routes.redoc
+import io.ktor.http.*
+import io.ktor.server.application.*
+import io.ktor.server.auth.*
+import io.ktor.server.request.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
+import io.ktor.util.pipeline.*
+import usecases.usecase.*
+import java.lang.reflect.Type
+import java.math.BigDecimal
+import java.time.Instant
+import kotlin.reflect.KTypeProjection
+import kotlin.reflect.full.createType
+import kotlin.reflect.full.hasAnnotation
+import kotlin.reflect.jvm.jvmErasure
+import kotlin.reflect.typeOf
+
+fun Application.restUsecases(usecases: Collection<UsecaseType<*>>): Routing {
+    return routing {
+        redoc(pageTitle = "CleanArchitecture API Docs")
+        authenticate(optional = true) {
+            usecases.filter { it::class.hasAnnotation<Query>() || it::class.hasAnnotation<Mutation>() }
+                .forEach { usecase ->
+                    val name = usecase::class.simpleName!!
+                    route("/${name.lowercase()}") {
+                        install(NotarizedRoute()) {
+                            post = PostInfo.builder {
+                                summary(name)
+                                description(name)
+                                request {
+                                    description(name)
+                                    when (usecase) {
+                                        is UsecaseA1<*, *> ->
+                                            RestA1::class.createType(usecase.args.map { KTypeProjection.invariant(it) })
+
+                                        else -> null
+                                    }.let {
+                                        requestType(it ?: typeOf<Unit>())
+                                    }
+                                }
+                                response {
+                                    description("Description")
+                                    responseCode(HttpStatusCode.OK)
+                                    responseType(usecase.result)
+                                }
+                            }
+                        }
+                        post {
+                            val response = when (usecase) {
+                                is UsecaseA0<*> -> execute(usecase)
+                                is UsecaseA1<*, *> -> execute(usecase)
+                                else -> throw Exception("Invalid usecase")
+                            }
+                            this.call.respond(response)
+                        }
+                    }
+                }
+        }
+    }
+}
+
+fun ApplicationCall.getAuthentication() = authentication.principal<UserPrincipal>()?.user
+
+suspend fun <R, U : UsecaseA0<R>> PipelineContext<Unit, ApplicationCall>.execute(usecase: U): R {
+    return usecase(call.getAuthentication())
+}
+
+suspend fun <R, A0 : Any, U : UsecaseA1<A0, R>> PipelineContext<Unit, ApplicationCall>.execute(usecase: U): R {
+    val args = call.deserialize<RestA1<A0>>(usecase)
+    return usecase(call.getAuthentication(), args.a0)
+}
+
+suspend inline fun <reified T : Any> ApplicationCall.deserialize(usecase: UsecaseType<*>): T {
+    val type = TypeToken.getParameterized(T::class.java, *usecase.args.map { it.jvmErasure.java }.toTypedArray()).type
+    return gson.fromJson(this.receiveText(), type)
+}
+
+data class RestA1<A0>(
+    val a0: A0
+)
+
+val gson = GsonBuilder().apply {
+//    ValueClass::class.sealedSubclasses.forEach {
+//        registerTypeAdapter(it.java, ValueClassAdapter())
+//    }
+//    registerTypeAdapter(Email::class.java, ValueClassAdapter())
+//    registerTypeAdapter(NewPassword::class.java, ValueClassAdapter())
+//    registerTypeAdapter(Password::class.java, ValueClassAdapter())
+//    registerTypeAdapter(PasswordHash::class.java, ValueClassAdapter())
+    registerTypeAdapter(Instant::class.java, InstantAdapter())
+    registerTypeAdapter(BigDecimal::class.java, BigDecimalAdapter())
+}.create()!!
+
+class InstantAdapter : JsonSerializer<Instant>, JsonDeserializer<Instant> {
+    override fun serialize(src: Instant, typeOfSrc: Type, context: JsonSerializationContext) =
+        JsonPrimitive(src.toString())
+
+    override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext) =
+        Instant.parse((json as JsonPrimitive).asString)
+}
+
+class ValueClassAdapter : JsonSerializer<ValueClass<*>> {
+    override fun serialize(src: ValueClass<*>, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
+        return JsonObject().apply {
+            add("value", JsonPrimitive(src.value.toString()))
+        }
+    }
+}
+
+class BigDecimalAdapter : JsonSerializer<BigDecimal> {
+    override fun serialize(src: BigDecimal, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
+        return JsonPrimitive(src.toPlainString())
+    }
+}
