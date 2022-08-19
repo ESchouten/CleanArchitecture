@@ -49,7 +49,6 @@ fun Application.loginModule(config: Config) {
     }
 
     routing {
-
         install(ContentNegotiation) {
             gson()
         }

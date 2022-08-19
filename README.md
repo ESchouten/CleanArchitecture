@@ -17,13 +17,19 @@ GraphQL endpoints are auto-generated from the Usecases
 
 ##### Technologies:
 
-Ktor, JWT, Exposed, Flyway, KGraphQL/GraphQL generated endpoints, Gradle.
+Ktor, JWT, Exposed, Flyway, OpenAPI/REST & KGraphQL/GraphQL generated endpoints, Gradle.
 
 ![image](https://miro.medium.com/max/800/1*0R0r00uF1RyRFxkxo3HVDg.png)
 
-## GraphQL Plaground
+## OpenAPI REST
 
-Default url: http://localhost:8080/graphql
+Docs URL: http://localhost:8080/docs
+
+API definitions: http://localhost:8080/openapi.json
+
+## GraphQL
+
+Playground URL: http://localhost:8080/graphql
 
 ### Login
 

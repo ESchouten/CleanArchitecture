@@ -18,6 +18,7 @@ import io.ktor.server.plugins.defaultheaders.*
 import kotlinx.coroutines.launch
 import ktor.plugins.GraphQL
 import ktor.plugins.get
+import ktor.plugins.rest
 import org.koin.ktor.plugin.Koin
 import usecases.usecase.UsecaseType
 import java.time.Instant
@@ -40,6 +41,7 @@ fun Application.module(testing: Boolean = false) {
     loginModule(config)
 
     val usecases = getAll<UsecaseType<*>>()
+
     install(GraphQL) {
         this.playground = config.development
 
@@ -74,16 +76,7 @@ fun Application.module(testing: Boolean = false) {
         )
     }
 
-    val routes = restUsecases(usecases)
-
-//    fun allRoutes(root: Route): List<Route> {
-//        return listOf(root) + root.children.flatMap { allRoutes(it) }
-//    }
-//
-//    val allRoutes = allRoutes(routes).filter { it.selector is HttpMethodRouteSelector }
-//    allRoutes.forEach {
-//        println("ROUTE: $it")
-//    }
+    rest(usecases)
 
     launch {
         setup(get(), get())

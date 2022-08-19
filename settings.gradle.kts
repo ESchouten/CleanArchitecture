@@ -25,6 +25,7 @@ dependencyResolutionManagement {
             version("shadowjar", "7.1.2")
             version("coroutines", "1.6.4")
             version("ktor", "2.1.0")
+            version("kompendium", "3.0.0")
             version("slf4j", "2.0.0-beta1")
             version("logback", "1.3.0-beta0")
             version("koin", "3.2.0")
