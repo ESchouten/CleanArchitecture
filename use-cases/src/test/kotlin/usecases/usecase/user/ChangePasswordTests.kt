@@ -78,7 +78,7 @@ class ChangePasswordTests : UsecaseTests {
                 runBlocking {
                     changePasswordMock.invoke(
                         any(),
-                        any()
+                        ChangePasswordModel(user.id, newPassword)
                     )
                 }
             } returns UserModel(user.copy(password = newPasswordHash))

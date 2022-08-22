@@ -34,7 +34,7 @@ class LoginUserTests : UsecaseTests {
             every { passwordEncoder.matches(password, PasswordHash(password.value.reversed())) } returns true
             every { authenticator.generate(UserModel(user)) } returns "token"
             val result = usecase(null, loginUserModel)
-            assertEquals(result, "token")
+            assertEquals("Bearer token", result)
         }
     }
 

@@ -34,22 +34,24 @@ inline fun <reified T : Any> getAll(): Collection<T> = getKoin().let { koin ->
 
 fun Module.usecasesAndRepositories(
     domain: String,
-    excludeUsecases: List<KClass<UsecaseType<*>>> = emptyList(),
+    excludeUsecases: List<KClass<out UsecaseType<*>>> = emptyList(),
     excludeRepositories: List<KClass<out Repository<*, *>>> = emptyList()
 ) {
     usecases(domain, excludeUsecases)
     repositories(domain, excludeRepositories)
 }
 
-fun Module.usecases(domain: String, exclude: List<KClass<UsecaseType<*>>> = emptyList()) {
-    usecases.map { it.kotlin }.filter { it.qualifiedName!!.startsWith("$usecasePackage.$domain") && !exclude.contains(it) }.forEach { uc ->
+fun Module.usecases(domain: String, exclude: List<KClass<out UsecaseType<*>>> = emptyList()) {
+    usecases.map { it.kotlin }
+        .filter { it.qualifiedName!!.startsWith("$usecasePackage.$domain") && !exclude.contains(it) }.forEach { uc ->
         usecase(uc)
     }
     single {}
 }
 
 fun Module.repositories(domain: String, exclude: List<KClass<out Repository<*, *>>> = emptyList()) {
-    repositories.map { it.kotlin }.filter { it.qualifiedName!!.startsWith("$repositoryPackage.$domain") && !exclude.contains(it) }.forEach { uc ->
+    repositories.map { it.kotlin }
+        .filter { it.qualifiedName!!.startsWith("$repositoryPackage.$domain") && !exclude.contains(it) }.forEach { uc ->
         repository(uc)
     }
 }
