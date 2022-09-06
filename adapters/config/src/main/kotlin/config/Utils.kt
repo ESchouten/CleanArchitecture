@@ -43,17 +43,18 @@ fun Module.usecasesAndRepositories(
 
 fun Module.usecases(domain: String, exclude: List<KClass<out UsecaseType<*>>> = emptyList()) {
     usecases.map { it.kotlin }
-        .filter { it.qualifiedName!!.startsWith("$usecasePackage.$domain") && !exclude.contains(it) }.forEach { uc ->
-        usecase(uc)
-    }
-    single {}
+        .filter { it.qualifiedName!!.startsWith("$usecasePackage.$domain") && !exclude.contains(it) }
+        .forEach { uc ->
+            usecase(uc)
+        }
 }
 
 fun Module.repositories(domain: String, exclude: List<KClass<out Repository<*, *>>> = emptyList()) {
     repositories.map { it.kotlin }
-        .filter { it.qualifiedName!!.startsWith("$repositoryPackage.$domain") && !exclude.contains(it) }.forEach { uc ->
-        repository(uc)
-    }
+        .filter { it.qualifiedName!!.startsWith("$repositoryPackage.$domain") && !exclude.contains(it) }
+        .forEach { uc ->
+            repository(uc)
+        }
 }
 
 fun Module.usecase(usecase: KClass<out UsecaseType<*>>): Pair<Module, SingleInstanceFactory<UsecaseType<*>>> {
