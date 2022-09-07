@@ -55,13 +55,19 @@ fun Application.rest(usecases: Collection<UsecaseType<*>>) {
                                 }
                             }
                         }
-                        post {
-                            val response = when (usecase) {
-                                is UsecaseA0<*> -> execute(usecase)
-                                is UsecaseA1<*, *> -> execute(usecase)
-                                else -> throw Exception("Invalid usecase")
+                        if (usecase is UsecaseA0<*> && usecase::class.hasAnnotation<Query>()) {
+                            get {
+                                execute(usecase)
                             }
-                            this.call.respond(response)
+                        } else {
+                            post {
+                                val response = when (usecase) {
+                                    is UsecaseA0<*> -> execute(usecase)
+                                    is UsecaseA1<*, *> -> execute(usecase)
+                                    else -> throw Exception("Invalid usecase")
+                                }
+                                this.call.respond(response)
+                            }
                         }
                     }
                 }
