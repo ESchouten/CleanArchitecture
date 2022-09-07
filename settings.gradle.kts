@@ -21,7 +21,7 @@ include(
 dependencyResolutionManagement {
     versionCatalogs {
         create("libs") {
-            version("kotlin", "1.7.20-Beta")
+            version("kotlin", "1.7.10")
             version("shadowjar", "7.1.2")
             version("coroutines", "1.6.4")
             version("ktor", "2.1.1")
