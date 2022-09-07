@@ -16,6 +16,7 @@ import io.ktor.server.plugins.forwardedheaders.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import io.ktor.util.date.*
 import ktor.plugins.get
 import usecases.dependency.Authenticator
 import usecases.model.LoginUserModel
@@ -75,7 +76,7 @@ fun Application.loginModule(config: Config) {
         }
 
         post("/logout") {
-            call.response.cookies.appendExpired(AUTH_COOKIE)
+            call.response.cookies.append(AUTH_COOKIE, "", expires = GMTDate.START)
             call.respond(HttpStatusCode.OK)
         }
     }

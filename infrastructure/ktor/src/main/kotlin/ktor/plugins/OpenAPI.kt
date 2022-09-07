@@ -2,6 +2,8 @@ package ktor.plugins
 
 import com.google.gson.*
 import com.google.gson.reflect.TypeToken
+import io.bkbn.kompendium.core.metadata.GetInfo
+import io.bkbn.kompendium.core.metadata.MethodInfo
 import io.bkbn.kompendium.core.metadata.PostInfo
 import io.bkbn.kompendium.core.plugin.NotarizedRoute
 import io.bkbn.kompendium.core.routes.redoc
@@ -32,24 +34,24 @@ fun Application.rest(usecases: Collection<UsecaseType<*>>) {
                     val name = usecase::class.simpleName!!
                     route("/${name.lowercase()}") {
                         install(NotarizedRoute()) {
-                            post = PostInfo.builder {
-                                summary(name)
-                                description(name)
-                                request {
-                                    description(name)
-                                    when (usecase) {
-                                        is UsecaseA1<*, *> ->
-                                            RestA1::class.createType(usecase.args.map { KTypeProjection.invariant(it) })
-
-                                        else -> null
-                                    }.let {
-                                        requestType(it ?: typeOf<Unit>())
-                                    }
+                            if (usecase is UsecaseA0<*> && usecase::class.hasAnnotation<Query>()) {
+                                get = GetInfo.builder {
+                                    configure(usecase)
                                 }
-                                response {
-                                    description(name)
-                                    responseCode(HttpStatusCode.OK)
-                                    responseType(usecase.result)
+                            } else {
+                                post = PostInfo.builder {
+                                    configure(usecase)
+                                    request {
+                                        description(name)
+                                        when (usecase) {
+                                            is UsecaseA1<*, *> ->
+                                                RestA1::class.createType(usecase.args.map { KTypeProjection.invariant(it) })
+
+                                            else -> null
+                                        }.let {
+                                            requestType(it ?: typeOf<Unit>())
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -64,6 +66,17 @@ fun Application.rest(usecases: Collection<UsecaseType<*>>) {
                     }
                 }
         }
+    }
+}
+
+private fun <T : MethodInfo> MethodInfo.Builder<T>.configure(usecase: UsecaseType<*>) {
+    val name = usecase::class.simpleName!!
+    summary(name)
+    description(name)
+    response {
+        description(name)
+        responseCode(HttpStatusCode.OK)
+        responseType(usecase.result)
     }
 }
 
