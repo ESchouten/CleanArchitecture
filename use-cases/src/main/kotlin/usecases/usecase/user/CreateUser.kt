@@ -7,11 +7,11 @@ import usecases.dependency.Logger
 import usecases.dependency.PasswordEncoder
 import usecases.model.CreateUserModel
 import usecases.model.UserModel
-import usecases.usecase.Mutation
+import usecases.usecase.Create
 import usecases.usecase.UsecaseA1
 import kotlin.reflect.typeOf
 
-@Mutation
+@Create
 class CreateUser(
     logger: Logger,
     private val repository: UserRepository,

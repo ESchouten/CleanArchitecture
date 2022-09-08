@@ -4,11 +4,11 @@ import domain.entity.user.Authorities
 import domain.repository.UserRepository
 import usecases.dependency.Logger
 import usecases.model.UserModel
-import usecases.usecase.Mutation
+import usecases.usecase.Delete
 import usecases.usecase.UsecaseA1
 import kotlin.reflect.typeOf
 
-@Mutation
+@Delete
 class DeleteUser(
     logger: Logger,
     private val repository: UserRepository,

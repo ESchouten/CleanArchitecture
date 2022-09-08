@@ -8,10 +8,16 @@ import usecases.model.UserModel
 import kotlin.reflect.KType
 
 @Target(AnnotationTarget.CLASS)
-annotation class Query
+annotation class Read
 
 @Target(AnnotationTarget.CLASS)
-annotation class Mutation
+annotation class Create
+
+@Target(AnnotationTarget.CLASS)
+annotation class Update
+
+@Target(AnnotationTarget.CLASS)
+annotation class Delete
 
 sealed class UsecaseType<R : Any>(
     val result: KType,

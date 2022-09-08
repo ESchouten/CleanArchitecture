@@ -36,7 +36,7 @@ fun SchemaBuilder.usecases(usecases: Collection<UsecaseType<*>>) {
         .map { it.kClass }
         .toSet()
 
-    val types = usecases.filter { it::class.hasAnnotation<Query>() || it::class.hasAnnotation<Mutation>() }.flatMap {
+    val types = usecases.filter { it::class.hasAnnotation<Read>() || it::class.hasAnnotation<Create>() }.flatMap {
         usecase(it)
         types(it)
     }.toSet()
@@ -47,8 +47,8 @@ fun SchemaBuilder.usecases(usecases: Collection<UsecaseType<*>>) {
 fun SchemaBuilder.usecase(usecase: UsecaseType<*>) {
     val type: ((String, AbstractOperationDSL.() -> Unit) -> Publisher)? = usecase::class.let {
         when {
-            it.hasAnnotation<Query>() -> ::query
-            it.hasAnnotation<Mutation>() -> ::mutation
+            it.hasAnnotation<Read>() -> ::query
+            it.hasAnnotation<Create>() -> ::mutation
             else -> null
         }
     }

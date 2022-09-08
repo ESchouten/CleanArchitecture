@@ -4,11 +4,11 @@ import domain.entity.user.Authorities
 import domain.repository.UserRepository
 import usecases.dependency.Logger
 import usecases.model.UserModel
-import usecases.usecase.Query
+import usecases.usecase.Read
 import usecases.usecase.UsecaseA1
 import kotlin.reflect.typeOf
 
-@Query
+@Read
 class GetUser(
     logger: Logger,
     private val repository: UserRepository

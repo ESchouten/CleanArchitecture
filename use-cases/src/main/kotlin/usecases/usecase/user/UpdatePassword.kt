@@ -8,12 +8,12 @@ import usecases.dependency.Logger
 import usecases.dependency.PasswordEncoder
 import usecases.model.ChangePasswordModel
 import usecases.model.UserModel
-import usecases.usecase.Mutation
+import usecases.usecase.Update
 import usecases.usecase.UsecaseA1
 import kotlin.reflect.typeOf
 
-@Mutation
-class ChangePassword(
+@Update
+class UpdatePassword(
     logger: Logger,
     private val repository: UserRepository,
     private val passwordEncoder: PasswordEncoder

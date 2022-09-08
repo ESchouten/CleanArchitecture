@@ -2,9 +2,7 @@ package ktor.plugins
 
 import com.google.gson.*
 import com.google.gson.reflect.TypeToken
-import io.bkbn.kompendium.core.metadata.GetInfo
-import io.bkbn.kompendium.core.metadata.MethodInfo
-import io.bkbn.kompendium.core.metadata.PostInfo
+import io.bkbn.kompendium.core.metadata.*
 import io.bkbn.kompendium.core.plugin.NotarizedRoute
 import io.bkbn.kompendium.core.routes.redoc
 import io.ktor.http.*
@@ -29,45 +27,58 @@ fun Application.rest(usecases: Collection<UsecaseType<*>>) {
     routing {
         redoc(pageTitle = "CleanArchitecture API Docs")
         authenticate(optional = true) {
-            usecases.filter { it::class.hasAnnotation<Query>() || it::class.hasAnnotation<Mutation>() }
+            usecases.filter { it::class.hasAnnotation<Read>() || it::class.hasAnnotation<Create>() || it::class.hasAnnotation<Update>() || it::class.hasAnnotation<Delete>() }
                 .forEach { usecase ->
                     val name = usecase::class.simpleName!!
                     route("/${name.lowercase()}") {
                         install(NotarizedRoute()) {
-                            if (usecase is UsecaseA0<*> && usecase::class.hasAnnotation<Query>()) {
-                                get = GetInfo.builder {
-                                    configure(usecase)
+                            if (usecase is UsecaseA0<*> && (usecase::class.hasAnnotation<Read>() || usecase::class.hasAnnotation<Delete>())) {
+                                if (usecase::class.hasAnnotation<Read>()) {
+                                    get = GetInfo.builder {
+                                        configure(usecase, name)
+                                    }
+                                } else {
+                                    delete = DeleteInfo.builder {
+                                        configure(usecase, name)
+                                    }
                                 }
                             } else {
-                                post = PostInfo.builder {
-                                    configure(usecase)
-                                    request {
-                                        description(name)
-                                        when (usecase) {
-                                            is UsecaseA1<*, *> ->
-                                                RestA1::class.createType(usecase.args.map { KTypeProjection.invariant(it) })
-
-                                            else -> null
-                                        }.let {
-                                            requestType(it ?: typeOf<Unit>())
-                                        }
+                                if (usecase::class.hasAnnotation<Update>()) {
+                                    put = PutInfo.builder {
+                                        configureRequest(usecase, name)
+                                    }
+                                } else {
+                                    post = PostInfo.builder {
+                                        configureRequest(usecase, name)
                                     }
                                 }
                             }
                         }
-                        if (usecase is UsecaseA0<*> && usecase::class.hasAnnotation<Query>()) {
-                            get {
-                                call.respond(execute(usecase))
+                        if (usecase is UsecaseA0<*> && (usecase::class.hasAnnotation<Read>() || usecase::class.hasAnnotation<Delete>())) {
+                            if (usecase::class.hasAnnotation<Read>()) {
+                                get {
+                                    call.respond(execute(usecase))
+                                }
+                            } else {
+                                delete {
+                                    call.respond(execute(usecase))
+                                }
                             }
                         } else {
-                            post {
-                                call.respond(
-                                    when (usecase) {
-                                        is UsecaseA0<*> -> execute(usecase)
-                                        is UsecaseA1<*, *> -> execute(usecase)
-                                        else -> throw Exception("Invalid usecase")
-                                    }
-                                )
+                            method(
+                                if (usecase::class.hasAnnotation<Update>()) {
+                                    HttpMethod.Put
+                                } else HttpMethod.Post
+                            ) {
+                                handle {
+                                    call.respond(
+                                        when (usecase) {
+                                            is UsecaseA0<*> -> execute(usecase)
+                                            is UsecaseA1<*, *> -> execute(usecase)
+                                            else -> throw Exception("Invalid usecase")
+                                        }
+                                    )
+                                }
                             }
                         }
                     }
@@ -76,14 +87,28 @@ fun Application.rest(usecases: Collection<UsecaseType<*>>) {
     }
 }
 
-private fun <T : MethodInfo> MethodInfo.Builder<T>.configure(usecase: UsecaseType<*>) {
-    val name = usecase::class.simpleName!!
+private fun <T : MethodInfo> MethodInfo.Builder<T>.configure(usecase: UsecaseType<*>, name: String) {
     summary(name)
     description(name)
     response {
         description(name)
         responseCode(HttpStatusCode.OK)
         responseType(usecase.result)
+    }
+}
+
+private fun <T : MethodInfoWithRequest> MethodInfoWithRequest.Builder<T>.configureRequest(usecase: UsecaseType<*>, name: String) {
+    configure(usecase, name)
+    request {
+        description(name)
+        when (usecase) {
+            is UsecaseA1<*, *> ->
+                RestA1::class.createType(usecase.args.map { KTypeProjection.invariant(it) })
+
+            else -> null
+        }.let {
+            requestType(it ?: typeOf<Unit>())
+        }
     }
 }
 

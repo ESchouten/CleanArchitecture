@@ -7,11 +7,11 @@ import domain.repository.UserRepository
 import usecases.dependency.Logger
 import usecases.model.UpdateUserModel
 import usecases.model.UserModel
-import usecases.usecase.Mutation
+import usecases.usecase.Update
 import usecases.usecase.UsecaseA1
 import kotlin.reflect.typeOf
 
-@Mutation
+@Update
 class UpdateUser(
     logger: Logger,
     private val repository: UserRepository,

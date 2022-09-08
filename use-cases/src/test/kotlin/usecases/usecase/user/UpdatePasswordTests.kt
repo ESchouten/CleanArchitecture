@@ -19,13 +19,13 @@ import usecases.value
 import kotlin.test.Test
 import kotlin.test.assertFailsWith
 
-class ChangePasswordTests : UsecaseTests {
+class UpdatePasswordTests : UsecaseTests {
 
     val repository = mockk<UserRepository>()
     val passwordEncoder = mockk<PasswordEncoder>()
-    override val usecase = ChangePassword(logger, repository, passwordEncoder)
-    val changePasswordMock = mockk<ChangePassword>()
-    val changeOwnPassword = ChangeOwnPassword(logger, repository, changePasswordMock, passwordEncoder)
+    override val usecase = UpdatePassword(logger, repository, passwordEncoder)
+    val updatePasswordMock = mockk<UpdatePassword>()
+    val updateOwnPassword = UpdateOwnPassword(logger, repository, updatePasswordMock, passwordEncoder)
 
     val newPassword = NewPassword(password.value + 1)
     val newPasswordHash = PasswordHash(newPassword.value.reversed())
@@ -76,14 +76,14 @@ class ChangePasswordTests : UsecaseTests {
             every { passwordEncoder.matches(password, PasswordHash(password.value.reversed())) } returns true
             every {
                 runBlocking {
-                    changePasswordMock.invoke(
+                    updatePasswordMock.invoke(
                         any(),
                         ChangePasswordModel(user.id, newPassword)
                     )
                 }
             } returns UserModel(user.copy(password = newPasswordHash))
 
-            changeOwnPassword(userModel, changeOwnPasswordModel)
+            updateOwnPassword(userModel, changeOwnPasswordModel)
         }
     }
 
@@ -94,7 +94,7 @@ class ChangePasswordTests : UsecaseTests {
                 every { runBlocking { repository.findById(userModel.id) } } returns user
                 every { passwordEncoder.matches(newPassword, PasswordHash(password.value.reversed())) } returns false
 
-                changeOwnPassword(userModel, changeOwnPasswordModel.copy(current = newPassword))
+                updateOwnPassword(userModel, changeOwnPasswordModel.copy(current = newPassword))
             }
         }
     }

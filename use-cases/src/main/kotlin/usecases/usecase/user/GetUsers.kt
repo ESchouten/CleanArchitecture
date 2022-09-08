@@ -6,12 +6,12 @@ import domain.repository.UserRepository
 import usecases.dependency.Logger
 import usecases.model.UserModel
 import usecases.model.UserPaginationResult
-import usecases.usecase.Query
+import usecases.usecase.Read
 import usecases.usecase.UsecaseA1
 import kotlin.reflect.typeOf
 
-@Query
-class ListUsers(
+@Read
+class GetUsers(
     logger: Logger,
     private val repository: UserRepository,
 ) : UsecaseA1<Pagination, UserPaginationResult>(typeOf<Pagination>(), typeOf<UserPaginationResult>(), logger) {

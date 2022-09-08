@@ -5,11 +5,11 @@ import domain.entity.user.Email
 import domain.repository.UserRepository
 import usecases.dependency.Logger
 import usecases.model.UserModel
-import usecases.usecase.Query
+import usecases.usecase.Read
 import usecases.usecase.UsecaseA1
 import kotlin.reflect.typeOf
 
-@Query
+@Read
 class UserExists(
     logger: Logger,
     private val repository: UserRepository

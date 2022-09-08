@@ -8,11 +8,11 @@ import usecases.dependency.Logger
 import usecases.dependency.PasswordEncoder
 import usecases.model.LoginUserModel
 import usecases.model.UserModel
-import usecases.usecase.Query
+import usecases.usecase.Create
 import usecases.usecase.UsecaseA1
 import kotlin.reflect.typeOf
 
-@Query
+@Create
 class LoginUser(
     logger: Logger,
     private val repository: UserRepository,
