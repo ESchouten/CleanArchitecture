@@ -1,5 +1,6 @@
 package ktor
 
+import com.apurebase.kgraphql.GraphQL
 import config.getAll
 import config.modules
 import config.setup
@@ -16,7 +17,6 @@ import io.ktor.server.cio.*
 import io.ktor.server.plugins.callloging.*
 import io.ktor.server.plugins.defaultheaders.*
 import kotlinx.coroutines.launch
-import ktor.plugins.GraphQL
 import ktor.plugins.get
 import ktor.plugins.rest
 import org.koin.ktor.plugin.Koin
