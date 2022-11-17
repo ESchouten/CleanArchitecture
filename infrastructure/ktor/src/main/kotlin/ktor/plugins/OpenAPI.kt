@@ -19,6 +19,7 @@ import usecases.usecase.*
 import java.lang.reflect.Type
 import java.math.BigDecimal
 import java.time.Instant
+import kotlin.reflect.KClass
 import kotlin.reflect.KTypeProjection
 import kotlin.reflect.full.createType
 import kotlin.reflect.full.hasAnnotation
@@ -99,8 +100,23 @@ suspend fun <R, A0 : Any, U : UsecaseA1<A0, R>> PipelineContext<Unit, Applicatio
 }
 
 suspend inline fun <reified T : Any> ApplicationCall.deserialize(usecase: UsecaseType<*>): T {
-    val type = TypeToken.getParameterized(T::class.java, *usecase.args.map { it.jvmErasure.java }.toTypedArray()).type
+    val type = TypeToken.getParameterized(
+        T::class.java,
+        *usecase.args.map { boxedClassOf(it.jvmErasure).java }.toTypedArray()
+    ).type
     return gson.fromJson(this.receiveText(), type)
+}
+
+fun boxedClassOf(kClass: KClass<*>) = when (kClass) {
+    Boolean::class -> java.lang.Boolean::class
+    Byte::class -> java.lang.Byte::class
+    Char::class -> java.lang.Character::class
+    Float::class -> java.lang.Float::class
+    Int::class -> java.lang.Integer::class
+    Long::class -> java.lang.Long::class
+    Short::class -> java.lang.Short::class
+    Double::class -> java.lang.Double::class
+    else -> kClass
 }
 
 data class RestA1<A0>(
