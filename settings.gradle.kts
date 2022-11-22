@@ -29,7 +29,7 @@ dependencyResolutionManagement {
             version("slf4j", "2.0.3")
             version("logback", "1.4.4")
             version("koin", "3.2.2")
-            version("kgraphql", "0.18.0")
+            version("kgraphql", "0.18.1")
             version("exposed", "0.41.1")
             version("jwt", "4.2.1")
             version("bcrypt", "0.9.0")
