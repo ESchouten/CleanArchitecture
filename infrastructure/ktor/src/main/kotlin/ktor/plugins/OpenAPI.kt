@@ -2,6 +2,10 @@ package ktor.plugins
 
 import com.google.gson.*
 import com.google.gson.reflect.TypeToken
+import domain.AlreadyExistsException
+import domain.AuthorizationException
+import domain.LoginException
+import domain.NotFoundException
 import io.bkbn.kompendium.core.metadata.GetInfo
 import io.bkbn.kompendium.core.metadata.MethodInfo
 import io.bkbn.kompendium.core.metadata.PostInfo
@@ -58,22 +62,40 @@ fun Application.rest(usecases: Collection<UsecaseType<*>>) {
                         }
                         if (usecase is UsecaseA0<*> && usecase::class.hasAnnotation<Query>()) {
                             get {
-                                call.respond(execute(usecase))
+                                handle {
+                                    execute(usecase)
+                                }
                             }
                         } else {
                             post {
-                                call.respond(
+                                handle {
                                     when (usecase) {
                                         is UsecaseA0<*> -> execute(usecase)
                                         is UsecaseA1<*, *> -> execute(usecase)
                                         else -> throw Exception("Invalid usecase")
                                     }
-                                )
+                                }
                             }
                         }
                     }
                 }
         }
+    }
+}
+
+suspend fun PipelineContext<Unit, ApplicationCall>.handle(execute: suspend () -> Any) {
+    try {
+        call.respond(execute())
+    } catch (ex: LoginException) {
+        call.respond(HttpStatusCode.Unauthorized, ex.message ?: "")
+    } catch (ex: AuthorizationException) {
+        call.respond(HttpStatusCode.Forbidden, ex.message ?: "")
+    } catch (ex: AlreadyExistsException) {
+        call.respond(HttpStatusCode.Conflict, ex.message ?: "")
+    } catch (ex: NotFoundException) {
+        call.respond(HttpStatusCode.NotFound, ex.message ?: "")
+    } catch (ex: Exception) {
+        call.respond(HttpStatusCode.InternalServerError, ex.message ?: "")
     }
 }
 
