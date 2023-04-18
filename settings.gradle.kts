@@ -28,7 +28,7 @@ dependencyResolutionManagement {
             version("kompendium", "3.13.0")
             version("slf4j", "2.0.7")
             version("logback", "1.4.6")
-            version("koin", "3.2.2")
+            version("koin", "3.4.0")
             version("kgraphql", "0.19.0")
             version("exposed", "0.41.1")
             version("jwt", "4.4.0")

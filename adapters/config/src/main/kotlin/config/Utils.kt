@@ -5,9 +5,8 @@ package config
 import domain.repository.Repository
 import org.koin.core.definition.BeanDefinition
 import org.koin.core.definition.Kind
-import org.koin.core.instance.InstanceFactory
+import org.koin.core.definition.KoinDefinition
 import org.koin.core.instance.SingleInstanceFactory
-import org.koin.core.instance.newInstance
 import org.koin.core.module.Module
 import org.koin.core.parameter.emptyParametersHolder
 import org.koin.core.qualifier._q
@@ -57,34 +56,36 @@ fun Module.repositories(domain: String, exclude: List<KClass<out Repository<*, *
         }
 }
 
-fun Module.usecase(usecase: KClass<out UsecaseType<*>>): Pair<Module, SingleInstanceFactory<UsecaseType<*>>> {
-    val def = BeanDefinition(
-        _q("_root_"),
-        usecase,
-        null,
-        { newInstance(usecase, emptyParametersHolder()) },
-        Kind.Singleton,
-        secondaryTypes = emptyList()
-    )
-    val factory = SingleInstanceFactory(def)
+fun Module.usecase(usecase: KClass<out UsecaseType<*>>): KoinDefinition<out UsecaseType<*>> {
+    val factory = createFactory(usecase)
     indexPrimaryType(factory)
-    return Pair(this, factory)
+    return KoinDefinition(this, factory)
 }
 
-fun Module.repository(repository: KClass<out Repository<*, *>>): Pair<Module, InstanceFactory<out Repository<*, *>>> {
-    val def = BeanDefinition(
-        _q("_root_"),
-        repository,
-        null,
-        { newInstance(repository, emptyParametersHolder()) },
-        Kind.Singleton,
-        secondaryTypes = emptyList()
-    )
-    val factory = SingleInstanceFactory(def)
+fun Module.repository(repository: KClass<out Repository<*, *>>): KoinDefinition<out Repository<*, *>> {
+    val factory = createFactory(repository)
     indexPrimaryType(factory)
     val domain: KClass<in Repository<*, *>> =
         repository.supertypes.find { it.isSubtypeOf(typeOf<Repository<*, *>>()) }!!.jvmErasure as KClass<in Repository<*, *>>
-    return Pair(this, factory).apply {
-        bind(domain)
-    }
+    val koinDef = KoinDefinition(this, factory)
+    koinDef.bind(domain)
+    return koinDef
+}
+
+private fun <T : Any> Module.createFactory(clazz: KClass<T>): SingleInstanceFactory<T> {
+    val def = BeanDefinition(
+        _q("_root_"),
+        clazz,
+        null,
+        {
+            val constructor = clazz.constructors.first()
+            val params = constructor.parameters.map { this.getOrNull<Any>(it.type.jvmErasure, null) { emptyParametersHolder() }!! }
+            constructor.call(*params.toTypedArray())
+        },
+        Kind.Singleton,
+        secondaryTypes = emptyList()
+    )
+    val factory = SingleInstanceFactory(def)
+    indexPrimaryType(factory)
+    return factory
 }
